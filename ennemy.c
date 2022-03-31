@@ -17,6 +17,7 @@ void initEnnemy(Ennemy *e, int x, int y, int vitesse, int direction, int nbreVie
     e->AnimE_Run = 0;
     e->AnimeE_Idle = 0;
     e->Flipped = 0;
+    e->posABS = e->pos;
 
     for (int i = 0; i < 6; i++)
     {
@@ -108,12 +109,14 @@ void deplacerEnnemy(Ennemy *e, Config *Confg)
     if (e->direction == 1)
     {
         e->pos.x += e->v * 20;
+        e->posABS.x += e->v * 20;
         e->Flipped = 0;
     }
 
     else if (e->direction == -1)
     {
         e->pos.x -= e->v * 20;
+        e->posABS.x -= e->v * 20;
         e->Flipped = 1;
     }
 }
