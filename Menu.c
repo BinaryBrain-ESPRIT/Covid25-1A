@@ -198,10 +198,15 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                 isRunning = 0;
                 break;
             case SDLK_e:
+
                 InitEnigme(&enig, "enigmeImg.txt");
                 afficherEnigme(enig, screen);
                 SDL_Flip(screen);
                 int done = 0;
+                int TimeSec = 0;
+                int TimerInit = SDL_GetTicks();
+                int Rep = 0;
+
                 while (!done)
                 {
                     SDL_PollEvent(&event);
@@ -211,12 +216,37 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                         done = 1;
                         Confg->isRunning = 0;
                         break;
-                    case SDL_KEYDOWN:
-                        if (event.key.keysym.sym == SDLK_ESCAPE)
+                    case SDL_MOUSEBUTTONDOWN:
+                        printf("x = %d\ny = %d\n", event.button.x, event.button.y);
+                        if (event.button.x > 1070 && event.button.x < 1232 && event.button.y > 105 && event.button.y < 270)
+                            Rep = 1;
+                        else if (event.button.x > 1356 && event.button.x < 1518 && event.button.y > 105 && event.button.y < 270)
+                            Rep = 2;
+                        else if (event.button.x > 1212 && event.button.x < 1374 && event.button.y > 363 && event.button.y < 527)
+                            Rep = 3;
+
+                        if (Rep > 0 && Rep < 4)
+                        {
+                            if (Rep == enig.NumRC)
+                                printf("Winn \n");
+                            else
+                                printf("Losser\n");
                             done = 1;
+                        }
+
                         break;
                     }
-                    animer(&enig, screen);
+
+                    int timer = (SDL_GetTicks() - TimerInit) / 1000;
+
+                    if (timer != TimeSec)
+                    {
+                        TimeSec = timer;
+                        animer(&enig, screen);
+                        SDL_Flip(screen);
+                        if (enig.TimerI >= 10)
+                            done = 1;
+                    }
                 }
                 break;
             case SDLK_f:
@@ -328,7 +358,7 @@ void MenuOpt(SDL_Surface *screen, Config *Confg)
     Mix_Chunk *sound;
     Image tabMO[6];
     Image tabMAO[3];
-
+    int TimeSec = 0;
     int isRunning = 1;
     int i = 0;
     SDL_Event event;
@@ -350,7 +380,6 @@ void MenuOpt(SDL_Surface *screen, Config *Confg)
 
     while (isRunning)
     {
-        printf("%d\n", Confg->Lang);
         if (Confg->isRunning == 0)
             isRunning = 0;
 

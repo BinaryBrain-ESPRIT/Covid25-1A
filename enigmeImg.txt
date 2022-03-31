@@ -1,1 +1,1 @@
-assets/enigmeImage/Background.png assets/enigmeImage/appleCard.png assets/enigmeImage/bananaCard.png assets/enigmeImage/watermelonCard.png assets/enigmeImage/cardBack.png
+1 assets/enigmeImage/Math/Math.jpg 3

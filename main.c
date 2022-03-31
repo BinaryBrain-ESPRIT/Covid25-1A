@@ -44,6 +44,7 @@ int main()
 
     while (Confg->isRunning)
     {
+
         // while (!(SDL_GetTicks() > last_frame_time + FRAME_TARGET_TIME));
         // last_frame_time = SDL_GetTicks();
         // delta_time = (SDL_GetTicks() - last_frame_time) / 1000.0f;
@@ -93,9 +94,10 @@ int main()
                 {
                 case 1:
                     MenuNG(screen, Confg);
+                    i = 0;
                     AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
                     SDL_Flip(screen);
-                    i = 0;
+
                     break;
                 case 2:
                     MenuOpt(screen, Confg);
@@ -103,10 +105,10 @@ int main()
                         InitTxt_en(tabMT, tabMAT);
                     else
                         InitTxt_fr(tabMT, tabMAT);
-
+                    i = 0;
                     AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
                     SDL_Flip(screen);
-                    i = 0;
+
                     break;
                 case 3:
 
