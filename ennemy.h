@@ -10,8 +10,8 @@
 typedef struct
 {
     SDL_Rect pos;
-    SDL_Surface *img[5][10];
-    int numAnim;
+    SDL_Surface *img[6][10];
+    int Flipped;
     double v; // Vitesse
     int direction;
     int nbreVie;

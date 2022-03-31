@@ -44,6 +44,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     int i = 0, a = 0, x = 0;
     int last_frame_time = 0;
     int diff;
+    int NoEnnemyAround;
     SDL_Rect cam = {0, 0, Width, Height};
     Player p;
     Ennemy e[5];
@@ -153,7 +154,6 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         switch (event.type)
         {
         case SDL_MOUSEMOTION:
-            // printf("x = %d\ty = %d\n", event.motion.x, event.motion.y);
             break;
         case SDL_QUIT:
             Confg->isRunning = 0;
@@ -163,26 +163,10 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
             switch (event.key.keysym.sym)
             {
             case SDLK_RIGHT:
-                /*
-                if (cam.x < 7600)
-                {
-                    cam.x += e[0].v * 20;
-                    e[0].posInit -= e[0].v * 20;
-                    e[0].pos.x -= e[0].v * 20;
-                }
-                */
-
                 p.direction = 1;
                 break;
             case SDLK_LEFT:
-                /*if (cam.x > 0)
-                {
-                    cam.x -= e[0].v * 20;
-                    e[0].posInit += e[0].v * 20;
-                    e[0].pos.x += e[0].v * 20;
-                }*/
                 p.direction = -1;
-
                 break;
             case SDLK_TAB:
                 if (!Opened)
@@ -194,7 +178,6 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
 
                 break;
             case SDLK_ESCAPE:
-
                 isRunning = 0;
                 break;
             case SDLK_e:
@@ -217,7 +200,6 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                         Confg->isRunning = 0;
                         break;
                     case SDL_MOUSEBUTTONDOWN:
-                        printf("x = %d\ny = %d\n", event.button.x, event.button.y);
                         if (event.button.x > 1070 && event.button.x < 1232 && event.button.y > 105 && event.button.y < 270)
                             Rep = 1;
                         else if (event.button.x > 1356 && event.button.x < 1518 && event.button.y > 105 && event.button.y < 270)

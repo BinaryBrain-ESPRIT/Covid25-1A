@@ -9,7 +9,6 @@ void InitGameBackg(background *Backg, char NameImg[])
     Backg->cam.y = 0;
     Backg->cam.w = Width;
     Backg->cam.h = Height;
-    
 }
 
 void AfficherBackg(background Backg, SDL_Surface *screen)
@@ -69,7 +68,7 @@ int collisionPP(Player p, SDL_Surface Masque)
     }
 }
 
-void scrolling(background * Backg, int direction, int pas_Avancement)
+void scrolling(background *Backg, int direction, int pas_Avancement)
 {
     switch (direction)
     {
@@ -84,6 +83,7 @@ void scrolling(background * Backg, int direction, int pas_Avancement)
         break;
     case -2:
         Backg->cam.y += pas_Avancement;
+        break;
     }
 }
 void LibererBackg(background backg)
