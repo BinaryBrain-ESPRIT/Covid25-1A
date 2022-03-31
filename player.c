@@ -13,7 +13,7 @@ void initPerso(Player *p, int NumPlayer)
     p->direction = 0;
     p->animI = 0;
     p->animJ = 0;
-    p->flipped = gi         0;
+    p->flipped = 0;
     p->AnimP_Idle = 0;
     p->AnimP_Attack = 0;
     p->AnimP_Run = 0;
