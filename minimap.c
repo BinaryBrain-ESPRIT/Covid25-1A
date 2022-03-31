@@ -30,6 +30,6 @@ void MAJMinimap(SDL_Rect PosJoueur, SDL_Rect PosEnn, minimap *m, int redimension
     for (int i = 0; i < 5; i++)
     {
         m->zombieTagPos[i].x = m->pos.x + ((PosEnn.x * redimensionnement) / 100);
-        m->zombieTagPos[i].y = m->pos.y + ((PosEnn.x * redimensionnement) / 100);
+        m->zombieTagPos[i].y = m->pos.y + ((PosEnn.y * redimensionnement) / 100);
     }
 }

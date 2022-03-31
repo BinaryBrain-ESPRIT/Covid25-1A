@@ -70,7 +70,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
 
     // Init MiniMap
     initminimap(&map, "assets/Levels/Backg/level1mini.png", p, e);
-    // SDL_ShowCursor(SDL_DISABLE);
+    SDL_ShowCursor(SDL_DISABLE);
 
     while (isRunning)
     {
