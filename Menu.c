@@ -189,7 +189,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                 int TimeSec = 0;
                 int TimerInit = SDL_GetTicks();
                 int Rep = 0;
-
+                SDL_ShowCursor(SDL_ENABLE);
                 while (!done)
                 {
                     SDL_PollEvent(&event);
@@ -230,6 +230,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                             done = 1;
                     }
                 }
+                SDL_ShowCursor(SDL_DISABLE);
                 break;
             case SDLK_f:
                 if (Confg->Fullscr > 0)
