@@ -80,14 +80,14 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
 
         if (Confg->isRunning == 0)
             isRunning = 0;
-        for (i = 0; i < 5; i++)
-            MAJMinimap(p.posABS, e[i].pos, &map, Redim);
+
         /*
         MAJMinimap(e[i].pos,&map,Redim);*/
         AfficherBackg(tabG[0], screen);
         AfficherImg(tabGameUI[0], screen);
         afficherminimap(map, screen);
 
+        MAJMinimap(p.posABS, e, &map, Redim);
         // Perso
         animerPerso(&p);
         if (p.pos.x >= screen->w / 2 && p.direction == 1)
