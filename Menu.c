@@ -90,7 +90,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         animerPerso(&p);
         if (p.pos.x >= screen->w / 2 && p.direction == 1)
         {
-            scrolling(&tabG[0], p.direction, 7);
+            scrolling(&tabG[0], p.direction, 10);
             p.posABS.x += 7;
             for (int i = 0; i < 5; i++)
             {
@@ -100,7 +100,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         }
         else if (p.direction == -1 && p.pos.x <= 500 && p.posABS.x > 500)
         {
-            scrolling(&tabG[0], p.direction, 7);
+            scrolling(&tabG[0], p.direction, 10);
             p.posABS.x -= 7;
             for (int i = 0; i < 5; i++)
             {
