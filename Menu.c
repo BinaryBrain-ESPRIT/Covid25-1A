@@ -81,8 +81,6 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         if (Confg->isRunning == 0)
             isRunning = 0;
 
-        /*
-        MAJMinimap(e[i].pos,&map,Redim);*/
         AfficherBackg(tabG[0], screen);
         AfficherImg(tabGameUI[0], screen);
         afficherminimap(map, screen);
@@ -113,24 +111,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         else
             deplacerPerso(&p, Confg->deltaTime);
         afficherPerso(p, screen);
-        /*
-            // Ennemy
-            if (collisionBB(e[0], p))
-            {
-                e[0].direction = 0;
-                e[0].attack = 1;
-                animerEnnemy(&e[0], Confg);
-                afficherEnnemy(e[0], screen);
-            }
-            else
-            {
-                e[0].attack = 0;
-                animerEnnemy(&e[0], Confg);
-                deplacerIA(&e[0], p.pos);
-                deplacerEnnemy(&e[0], Confg);
-                afficherEnnemy(e[0], screen);
-            }
-    */
+   
         for (int i = 0; i < 5; i++)
         {
             if (collisionBB(e[i], p))
@@ -217,7 +198,6 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                                 printf("Losser\n");
                             done = 1;
                         }
-
                         break;
                     }
 
