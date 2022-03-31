@@ -10,7 +10,7 @@ typedef struct
 }minimap;
 
 void initminimap(minimap *m,char nameimg[], Player p);
-void MAJMinimap(SDL_Rect PosJoueur,minimap *m,SDL_Rect camera, int redimensionnelent);
+void MAJMinimap(SDL_Rect PosJoueur,minimap *m,int redimensionnement);
 void afficherminimap(minimap m,SDL_Surface *screen);
 void Liberer (minimap * m);
 void sauvegarder(int score,char nomjoueur[],char nomfichier[]);

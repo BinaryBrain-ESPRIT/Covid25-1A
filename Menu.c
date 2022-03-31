@@ -80,8 +80,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
 
         if (Confg->isRunning == 0)
             isRunning = 0;
-        map.playerTagPos.x = map.pos.x + ((p.posABS.x * Redim) / 100);
-        map.playerTagPos.y = map.pos.y + ((p.posABS.y * Redim) / 100);
+        MAJMinimap(p.posABS,&map,Redim);
         AfficherBackg(tabG[0], screen);
         AfficherImg(tabGameUI[0], screen);
         afficherminimap(map, screen);

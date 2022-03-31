@@ -15,3 +15,9 @@ void afficherminimap(minimap m, SDL_Surface *screen)
     SDL_BlitSurface(m.image,NULL,screen,&m.pos);
     SDL_BlitSurface(m.playerTag,NULL,screen,&m.playerTagPos);
 }
+void MAJMinimap(SDL_Rect PosJoueur,minimap *m, int redimensionnement)
+{
+    m->playerTagPos.x = m->pos.x + ((PosJoueur.x * redimensionnement) / 100);
+    m->playerTagPos.y = m->pos.y + ((PosJoueur.y * redimensionnement) / 100);
+
+}
