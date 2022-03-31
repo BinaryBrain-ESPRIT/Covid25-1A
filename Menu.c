@@ -91,21 +91,21 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         if (p.pos.x >= screen->w / 2 && p.direction == 1)
         {
             scrolling(&tabG[0], p.direction, 10);
-            p.posABS.x += 7;
+            p.posABS.x += 10;
             for (int i = 0; i < 5; i++)
             {
-                e[i].posInit -= 7;
-                e[i].pos.x -= 7;
+                e[i].posInit -= 10;
+                e[i].pos.x -= 10;
             }
         }
         else if (p.direction == -1 && p.pos.x <= 500 && p.posABS.x > 500)
         {
             scrolling(&tabG[0], p.direction, 10);
-            p.posABS.x -= 7;
+            p.posABS.x -= 10;
             for (int i = 0; i < 5; i++)
             {
-                e[i].posInit += 7;
-                e[i].pos.x += 7;
+                e[i].posInit += 10;
+                e[i].pos.x += 10;
             }
         }
         else
