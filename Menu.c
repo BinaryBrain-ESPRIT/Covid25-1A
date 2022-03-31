@@ -69,7 +69,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     initPerso(&p, Confg->Player);
 
     // Init MiniMap
-    initminimap(&map, "assets/Levels/Backg/level1mini.png", p);
+    initminimap(&map, "assets/Levels/Backg/level1mini.png", p, e);
     // SDL_ShowCursor(SDL_DISABLE);
 
     while (isRunning)
@@ -80,7 +80,10 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
 
         if (Confg->isRunning == 0)
             isRunning = 0;
-        MAJMinimap(p.posABS,&map,Redim);
+        for (i = 0; i < 5; i++)
+            MAJMinimap(p.posABS, e[i].pos, &map, Redim);
+        /*
+        MAJMinimap(e[i].pos,&map,Redim);*/
         AfficherBackg(tabG[0], screen);
         AfficherImg(tabGameUI[0], screen);
         afficherminimap(map, screen);
