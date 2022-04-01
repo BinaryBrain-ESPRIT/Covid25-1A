@@ -164,7 +164,6 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                 isRunning = 0;
                 break;
             case SDLK_e:
-
                 InitEnigme(&enig, "enigmeImg.txt");
                 afficherEnigme(enig, screen);
                 SDL_Flip(screen);

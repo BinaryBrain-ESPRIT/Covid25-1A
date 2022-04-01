@@ -9,7 +9,7 @@ void InitEnigme(Enigme *e, char *nomfichier)
     char NomBackgL[100];
     char NomTimer[100];
     int Res;
-    int RandNum = rand() % (3 - 1) + 1;
+    //int RandNum = rand() % (3 - 1) + 1;
     f = fopen(nomfichier, "r");
 
     fscanf(f, "%d %s %s %s %d", &e->NumE, NomBackg, NomBackgW, NomBackgL, &e->NumRC);
