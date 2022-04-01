@@ -242,13 +242,9 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                         Confg->isRunning = 0;
                         break;
                     case SDL_KEYDOWN:
-
-                        printf("%s\n", event.key.keysym.sym);
                         switch (event.key.keysym.sym)
                         {
-
                         case SDLK_1:
-
                             Rep = 1;
                             break;
                         case SDLK_2:
@@ -257,17 +253,15 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                         case SDLK_3:
                             Rep = 3;
                             break;
-                        default:
-                            break;
                         }
                         break;
                     case SDL_MOUSEBUTTONDOWN:
-                        if (event.button.x > 261 && event.button.x < 1232 && event.button.y > 409 && event.button.y < 270)
-                            Rep = 1;
-                        else if (event.button.x > 1340 && event.button.x < 1518 && event.button.y > 409 && event.button.y < 270)
-                            Rep = 2;
-                        else if (event.button.x > 775 && event.button.x < 1374 && event.button.y > 661 && event.button.y < 527)
-                            Rep = 3;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            if (event.button.x > enig1.Rep[i].pos.x && event.button.x < enig1.Rep[i].pos.x + enig1.Rep[i].surfaceText->w && event.button.y > enig1.Rep[i].pos.y && event.button.y < enig1.Rep[1].pos.y + enig1.Rep[i].surfaceText->h)
+                                Rep = i + 1;
+                        }
+
                         break;
                     }
                     if (Rep > 0 && Rep < 4)
