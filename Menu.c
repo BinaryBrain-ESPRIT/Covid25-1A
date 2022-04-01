@@ -241,6 +241,24 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                         done = 1;
                         Confg->isRunning = 0;
                         break;
+                    case SDL_KEYDOWN:
+
+                        switch (event.key.keysym.sym)
+                        {
+                        case SDLK_1:
+                            printf("Enter\n");
+                            Rep = 1;
+                            break;
+                        case SDLK_2:
+                            Rep = 2;
+                            break;
+                        case SDLK_3:
+                            Rep = 3;
+                            break;
+                        default:
+                            break;
+                        }
+                        break;
                     case SDL_MOUSEBUTTONDOWN:
                         if (event.button.x > 261 && event.button.x < 1232 && event.button.y > 409 && event.button.y < 270)
                             Rep = 1;
@@ -248,26 +266,26 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                             Rep = 2;
                         else if (event.button.x > 775 && event.button.x < 1374 && event.button.y > 661 && event.button.y < 527)
                             Rep = 3;
-
-                        if (Rep > 0 && Rep < 4)
-                        {
-                            if (Rep == enig1.NumRepC)
-                            {
-                                AfficherImg(enig1.Backg[1], screen);
-                                printf("Winner\n");
-                                SDL_Flip(screen);
-                                SDL_Delay(2000);
-                            }
-                            else
-                            {
-                                AfficherImg(enig1.Backg[2], screen);
-                                printf("Looser\n");
-                                SDL_Flip(screen);
-                                SDL_Delay(2000);
-                            }
-                            // done = 1;
-                        }
                         break;
+                    }
+                    if (Rep > 0 && Rep < 4)
+                    {
+                        printf("RepC = %d\n", enig1.NumRepC);
+                        if (Rep == enig1.NumRepC)
+                        {
+                            // AfficherImg(enig1.Backg[1], screen);
+                            printf("Winner\n");
+                            // SDL_Flip(screen);
+                            SDL_Delay(2000);
+                        }
+                        else
+                        {
+                            // AfficherImg(enig1.Backg[2], screen);
+                            printf("Looser\n");
+                            // SDL_Flip(screen);
+                            SDL_Delay(2000);
+                        }
+                        done = 1;
                     }
 
                     int timer = (SDL_GetTicks() - TimerInit) / 1000;
