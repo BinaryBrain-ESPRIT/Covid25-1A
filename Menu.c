@@ -2,6 +2,7 @@
 #include "Main_Fn.h"
 #include "minimap.h"
 #include "enigme_image.h"
+#include "enigme.h"
 void AffichageMainMenu(SDL_Surface *screen, Text tabT[], Text tabAT[], Image tabI[], int j, int l, int p)
 {
     AfficherImg(tabI[0], screen);
@@ -50,6 +51,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     Ennemy e[5];
     minimap map;
     Enigme enig;
+    enigme enig1;
     background tabG[3];
     Image tabGameUI[5];
     // Init LevelBackg
@@ -69,8 +71,8 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     initPerso(&p, Confg->Player);
 
     // Init MiniMap
-    initminimap(&map, "assets/Levels/Backg/level1mini.png", p);
-    // SDL_ShowCursor(SDL_DISABLE);
+    initminimap(&map, "assets/Levels/Backg/level1mini.png", p, e);
+    SDL_ShowCursor(SDL_DISABLE);
 
     while (isRunning)
     {
@@ -80,12 +82,12 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
 
         if (Confg->isRunning == 0)
             isRunning = 0;
-        map.playerTagPos.x = map.pos.x + ((p.posABS.x * Redim) / 100);
-        map.playerTagPos.y = map.pos.y + ((p.posABS.y * Redim) / 100);
+
         AfficherBackg(tabG[0], screen);
         AfficherImg(tabGameUI[0], screen);
         afficherminimap(map, screen);
 
+        MAJMinimap(p.posABS, e, &map, Redim);
         // Perso
         animerPerso(&p);
         if (p.pos.x >= screen->w / 2 && p.direction == 1)
@@ -111,24 +113,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         else
             deplacerPerso(&p, Confg->deltaTime);
         afficherPerso(p, screen);
-        /*
-            // Ennemy
-            if (collisionBB(e[0], p))
-            {
-                e[0].direction = 0;
-                e[0].attack = 1;
-                animerEnnemy(&e[0], Confg);
-                afficherEnnemy(e[0], screen);
-            }
-            else
-            {
-                e[0].attack = 0;
-                animerEnnemy(&e[0], Confg);
-                deplacerIA(&e[0], p.pos);
-                deplacerEnnemy(&e[0], Confg);
-                afficherEnnemy(e[0], screen);
-            }
-    */
+
         for (int i = 0; i < 5; i++)
         {
             if (collisionBB(e[i], p))
@@ -181,7 +166,6 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                 isRunning = 0;
                 break;
             case SDLK_e:
-
                 InitEnigme(&enig, "enigmeImg.txt");
                 afficherEnigme(enig, screen);
                 SDL_Flip(screen);
@@ -210,12 +194,19 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                         if (Rep > 0 && Rep < 4)
                         {
                             if (Rep == enig.NumRC)
-                                printf("Winn \n");
+                            {
+                                AfficherImg(enig.Backg[1], screen);
+                                SDL_Flip(screen);
+                                SDL_Delay(2000);
+                            }
                             else
-                                printf("Losser\n");
+                            {
+                                AfficherImg(enig.Backg[2], screen);
+                                SDL_Flip(screen);
+                                SDL_Delay(2000);
+                            }
                             done = 1;
                         }
-
                         break;
                     }
 
@@ -231,6 +222,81 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                     }
                 }
                 SDL_ShowCursor(SDL_DISABLE);
+                break;
+            case SDLK_t:
+                InitEnigme1(&enig1, "enigme.txt");
+                afficherEnigme1(enig1, screen);
+                SDL_Flip(screen);
+                done = 0;
+                TimeSec = 0;
+                TimerInit = SDL_GetTicks();
+                Rep = 0;
+                SDL_ShowCursor(SDL_ENABLE);
+                while (!done)
+                {
+                    SDL_PollEvent(&event);
+                    switch (event.type)
+                    {
+                    case SDL_QUIT:
+                        done = 1;
+                        Confg->isRunning = 0;
+                        break;
+                    case SDL_KEYDOWN:
+                        switch (event.key.keysym.sym)
+                        {
+                        case SDLK_1:
+                            Rep = 1;
+                            break;
+                        case SDLK_2:
+                            Rep = 2;
+                            break;
+                        case SDLK_3:
+                            Rep = 3;
+                            break;
+                        }
+                        break;
+                    case SDL_MOUSEBUTTONDOWN:
+                        for (int i = 0; i < 3; i++)
+                        {
+                            if (event.button.x > enig1.Rep[i].pos.x && event.button.x < enig1.Rep[i].pos.x + enig1.Rep[i].surfaceText->w && event.button.y > enig1.Rep[i].pos.y && event.button.y < enig1.Rep[1].pos.y + enig1.Rep[i].surfaceText->h)
+                                Rep = i + 1;
+                        }
+
+                        break;
+                    }
+                    if (Rep > 0 && Rep < 4)
+                    {
+                        printf("RepC = %d\n", enig1.NumRepC);
+                        if (Rep == enig1.NumRepC)
+                        {
+                            // AfficherImg(enig1.Backg[1], screen);
+                            printf("Winner\n");
+                            // SDL_Flip(screen);
+                            SDL_Delay(2000);
+                        }
+                        else
+                        {
+                            // AfficherImg(enig1.Backg[2], screen);
+                            printf("Looser\n");
+                            // SDL_Flip(screen);
+                            SDL_Delay(2000);
+                        }
+                        done = 1;
+                    }
+
+                    int timer = (SDL_GetTicks() - TimerInit) / 1000;
+
+                    if (timer != TimeSec)
+                    {
+                        TimeSec = timer;
+                        animer1(&enig1, screen);
+                        SDL_Flip(screen);
+                        if (enig1.TimerI >= 10)
+                            done = 1;
+                    }
+                }
+                SDL_ShowCursor(SDL_DISABLE);
+                break;
                 break;
             case SDLK_f:
                 if (Confg->Fullscr > 0)

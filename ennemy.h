@@ -9,7 +9,7 @@
 #include "Main_Fn.h"
 typedef struct
 {
-    SDL_Rect pos;
+    SDL_Rect pos,posABS;
     SDL_Surface *img[6][10];
     int Flipped;
     double v; // Vitesse

@@ -20,27 +20,6 @@ typedef struct
     SDL_Surface *img;
 } Image;
 
-typedef struct
-{
-    Image tabMO[6];
-    Image tabMAO[3];
-    Image tabO[5];
-} tabI;
-
-typedef struct
-{
-    //background tabG[5];
-    Image tabG[5];
-    Image tabMG[11];
-    Image tabGameUI[5];
-    Image tabM[6];
-
-} tabIG;
-typedef struct
-{
-    Text tabMT[5], tabMAT[5];
-    Text tabOT[5], tabOAT[5];
-} tabT;
 
 // Txt FN
 void InitTitle(Text *text, char Title[]);

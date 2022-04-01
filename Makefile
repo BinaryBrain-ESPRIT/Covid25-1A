@@ -1,5 +1,5 @@
-game:main.o Main_Fn.o Text_Image.o Menu.o Mouse.o ennemy.o player.o Background.o minimap.o enigme_image.o
-	gcc main.o Main_Fn.o Text_Image.o Menu.o Mouse.o ennemy.o  player.o Background.o  minimap.o enigme_image.o -o game -lSDL -lSDL_image -lSDL_ttf -lSDL_mixer
+game:main.o Main_Fn.o Text_Image.o Menu.o Mouse.o ennemy.o player.o Background.o minimap.o enigme_image.o enigme.o
+	gcc main.o Main_Fn.o Text_Image.o Menu.o Mouse.o ennemy.o  player.o Background.o  minimap.o enigme_image.o enigme.o -o game -lSDL -lSDL_image -lSDL_ttf -lSDL_mixer
 main.o:main.c 
 	gcc -c main.c -g
 Main_Fn.o:Main_Fn.c  
@@ -19,4 +19,6 @@ Background.o:Background.c
 minimap.o:minimap.c
 	gcc -c minimap.c -g
 enigme_image.o:enigme_image.c
-	gcc -c enigme_image.c -g 
+	gcc -c enigme_image.c -g
+enigme.o:enigme.c
+	gcc -c enigme.c -g 

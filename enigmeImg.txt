@@ -1,1 +1,1 @@
-1 assets/enigmeImage/Math/Math.jpg 3
+1 assets/enigmeImage/Math/Math.jpg assets/enigmeImage/Math/Math_Win.jpg assets/enigmeImage/Math/Math_Loose.jpg 3
