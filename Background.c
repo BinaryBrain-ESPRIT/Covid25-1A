@@ -36,36 +36,40 @@ SDL_Color GetPixel(SDL_Surface *pSurface, int x, int y)
 
     return color;
 }
+
 int collisionPP(Player p, SDL_Surface Masque)
 {
     SDL_Color color;
+
     int posX = p.pos.x;
     int posY = p.pos.y;
     int posX1 = posX + p.img[p.animI][p.animJ]->w;
     int posY1 = posY + p.img[p.animI][p.animJ]->h;
+
     for (int i = posY; i <= posY1; i++)
     {
         // Right
         color = GetPixel(&Masque, posX1, i);
         if (color.r == 0 && color.g == 0 && color.b == 0)
-            p.direction = 0;
+            return 1;
         // Left
         color = GetPixel(&Masque, posX, i);
         if (color.r == 0 && color.g == 0 && color.b == 0)
-            p.direction = 0;
+            return -1;
     }
     for (int i = posX; i <= posX1; i++)
     {
         // TOP
         color = GetPixel(&Masque, i, posY);
         if (color.r == 0 && color.g == 0 && color.b == 0)
-            p.direction = 0;
-
+            return 2;
         // Bot
         color = GetPixel(&Masque, i, posY1);
         if (color.r == 0 && color.g == 0 && color.b == 0)
-            p.direction = 0;
+            return -2;
     }
+
+    return 0;
 }
 
 void scrolling(background *Backg, int direction, int pas_Avancement)

@@ -27,37 +27,6 @@ int Setup(Config *Confg)
     return 1;
 }
 
-void InitImg(tabI *tabI, tabIG *tabIG)
-{
-
-    InitBackg(&tabIG->tabM[0], "assets/MainMenu/Level-1-Perso-3.png");
-    InitBackg(&tabIG->tabM[1], "assets/MainMenu/Level-2-Perso-3.png");
-    InitBackg(&tabIG->tabM[2], "assets/MainMenu/Level-2-Perso-2.png");
-    InitBackg(&tabIG->tabM[3], "assets/MainMenu/Level-3-Perso-3.png");
-    InitBackg(&tabIG->tabM[4], "assets/MainMenu/Level-3-Perso-2.png");
-    InitBackg(&tabIG->tabM[5], "assets/MainMenu/Level-3-Perso-1.png");
-
-    InitBackg(&tabIG->tabG[0], "assets/Levels/Backg/Level1.png");
-
-    initImg(&tabIG->tabGameUI[0], 10, 20, "assets/Menu/Menu_But.png");
-    
-    InitBackg(&tabI->tabMO[0], "assets/MenuOpt/Background.png");
-    initImg(&tabI->tabMO[1], Width / 2 - 245, 356.5, "assets/MenuOpt/volumebar.png");
-    initImg(&tabI->tabMO[2], 1175, 356.5, "assets/MenuOpt/volumebut.png");
-
-    initImg(&tabIG->tabMG[0], Width / 2 - 333, Height / 2 - 430, "assets/Menu/Board.png");
-    initImg(&tabIG->tabMG[1], Width / 2 - 212, 338 - 51, "assets/Menu/Level.png");
-    initImg(&tabIG->tabMG[2], Width / 2 - 212, 475 - 51, "assets/Menu/Restart.png");
-    initImg(&tabIG->tabMG[3], Width / 2 - 212, 613 - 51, "assets/Menu/Options.png");
-    initImg(&tabIG->tabMG[4], Width / 2 - 212, 752 - 51, "assets/Menu/Quit.png");
-    initImg(&tabIG->tabMG[5], Width / 2 - 57, 855, "assets/Menu/CloseBord.png");
-    initImg(&tabIG->tabMG[6], Width / 2 - 212, 336 - 51, "assets/Menu/A_Level.png");
-    initImg(&tabIG->tabMG[7], Width / 2 - 212, 475 - 51, "assets/Menu/A_Restart.png");
-    initImg(&tabIG->tabMG[8], Width / 2 - 212, 613 - 51, "assets/Menu/A_Options.png");
-    initImg(&tabIG->tabMG[9], Width / 2 - 212, 752 - 51, "assets/Menu/A_Quit.png");
-    initImg(&tabIG->tabMG[10], Width / 2 - 57, 855, "assets/Menu/A_CloseBord.png");
-}
-
 void InitTxt_en(Text *tabMT,Text * tabMAT)
 {
     InitTitle(&tabMT[0], "Covid-25");
