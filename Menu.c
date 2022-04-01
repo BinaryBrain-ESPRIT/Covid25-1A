@@ -243,10 +243,12 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                         break;
                     case SDL_KEYDOWN:
 
+                        printf("%s\n", event.key.keysym.sym);
                         switch (event.key.keysym.sym)
                         {
+
                         case SDLK_1:
-                            printf("Enter\n");
+
                             Rep = 1;
                             break;
                         case SDLK_2:
