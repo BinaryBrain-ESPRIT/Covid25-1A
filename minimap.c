@@ -11,12 +11,8 @@ void initminimap(minimap *m, char nameimg[], Player p, Ennemy e[])
     m->playerTagPos.y = ((p.pos.y * Redim) / 100) + m->pos.y;
     for (int i = 0; i < 5; i++)
     {
-<<<<<<< HEAD
 
         m->zombieTag[i] = IMG_Load("assets/Levels/Backg/minimaptagZombie.gif");
-=======
-        m->zombieTag[i] = IMG_Load("assets/Levels/Backg/minimaptagPlayer1.png");
->>>>>>> 9b9d355d51f6973e7619c19a06d1fccb1731ec05
         m->zombieTagPos[i].x = ((e[i].pos.x * Redim) / 100) + m->pos.x;
         m->zombieTagPos[i].y = ((e[i].pos.y * Redim) / 100) + m->pos.y;
     }
@@ -37,6 +33,6 @@ void MAJMinimap(SDL_Rect PosJoueur, Ennemy e[], minimap *m, int redimensionnemen
     for (int i = 0; i < 5; i++)
     {
         m->zombieTagPos[i].x = m->pos.x + ((e[i].posABS.x * redimensionnement) / 100);
-        m->zombieTagPos[i].y = m->pos.y + ((e[i].posABS.y * redimensionnement) / 100);
+        m->zombieTagPos[i].y = m->pos.y + ((e[i].posABS.y * redimensionnement) / 100)- 30;
     }
 }
