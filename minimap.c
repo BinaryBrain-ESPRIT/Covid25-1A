@@ -12,7 +12,7 @@ void initminimap(minimap *m, char nameimg[], Player p, Ennemy e[])
     for (int i = 0; i < 5; i++)
     {
 
-        m->zombieTag[i] = IMG_Load("assets/Levels/Backg/minimaptagPlayer1.png");
+        m->zombieTag[i] = IMG_Load("assets/Levels/Backg/minimaptagZombie.gif");
         m->zombieTagPos[i].x = ((e[i].pos.x * Redim) / 100) + m->pos.x;
         m->zombieTagPos[i].y = ((e[i].pos.y * Redim) / 100) + m->pos.y;
 
