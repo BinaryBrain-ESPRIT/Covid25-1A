@@ -6,7 +6,7 @@
 
 typedef struct
 {
-    Image Backg;
+    Image Backg[3];
     Image Timer[10];
     int NumRC;
     int NumE;

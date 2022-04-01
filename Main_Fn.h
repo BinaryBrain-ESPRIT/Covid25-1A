@@ -33,7 +33,6 @@ void Liberer_MusCh(Mix_Chunk * sound);
 
 
 int Setup(Config * Confg);
-void InitImg(tabI * tabI,tabIG *tabIG);
 void InitImg_fr(Image *tabMO,Image * tabMAO);
 void InitImg_en(Image *tabMO,Image * tabMAO);
 void InitTxt_en(Text *tabMT,Text * tabMAT);

@@ -111,7 +111,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         else
             deplacerPerso(&p, Confg->deltaTime);
         afficherPerso(p, screen);
-   
+
         for (int i = 0; i < 5; i++)
         {
             if (collisionBB(e[i], p))
@@ -193,9 +193,17 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                         if (Rep > 0 && Rep < 4)
                         {
                             if (Rep == enig.NumRC)
-                                printf("Winn \n");
+                            {
+                                AfficherImg(enig.Backg[1], screen);
+                                SDL_Flip(screen);
+                                SDL_Delay(2000);
+                            }
                             else
-                                printf("Losser\n");
+                            {
+                                AfficherImg(enig.Backg[2], screen);
+                                SDL_Flip(screen);
+                                SDL_Delay(2000);
+                            }
                             done = 1;
                         }
                         break;
