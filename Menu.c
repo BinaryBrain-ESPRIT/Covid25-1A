@@ -256,30 +256,29 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                         }
                         break;
                     case SDL_MOUSEBUTTONDOWN:
-                        for (int i = 0; i < 3; i++)
-                        {
-                            if (event.button.x > enig1.Rep[i].pos.x && event.button.x < enig1.Rep[i].pos.x + enig1.Rep[i].surfaceText->w && event.button.y > enig1.Rep[i].pos.y && event.button.y < enig1.Rep[1].pos.y + enig1.Rep[i].surfaceText->h)
-                                Rep = i + 1;
-                        }
-
+                        if (event.button.x > 261 && event.button.x < 596 && event.button.y > 427 && event.button.y < 565)
+                            Rep = 1;
+                        else if (event.button.x > 1340 && event.button.x < 1700 && event.button.y > 427 && event.button.y < 565)
+                            Rep = 2;
+                        else if (event.button.x > 775 && event.button.x < 1132 && event.button.y > 661 && event.button.y < 820)
+                            Rep = 3;
                         break;
                     }
                     if (Rep > 0 && Rep < 4)
                     {
-                        printf("RepC = %d\n", enig1.NumRepC);
                         if (Rep == enig1.NumRepC)
                         {
                             // AfficherImg(enig1.Backg[1], screen);
                             printf("Winner\n");
                             // SDL_Flip(screen);
-                            SDL_Delay(2000);
+                            //SDL_Delay(2000);
                         }
                         else
                         {
                             // AfficherImg(enig1.Backg[2], screen);
                             printf("Looser\n");
                             // SDL_Flip(screen);
-                            SDL_Delay(2000);
+                            //SDL_Delay(2000);
                         }
                         done = 1;
                     }
