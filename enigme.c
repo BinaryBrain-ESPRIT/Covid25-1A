@@ -56,3 +56,14 @@ void afficherEnigme(enigme e, SDL_Surface *screen)
   SDL_BlitSurface(e.Rep[1].surfaceText,NULL,screen,&e.Rep[1].pos);
   SDL_BlitSurface(e.Rep[2].surfaceText,NULL,screen,&e.Rep[2].pos);
 }
+void animer(enigme *e, SDL_Surface *screen)
+{
+    AfficherImg(e->Timer[10 - e->TimerI - 1], screen);
+    e->TimerI++;
+}
+void Free_Enigme(enigme *e)
+{
+    SDL_
+    FreeSurface(e->Backg.img);
+    for (int i = 0; i < 10; i++)
+        SDL_FreeSurface(e->Timer[i].img);
