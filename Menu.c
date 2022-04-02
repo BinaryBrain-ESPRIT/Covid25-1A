@@ -38,7 +38,7 @@ void AffichageMenuOpt(SDL_Surface *screen, Image tabMO[], Image tabMAO[], int j)
 
 void MenuNG(SDL_Surface *screen, Config *Confg)
 {
-
+    const Uint8 *state = SDL_GetKeyState(NULL);
     SDL_Event event;
     int isRunning = 1;
     int Opened = 0;
@@ -55,7 +55,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     background tabG[3];
     Image tabGameUI[5];
     // Init LevelBackg
-    InitGameBackg(&tabG[0], "assets/Levels/Backg/Level1.png");
+    InitGameBackg(&tabG[0], "assets/Levels/Level1.png");
 
     // Init GameUI
     initImg(&tabGameUI[0], 10, 20, "assets/Menu/Menu_But.png");
@@ -71,14 +71,15 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     initPerso(&p, Confg->Player);
 
     // Init MiniMap
-    initminimap(&map, "assets/Levels/Backg/level1mini.png", p, e);
+    initminimap(&map, "assets/MiniMap/level1mini.png", p, e);
     SDL_ShowCursor(SDL_DISABLE);
 
     while (isRunning)
     {
         last_frame_time = SDL_GetTicks();
 
-        // while (!(SDL_GetTicks() > last_frame_time + FRAME_TARGET_TIME));
+        // while (!(SDL_GetTicks() > last_frame_time + FRAME_TARGET_TIME))
+        ;
 
         if (Confg->isRunning == 0)
             isRunning = 0;
@@ -92,12 +93,15 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         animerPerso(&p);
         if (p.pos.x >= screen->w / 2 && p.direction == 1)
         {
-            scrolling(&tabG[0], p.direction, 10);
-            p.posABS.x += 10;
-            for (int i = 0; i < 5; i++)
+            if (p.posABS.x < 9390 && !(p.posABS.y > 530 && p.posABS.y < 1310))
             {
-                e[i].posInit -= 10;
-                e[i].pos.x -= 10;
+                scrolling(&tabG[0], p.direction, 10);
+                p.posABS.x += 10;
+                for (int i = 0; i < 5; i++)
+                {
+                    e[i].posInit -= 10;
+                    e[i].pos.x -= 10;
+                }
             }
         }
         else if (p.direction == -1 && p.pos.x <= 500 && p.posABS.x > 500)
@@ -110,9 +114,34 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                 e[i].pos.x += 10;
             }
         }
+        else if (p.direction == -2)
+        {
+            if (p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y < 1340)
+            {
+                scrolling(&tabG[0], p.direction, 10);
+                p.posABS.y += 10;
+                for (int i = 0; i < 5; i++)
+                {
+                    e[i].pos.y -= 10;
+                }
+            }
+        }
+        else if (p.direction == 2)
+        {
+            if (p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y > 510)
+            {
+                scrolling(&tabG[0], p.direction, 10);
+                p.posABS.y -= 10;
+                for (int i = 0; i < 5; i++)
+                {
+                    e[i].pos.y += 10;
+                }
+            }
+        }
         else
             deplacerPerso(&p, Confg->deltaTime);
         afficherPerso(p, screen);
+        printf("PlayerX = %d   PlayerY = %d\n", p.posABS.x, p.posABS.y);
 
         for (int i = 0; i < 5; i++)
         {
@@ -135,6 +164,30 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         // MiniMap Functions
 
         SDL_Flip(screen);
+
+        if (state[SDLK_UP])
+        {
+            if (p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y > 510)
+                p.direction = 2;
+            else
+                p.direction = 0;
+        }
+        if (state[SDLK_DOWN])
+        {
+            if (p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y < 1340)
+                p.direction = -2;
+            else
+                p.direction = 0;
+        }
+        if (state[SDLK_RIGHT])
+        {
+            p.direction = 1;
+        }
+        if (state[SDLK_LEFT])
+        {
+
+            p.direction = -1;
+        }
         SDL_PollEvent(&event);
         switch (event.type)
         {
@@ -147,12 +200,6 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym)
             {
-            case SDLK_RIGHT:
-                p.direction = 1;
-                break;
-            case SDLK_LEFT:
-                p.direction = -1;
-                break;
             case SDLK_TAB:
                 if (!Opened)
                 {
@@ -271,14 +318,14 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                             // AfficherImg(enig1.Backg[1], screen);
                             printf("Winner\n");
                             // SDL_Flip(screen);
-                            //SDL_Delay(2000);
+                            // SDL_Delay(2000);
                         }
                         else
                         {
                             // AfficherImg(enig1.Backg[2], screen);
                             printf("Looser\n");
                             // SDL_Flip(screen);
-                            //SDL_Delay(2000);
+                            // SDL_Delay(2000);
                         }
                         done = 1;
                     }
@@ -320,7 +367,6 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
 
             break;
         }
-
         Confg->deltaTime = (SDL_GetTicks() - last_frame_time);
     }
     SDL_ShowCursor(SDL_ENABLE);

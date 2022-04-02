@@ -21,11 +21,10 @@ void initPerso(Player *p, int NumPlayer)
     {
         for (int j = 0; j < 6; j++)
         {
-            sprintf(NomImg, "assets/Animation/Player%d/%d/%d.png", NumPlayer+1, i, j+1);
+            sprintf(NomImg, "assets/Animation/Player%d/%d/%d.png", NumPlayer + 1, i, j + 1);
             p->img[i][j] = IMG_Load(NomImg);
         }
     }
- 
 }
 void afficherPerso(Player p, SDL_Surface *screen)
 {
@@ -34,15 +33,33 @@ void afficherPerso(Player p, SDL_Surface *screen)
 void deplacerPerso(Player *p, int dt)
 {
 
-    if (p->direction == 1)
+    switch (p->direction)
     {
-        p->pos.x += p->v * dt;
-        p->posABS.x += p->v * dt;
-    }
-    else if (p->direction == -1 && p->pos.x > 0)
-    {
-        p->pos.x -= p->v * dt;
-        p->posABS.x -= p->v * dt;
+    case 1:
+        if (p->posABS.x < 9390 && !(p->posABS.y > 530 && p->posABS.y < 1310))
+        {
+            p->pos.x += p->v * dt;
+            p->posABS.x += p->v * dt;
+        }
+        break;
+    case -1:
+        if (p->posABS.x > 0 && !(p->posABS.y > 530 && p->posABS.y < 1310))
+        {
+            p->pos.x -= p->v * dt;
+            p->posABS.x -= p->v * dt;
+        }
+        break;
+    case 2:
+        if (p->posABS.x > 6800 && p->posABS.x < 6850 && p->posABS.y > 510)
+        {
+            p->pos.y -= p->v * dt;
+            p->posABS.y -= p->v * dt;
+        }
+        break;
+    case -2:
+        p->pos.y += p->v * dt;
+        p->posABS.y += p->v * dt;
+        break;
     }
 }
 void animerPerso(Player *p)
