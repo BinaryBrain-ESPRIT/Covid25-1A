@@ -14,21 +14,16 @@ int main()
     SDL_Event event;
     Mix_Chunk *sound;
     Mix_Music *music;
-
+    char NomBackg[40];
     int i = 0, isRunning;
     int last_frame_time = 0;
     float delta_time;
-    Image tabM[5];
+    Image tabM;
     Text tabMT[5];
     Text tabMAT[5];
 
     // Init Image
-    InitBackg(&tabM[0], "assets/MainMenu/Level-1-Perso-3.png");
-    InitBackg(&tabM[1], "assets/MainMenu/Level-2-Perso-3.png");
-    InitBackg(&tabM[2], "assets/MainMenu/Level-2-Perso-2.png");
-    InitBackg(&tabM[3], "assets/MainMenu/Level-3-Perso-3.png");
-    InitBackg(&tabM[4], "assets/MainMenu/Level-3-Perso-2.png");
-    InitBackg(&tabM[5], "assets/MainMenu/Level-3-Perso-1.png");
+
     // End Init
 
     Confg->isRunning = Setup(Confg);
@@ -36,9 +31,16 @@ int main()
     if (Confg->isRunning)
     {
         InitTxt_en(tabMT, tabMAT);
+
+        sprintf(NomBackg, "assets/MainMenu/Level-%d-Perso-%d.png", Confg->LevelR, Confg->Player);
+        InitBackg(&tabM, NomBackg);
+
         screen = SDL_SetVideoMode(Width, Height, Bpp, SDL_HWSURFACE | SDL_DOUBLEBUF);
+
         PlayMusic("assets/Sound/son.wav", music);
+
         AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+        
         SDL_Flip(screen);
     }
 
@@ -93,7 +95,7 @@ int main()
                 switch (i)
                 {
                 case 1:
-                    MenuNG(screen, Confg);
+                    SelectLevel(screen, Confg);
                     i = 0;
                     AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
                     SDL_Flip(screen);
@@ -130,7 +132,8 @@ int main()
             switch (i)
             {
             case 1:
-                MenuNG(screen, Confg);
+                SelectLevel(screen, Confg);
+                
                 AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
                 SDL_Flip(screen);
                 i = 0;
@@ -158,26 +161,18 @@ int main()
     }
 
     // Liberer_Mus(music);
-    /**/
-    /*
-        for (int i = 0; i < 6; i++)
-            Liberer_Img(tabI->tabMO[i]);
 
-        for (int i = 0; i < 3; i++)
-            Liberer_Img(tabI->tabMAO[i]);
+    Liberer_Img(tabM);
 
-        for (int i = 0; i < 11; i++)
-            Liberer_Img(tabMG[i]);
+    for (int i = 0; i < 5; i++)
+    {
+        // Liberer_txt(tabMT[i]);
+        // Liberer_txt(tabMAT[i]);
+    }
 
-        for (int i = 0; i < 5; i++)
-        {
-            Liberer_txt(tabMT[i]);
-            Liberer_txt(tabMAT[i]);
-        }
-    */
-
-    // TTF_Quit();
-    // SDL_Quit();
+    free(Confg);
+    TTF_Quit();
+    SDL_Quit();
 
     printf("\nGame ShutDown !\n");
 }

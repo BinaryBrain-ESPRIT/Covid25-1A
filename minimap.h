@@ -7,8 +7,8 @@
 
 typedef struct 
 {
-    SDL_Surface *image,*playerTag,*zombieTag[5];
-    SDL_Rect pos,playerTagPos,zombieTagPos[5];  
+    SDL_Surface *image,*image1,*playerTag,*zombieTag[5];
+    SDL_Rect pos,pos1,playerTagPos,zombieTagPos[5];  
 }minimap;
 
 void initminimap(minimap *m,char nameimg[], Player p,Ennemy e[]);

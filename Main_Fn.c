@@ -4,25 +4,26 @@ int Setup(Config *Confg)
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
-        printf("ERROR : %s", SDL_GetError());
+        printf("ERROR : %s\n", SDL_GetError());
         return 0;
     }
     if (TTF_Init() != 0)
     {
-        printf("ERROR : %s", SDL_GetError());
+        printf("ERROR : %s\n", SDL_GetError());
         return 0;
     }
-    if (Mix_OpenAudio(48000, MIX_DEFAULT_FORMAT, 2, 1536) == -1)
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS,1024) == -1)
     {
-        printf("%s", Mix_GetError());
+        printf("%s\n", Mix_GetError());
         return 0;
     }
-
+    SDL_WM_SetCaption("Covid 25","");
+    
     Confg->Lang = 1;
     Confg->Volume = 1;
     Confg->Fullscr = 1;
-    Confg->LevelR = 0;
-    Confg->Player = 0;
+    Confg->LevelR = 1;
+    Confg->Player = 3;
 
     return 1;
 }

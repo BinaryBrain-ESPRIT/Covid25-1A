@@ -3,9 +3,9 @@
 #include "minimap.h"
 #include "enigme_image.h"
 #include "enigme.h"
-void AffichageMainMenu(SDL_Surface *screen, Text tabT[], Text tabAT[], Image tabI[], int j, int l, int p)
+void AffichageMainMenu(SDL_Surface *screen, Text tabT[], Text tabAT[], Image tabI, int j, int l, int p)
 {
-    AfficherImg(tabI[0], screen);
+    AfficherImg(tabI, screen);
     if (j != 0)
     {
         for (int i = 1; i < 5; i++)
@@ -36,16 +36,75 @@ void AffichageMenuOpt(SDL_Surface *screen, Image tabMO[], Image tabMAO[], int j)
             AfficherImg(tabMO[i], screen);
 }
 
+void SelectLevel(SDL_Surface *screen, Config *Confg)
+{
+    SDL_Event event;
+    Image LevelBut[6];
+    Image Backg;
+    int isRunning = 1;
+    int x, y;
+    // Init
+
+    InitBackg(&Backg, "assets/SelectLevel/SelectLevel.png");
+    initImg(&LevelBut[0], 573, 765, "assets/SelectLevel/level1.png");
+    initImg(&LevelBut[1], 846, 765, "assets/SelectLevel/level2.png");
+    initImg(&LevelBut[2], 1110, 765, "assets/SelectLevel/level3.png");
+    initImg(&LevelBut[3], 573, 765, "assets/SelectLevel/level1S.png");
+    initImg(&LevelBut[4], 846, 765, "assets/SelectLevel/level2S.png");
+    initImg(&LevelBut[5], 1110, 765, "assets/SelectLevel/level3S.png");
+
+    // Affichage
+    AfficherImg(Backg, screen);
+    for (int i = 0; i < 3; i++)
+        AfficherImg(LevelBut[i], screen);
+    SDL_Flip(screen);
+    while (isRunning)
+    {
+        SDL_PollEvent(&event);
+        switch (event.type)
+        {
+        case SDL_QUIT:
+            Confg->isRunning = 0;
+            isRunning = 0;
+            break;
+        case SDL_KEYDOWN:
+            if (event.key.keysym.sym == SDLK_ESCAPE)
+                isRunning = 0;
+        case SDL_MOUSEBUTTONDOWN:
+            x = event.button.x;
+            y = event.button.y;
+            if (x > 571 && x < 809 && y > 765 && y < 821)
+            {
+                Confg->Level = 1;
+                MenuNG(screen, Confg);
+            }
+            if (x > 846 && x < 1084 && y > 765 && y < 821)
+            {
+                Confg->Level = 2;
+                MenuNG(screen, Confg);
+            }
+            if (x > 1110 && x < 1348 && y > 765 && y < 821)
+            {
+                Confg->Level = 3;
+                MenuNG(screen, Confg);
+            }
+            isRunning = 0;
+            break;
+        }
+    }
+
+    Liberer_Img(Backg);
+    for (int i = 0; i < 6; i++)
+        Liberer_Img(LevelBut[i]);
+}
 void MenuNG(SDL_Surface *screen, Config *Confg)
 {
     const Uint8 *state = SDL_GetKeyState(NULL);
     SDL_Event event;
     int isRunning = 1;
     int Opened = 0;
-    int i = 0, a = 0, x = 0;
     int last_frame_time = 0;
-    int diff;
-    int NoEnnemyAround;
+    char HealthImg[30];
     SDL_Rect cam = {0, 0, Width, Height};
     Player p;
     Ennemy e[5];
@@ -54,11 +113,13 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     enigme enig1;
     background tabG[3];
     Image tabGameUI[5];
+
     // Init LevelBackg
     InitGameBackg(&tabG[0], "assets/Levels/Level1.png");
 
     // Init GameUI
-    initImg(&tabGameUI[0], 10, 20, "assets/Menu/Menu_But.png");
+    initImg(&tabGameUI[0], 1800, 20, "assets/GameUi/MenuBut.png");
+    initImg(&tabGameUI[1], 40, 40, "assets/GameUi/Health3.png");
 
     // Init Ennemi
     initEnnemy(&e[0], 2500, 575, 5, 0, 2);
@@ -72,36 +133,65 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
 
     // Init MiniMap
     initminimap(&map, "assets/MiniMap/level1mini.png", p, e);
+
     SDL_ShowCursor(SDL_DISABLE);
 
     while (isRunning)
     {
         last_frame_time = SDL_GetTicks();
 
-        // while (!(SDL_GetTicks() > last_frame_time + FRAME_TARGET_TIME))
-        ;
+        // while (!(SDL_GetTicks() > last_frame_time + FRAME_TARGET_TIME));
 
         if (Confg->isRunning == 0)
             isRunning = 0;
 
+        // Affichage Backg
         AfficherBackg(tabG[0], screen);
-        AfficherImg(tabGameUI[0], screen);
+
+        // Affichage GameUI
+        for (int i = 0; i < 2; i++)
+            AfficherImg(tabGameUI[i], screen);
+
+        // Affichage MiniMap
         afficherminimap(map, screen);
 
         MAJMinimap(p.posABS, e, &map, Redim);
+
         // Perso
+
         animerPerso(&p);
-        if (p.pos.x >= screen->w / 2 && p.direction == 1)
+        afficherPerso(p, screen);
+
+        // PlayerDie
+        if (p.nbreVie == 0)
         {
-            if (p.posABS.x < 9390 && !(p.posABS.y > 530 && p.posABS.y < 1310))
+            if (p.AnimP_Die % 10 == 0)
             {
-                scrolling(&tabG[0], p.direction, 10);
-                p.posABS.x += 10;
-                for (int i = 0; i < 5; i++)
+                if (!p.flipped)
+                    p.animI = 4;
+                else
+                    p.animI = 5;
+                if (p.animJ >= 8)
                 {
-                    e[i].posInit -= 10;
-                    e[i].pos.x -= 10;
+                    isRunning = 0;
+                    SDL_Delay(2000);
                 }
+                else
+                    p.animJ++;
+
+                p.AnimP_Die = 0;
+            }
+            p.AnimP_Die += 2;
+        }
+
+        if (p.pos.x >= screen->w / 2 && p.direction == 1 && p.posABS.x < 9390 && !(p.posABS.y > 530 && p.posABS.y < 1310))
+        {
+            scrolling(&tabG[0], p.direction, 10);
+            p.posABS.x += 10;
+            for (int i = 0; i < 5; i++)
+            {
+                e[i].posInit -= 10;
+                e[i].pos.x -= 10;
             }
         }
         else if (p.direction == -1 && p.pos.x <= 500 && p.posABS.x > 500)
@@ -114,43 +204,41 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                 e[i].pos.x += 10;
             }
         }
-        else if (p.direction == -2)
+        else if (p.direction == -2 && p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y < 1340)
         {
-            if (p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y < 1340)
+            scrolling(&tabG[0], p.direction, 10);
+            p.posABS.y += 10;
+            for (int i = 0; i < 5; i++)
             {
-                scrolling(&tabG[0], p.direction, 10);
-                p.posABS.y += 10;
-                for (int i = 0; i < 5; i++)
-                {
-                    e[i].pos.y -= 10;
-                }
+                e[i].pos.y -= 10;
             }
         }
-        else if (p.direction == 2)
+        else if (p.direction == 2 && p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y > 510)
         {
-            if (p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y > 510)
+            scrolling(&tabG[0], p.direction, 10);
+            p.posABS.y -= 10;
+            for (int i = 0; i < 5; i++)
             {
-                scrolling(&tabG[0], p.direction, 10);
-                p.posABS.y -= 10;
-                for (int i = 0; i < 5; i++)
-                {
-                    e[i].pos.y += 10;
-                }
+                e[i].pos.y += 10;
             }
         }
         else
             deplacerPerso(&p, Confg->deltaTime);
-        afficherPerso(p, screen);
-        printf("PlayerX = %d   PlayerY = %d\n", p.posABS.x, p.posABS.y);
 
+        // Ennemy
         for (int i = 0; i < 5; i++)
         {
-            if (collisionBB(e[i], p))
+            if (collisionBB(e[i], p) && p.nbreVie > 0)
             {
                 e[i].direction = 0;
                 e[i].attack = 1;
+                if (e[i].anim_j == 2 && e[i].AnimE_Attack % 10 == 0)
+                    p.nbreVie--;
+                printf("NbreVie = %d\n", p.nbreVie);
                 animerEnnemy(&e[i], Confg);
                 afficherEnnemy(e[i], screen);
+                sprintf(HealthImg, "assets/GameUi/Health%d.png", p.nbreVie);
+                initImg(&tabGameUI[1], 40, 40, HealthImg);
             }
             else
             {
@@ -161,10 +249,10 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                 afficherEnnemy(e[i], screen);
             }
         }
-        // MiniMap Functions
 
         SDL_Flip(screen);
 
+        // PlayerMovement
         if (state[SDLK_UP])
         {
             if (p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y > 510)
@@ -188,11 +276,10 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
 
             p.direction = -1;
         }
+
         SDL_PollEvent(&event);
         switch (event.type)
         {
-        case SDL_MOUSEMOTION:
-            break;
         case SDL_QUIT:
             Confg->isRunning = 0;
             isRunning = 0;
@@ -213,6 +300,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                 isRunning = 0;
                 break;
             case SDLK_e:
+                // EnigmeImage
                 InitEnigme(&enig, "enigmeImg.txt");
                 afficherEnigme(enig, screen);
                 SDL_Flip(screen);
@@ -271,6 +359,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                 SDL_ShowCursor(SDL_DISABLE);
                 break;
             case SDLK_t:
+                // EnigmeTexte
                 InitEnigme1(&enig1, "enigme.txt");
                 afficherEnigme1(enig1, screen);
                 SDL_Flip(screen);
@@ -370,6 +459,17 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         Confg->deltaTime = (SDL_GetTicks() - last_frame_time);
     }
     SDL_ShowCursor(SDL_ENABLE);
+
+    // Liberation
+    for (int i = 0; i < 5; i++)
+        LibererEnnemy(e[i]);
+
+    LibererPlayer(p);
+
+    LibererBackg(tabG[0]);
+
+    for (int i = 0; i < 2; i++)
+        Liberer_Img(tabGameUI[i]);
 }
 
 void MenuInGame(SDL_Surface *screen, Config *Confg, int *Opened, int *isRunning)
@@ -378,17 +478,17 @@ void MenuInGame(SDL_Surface *screen, Config *Confg, int *Opened, int *isRunning)
 
     // Init Image menu In Game
 
-    initImg(&tabMG[0], Width / 2 - 333, Height / 2 - 430, "assets/Menu/Board.png");
-    initImg(&tabMG[1], Width / 2 - 212, 338 - 51, "assets/Menu/Level.png");
-    initImg(&tabMG[2], Width / 2 - 212, 475 - 51, "assets/Menu/Restart.png");
-    initImg(&tabMG[3], Width / 2 - 212, 613 - 51, "assets/Menu/Options.png");
-    initImg(&tabMG[4], Width / 2 - 212, 752 - 51, "assets/Menu/Quit.png");
-    initImg(&tabMG[5], Width / 2 - 57, 855, "assets/Menu/CloseBord.png");
-    initImg(&tabMG[6], Width / 2 - 212, 336 - 51, "assets/Menu/A_Level.png");
-    initImg(&tabMG[7], Width / 2 - 212, 475 - 51, "assets/Menu/A_Restart.png");
-    initImg(&tabMG[8], Width / 2 - 212, 613 - 51, "assets/Menu/A_Options.png");
-    initImg(&tabMG[9], Width / 2 - 212, 752 - 51, "assets/Menu/A_Quit.png");
-    initImg(&tabMG[10], Width / 2 - 57, 855, "assets/Menu/A_CloseBord.png");
+    InitBackg(&tabMG[0], "assets/MenuInGame/Board.png");
+    initImg(&tabMG[1], 819, 322, "assets/MenuInGame/Resume.png");
+    initImg(&tabMG[2], 819, 437, "assets/MenuInGame/Replay.png");
+    initImg(&tabMG[3], 819, 553, "assets/MenuInGame/Option.png");
+    initImg(&tabMG[4], 819, 669, "assets/MenuInGame/Exit.png");
+    initImg(&tabMG[5], 795, 801, "assets/MenuInGame/Cancel.png");
+    initImg(&tabMG[6], 819, 322, "assets/MenuInGame/ResumeS.png");
+    initImg(&tabMG[7], 819, 437, "assets/MenuInGame/ReplayS.png");
+    initImg(&tabMG[8], 819, 553, "assets/MenuInGame/OptionS.png");
+    initImg(&tabMG[9], 819, 669, "assets/MenuInGame/ExitS.png");
+    initImg(&tabMG[10], 795, 801, "assets/MenuInGame/CancelS.png");
 
     // End Init
 

@@ -1,5 +1,5 @@
 game:main.o Main_Fn.o Text_Image.o Menu.o Mouse.o ennemy.o player.o Background.o minimap.o enigme_image.o enigme.o
-	gcc main.o Main_Fn.o Text_Image.o Menu.o Mouse.o ennemy.o  player.o Background.o  minimap.o enigme_image.o enigme.o -o game -lSDL -lSDL_image -lSDL_ttf -lSDL_mixer
+	gcc main.o Main_Fn.o Text_Image.o Menu.o Mouse.o ennemy.o  player.o Background.o  minimap.o enigme_image.o enigme.o -g -o game -lSDL -lSDL_image -lSDL_ttf -lSDL_mixer
 main.o:main.c 
 	gcc -c main.c -g
 Main_Fn.o:Main_Fn.c  

@@ -10,8 +10,9 @@
 #include "ennemy.h"
 
 
-void AffichageMainMenu(SDL_Surface *screen, Text tabT[], Text tabAT[], Image tabI[], int j,int l,int p);
+void AffichageMainMenu(SDL_Surface *screen, Text tabT[], Text tabAT[], Image tabI, int j,int l,int p);
 void AffichageMenuOpt(SDL_Surface *screen, Image tabMO[], Image tabMAO[], int j);
+void SelectLevel(SDL_Surface *screen,Config *Confg);
 void MenuNG(SDL_Surface *screen, Config *Confg);
 void MenuInGame(SDL_Surface *screen, Config *Confg, int *Opened, int *isRunning);
 void MenuOpt(SDL_Surface *screen, Config *Confg);

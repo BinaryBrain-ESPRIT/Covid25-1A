@@ -20,7 +20,7 @@ typedef struct {
     int Volume;
     int Fullscr;
     int Lang;
-    int LevelR;
+    int LevelR,Level;
     int Player;
     double deltaTime;
 }Config;

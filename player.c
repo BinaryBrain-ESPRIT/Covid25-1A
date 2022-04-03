@@ -2,6 +2,7 @@
 
 void initPerso(Player *p, int NumPlayer)
 {
+    int n;
     char NomImg[100];
     p->pos.x = 250;
     p->pos.y = 510;
@@ -17,44 +18,49 @@ void initPerso(Player *p, int NumPlayer)
     p->AnimP_Idle = 0;
     p->AnimP_Attack = 0;
     p->AnimP_Run = 0;
-    for (int i = 0; i < 4; i++)
+    p->AnimP_Die = 0;
+
+    for (int i = 0; i < 6; i++)
     {
-        for (int j = 0; j < 6; j++)
+        if (i == 0 || i == 1)
+            n = 7;
+        else if (i == 2 || i == 3)
+            n = 6;
+        else if (i == 4 || i == 5)
+            n = 9;
+
+        for (int j = 0; j < n; j++)
         {
-            sprintf(NomImg, "assets/Animation/Player%d/%d/%d.png", NumPlayer + 1, i, j + 1);
+            sprintf(NomImg, "assets/Animation/Player1/%d/%d.png", i, j + 1);
             p->img[i][j] = IMG_Load(NomImg);
         }
     }
 }
+
 void afficherPerso(Player p, SDL_Surface *screen)
 {
     SDL_BlitSurface(p.img[p.animI][p.animJ], NULL, screen, &p.pos);
 }
+
 void deplacerPerso(Player *p, int dt)
 {
 
     switch (p->direction)
     {
     case 1:
-        if (p->posABS.x < 9390 && !(p->posABS.y > 530 && p->posABS.y < 1310))
-        {
-            p->pos.x += p->v * dt;
-            p->posABS.x += p->v * dt;
-        }
+        p->pos.x += p->v * dt;
+        p->posABS.x += p->v * dt;
+
         break;
     case -1:
-        if (p->posABS.x > 0 && !(p->posABS.y > 530 && p->posABS.y < 1310))
-        {
-            p->pos.x -= p->v * dt;
-            p->posABS.x -= p->v * dt;
-        }
+        p->pos.x -= p->v * dt;
+        p->posABS.x -= p->v * dt;
+
         break;
     case 2:
-        if (p->posABS.x > 6800 && p->posABS.x < 6850 && p->posABS.y > 510)
-        {
-            p->pos.y -= p->v * dt;
-            p->posABS.y -= p->v * dt;
-        }
+        p->pos.y -= p->v * dt;
+        p->posABS.y -= p->v * dt;
+
         break;
     case -2:
         p->pos.y += p->v * dt;
@@ -64,52 +70,73 @@ void deplacerPerso(Player *p, int dt)
 }
 void animerPerso(Player *p)
 {
-
-    switch (p->direction)
+    if (p->nbreVie > 0)
     {
-    case 0:
-        if (p->AnimP_Idle % 10 == 0)
+        switch (p->direction)
         {
-            if (!p->flipped)
-                p->animI = 0;
-            else
-                p->animI = 1;
+        case 0:
+            if (p->AnimP_Idle % 10 == 0)
+            {
+                if (!p->flipped)
+                    p->animI = 0;
+                else
+                    p->animI = 1;
 
-            if (p->animJ >= 5)
-                p->animJ = 0;
-            else
-                p->animJ++;
-            p->AnimP_Idle = 0;
-        }
-        p->AnimP_Idle += 2;
-        break;
-    case 1:
-        if (p->AnimP_Run % 10 == 0)
-        {
-            p->animI = 2;
-            if (p->animJ >= 5)
-                p->animJ = 0;
-            else
-                p->animJ++;
-            p->AnimP_Run = 0;
-        }
-        p->AnimP_Run += 4;
-        break;
-    case -1:
-        if (p->AnimP_Run % 10 == 0)
-        {
-            p->animI = 3;
-            if (p->animJ >= 5)
-                p->animJ = 0;
-            else
-                p->animJ++;
+                if (p->animJ >= 5)
+                    p->animJ = 0;
+                else
+                    p->animJ++;
+                p->AnimP_Idle = 0;
+            }
+            p->AnimP_Idle += 2;
+            break;
+        case 1:
+            if (p->AnimP_Run % 10 == 0)
+            {
+                p->animI = 2;
+                if (p->animJ >= 5)
+                    p->animJ = 0;
+                else
+                    p->animJ++;
+                p->AnimP_Run = 0;
+            }
+            p->AnimP_Run += 4;
+            break;
+        case -1:
+            if (p->AnimP_Run % 10 == 0)
+            {
+                p->animI = 3;
+                if (p->animJ >= 5)
+                    p->animJ = 0;
+                else
+                    p->animJ++;
 
-            p->AnimP_Run = 0;
+                p->AnimP_Run = 0;
+            }
+            p->AnimP_Run += 4;
+            break;
         }
-        p->AnimP_Run += 4;
-        break;
     }
 }
 void saut(Player *p)
 {
+}
+
+void LibererPlayer(Player p)
+{
+    int n;
+    for (int i = 0; i < 6; i++)
+    {
+        if (i == 0 || i == 1)
+            n = 7;
+        else if (i == 2 || i == 3)
+            n = 6;
+        else if (i == 4 || i == 5)
+            n = 9;
+
+        for (int j = 0; j < n; j++)
+        {
+            SDL_FreeSurface(p.img[i][j]);
+        }
+    }
 }

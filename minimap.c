@@ -4,8 +4,11 @@
 void initminimap(minimap *m, char nameimg[], Player p, Ennemy e[])
 {
     m->image = IMG_Load(nameimg);
-    m->pos.x = Width / 2 - (m->image->w / 2);
-    m->pos.y = 50;
+    m->image1 = IMG_Load("assets/MiniMap/MinimapFrame.png");
+    m->pos1.x = 0;
+    m->pos1.y = 0;
+    m->pos.x = 382;
+    m->pos.y = 45;
     m->playerTag = IMG_Load("assets/MiniMap/PlayerTag.png");
     m->playerTagPos.x = ((p.pos.x * Redim) / 100) + m->pos.x;
     m->playerTagPos.y = ((p.pos.y * Redim) / 100) + m->pos.y;
@@ -18,7 +21,9 @@ void initminimap(minimap *m, char nameimg[], Player p, Ennemy e[])
 }
 void afficherminimap(minimap m, SDL_Surface *screen)
 {
+    SDL_BlitSurface(m.image1, NULL, screen, &m.pos1);
     SDL_BlitSurface(m.image, NULL, screen, &m.pos);
+    
     SDL_BlitSurface(m.playerTag, NULL, screen, &m.playerTagPos);
     for (int i = 0; i < 5; i++)
     {
@@ -34,4 +39,9 @@ void MAJMinimap(SDL_Rect PosJoueur, Ennemy e[], minimap *m, int redimensionnemen
         m->zombieTagPos[i].x = m->pos.x + ((e[i].posABS.x * redimensionnement) / 100);
         m->zombieTagPos[i].y = m->pos.y + ((e[i].posABS.y * redimensionnement) / 100);
     }
+}
+
+void Liberer (minimap * m){
+    SDL_FreeSurface(m->image);
+    SDL_FreeSurface(m->image1);
 }

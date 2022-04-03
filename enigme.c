@@ -4,9 +4,9 @@ void InitEnigme1(enigme *e, char *nomfichier)
 {
   // Declaration
   SDL_Color black = {0, 0, 0};
-  char NomBackg[100];
-  char NomTimer[100];
-  char ImgTimer[100];
+  char NomBackg[30];
+  char NomTimer[35];
+  
   // Fichier
   e->f = fopen(nomfichier, "r");
 
@@ -53,9 +53,7 @@ void InitEnigme1(enigme *e, char *nomfichier)
 
   for (int i = 0; i < 11; i++)
   {
-    strcpy(NomTimer, "assets/enigmeText/Timer/");
-    sprintf(ImgTimer, "%d.jpg", i);
-    strcat(NomTimer, ImgTimer);
+    sprintf(NomTimer, "assets/enigmeText/Timer/%d.jpg", i);
     initImg(&e->Timer[i], 1673, 32, NomTimer);
   }
   e->TimerI = 0;

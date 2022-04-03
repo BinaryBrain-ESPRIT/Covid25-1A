@@ -1,6 +1,6 @@
 #include "Mouse.h"
 
-void Motion_MM(Text tabMT[],Text tabMAT[],Image tabM[], SDL_Event event, SDL_Surface *screen, int *i, Config *Confg)
+void Motion_MM(Text tabMT[],Text tabMAT[],Image tabM, SDL_Event event, SDL_Surface *screen, int *i, Config *Confg)
 {
     int x, y;
     Mix_Chunk *sound;
@@ -68,7 +68,7 @@ void Motion_MG(Image *tabMG, SDL_Surface *screen,SDL_Event event, int *i)
     x = event.motion.x;
     y = event.motion.y;
     
-    if (x > 751 && x < 1175 && y > 288 && y < 388)
+    if (x > 819 && x < 1081 && y > 322 && y < 405)
     {
         if (*i != 1)
         {
@@ -78,7 +78,7 @@ void Motion_MG(Image *tabMG, SDL_Surface *screen,SDL_Event event, int *i)
         }
     }
 
-    else if (x > 751 && x < 1175 && y > 430 && y < 526)
+    else if (x > 819 && x < 1081 && y > 437 && y < 521)
     {
 
         if (*i != 2)
@@ -88,7 +88,7 @@ void Motion_MG(Image *tabMG, SDL_Surface *screen,SDL_Event event, int *i)
             SDL_Flip(screen);
         }
     }
-    else if (x > 751 && x < 1175 && y > 567 && y < 666)
+    else if (x > 819 && x < 1081 && y > 553 && y < 637)
     {
         if (*i != 3)
         {
@@ -98,7 +98,7 @@ void Motion_MG(Image *tabMG, SDL_Surface *screen,SDL_Event event, int *i)
         }
     }
 
-    else if (x > 751 && x < 1175 && y > 705 && y < 805)
+    else if (x > 819 && x < 1081 && y > 669 && y < 753)
     {
         if (*i != 4)
         {
@@ -107,7 +107,7 @@ void Motion_MG(Image *tabMG, SDL_Surface *screen,SDL_Event event, int *i)
             SDL_Flip(screen);
         }
     }
-    else if (x > 904 && x < 1016 && y > 862 && y < 965)
+    else if (x > 904 && x < 1016 && y > 801 && y < 900)
     {
         if (*i != 5)
         {

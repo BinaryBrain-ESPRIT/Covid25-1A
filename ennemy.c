@@ -22,9 +22,9 @@ void initEnnemy(Ennemy *e, int x, int y, int vitesse, int direction, int nbreVie
     for (int i = 0; i < 6; i++)
     {
         if (i == 0 || i == 1)
-            n = 16;
+            n = 15;
         else if (i == 2 || i == 3)
-            n = 11;
+            n = 10;
         else if (i == 4 || i == 5)
             n = 8;
         for (int j = 0; j < n; j++)
@@ -33,6 +33,8 @@ void initEnnemy(Ennemy *e, int x, int y, int vitesse, int direction, int nbreVie
             e->img[i][j] = IMG_Load(NomImg);
         }
     }
+
+   
 }
 void afficherEnnemy(Ennemy e, SDL_Surface *screen)
 {
@@ -67,7 +69,7 @@ void animerEnnemy(Ennemy *e, Config *Confg)
             if (e->AnimeE_Idle % 10 == 0)
             {
                 e->anim_i = 0;
-                if (e->anim_j >= 6)
+                if (e->anim_j >= 14)
                     e->anim_j = 0;
                 else
                     e->anim_j++;
@@ -80,7 +82,7 @@ void animerEnnemy(Ennemy *e, Config *Confg)
             if (e->AnimE_Run % 10 == 0)
             {
                 e->anim_i = 2;
-                if (e->anim_j >= 5)
+                if (e->anim_j >= 9)
                     e->anim_j = 0;
                 else
                     e->anim_j++;
@@ -92,7 +94,7 @@ void animerEnnemy(Ennemy *e, Config *Confg)
             if (e->AnimE_Run % 10 == 0)
             {
                 e->anim_i = 3;
-                if (e->anim_j >= 5)
+                if (e->anim_j >= 9)
                     e->anim_j = 0;
                 else
                     e->anim_j++;
@@ -144,12 +146,32 @@ void deplacerIA(Ennemy *e, SDL_Rect posPerso)
 }
 int collisionBB(Ennemy e, Player p)
 {
+    
     SDL_Rect posE = e.pos;
     SDL_Rect posP = p.pos;
-
     if ((posP.x > posE.x && posP.x < posE.x + e.img[e.anim_i][e.anim_j]->w) || (posP.x + p.img[p.animI][p.animJ]->w > posE.x && posP.x + p.img[p.animI][p.animJ]->w < posE.x + e.img[e.anim_i][e.anim_j]->w))
     {
         return 1;
     }
     return 0;
+}
+
+void LibererEnnemy(Ennemy e)
+{
+    int n;
+    
+    for (int i = 0; i < 6; i++)
+    {
+        if (i == 0 || i == 1)
+            n = 15;
+        else if (i == 2 || i == 3)
+            n = 10;
+        else if (i == 4 || i == 5)
+            n = 8;
+        for (int j = 0; j < n; j++)
+        {
+            SDL_FreeSurface(e.img[i][j]);
+        }
+    }
+    
 }

@@ -10,7 +10,7 @@
 typedef struct
 {
     SDL_Rect pos,posABS;
-    SDL_Surface *img[6][10];
+    SDL_Surface *img[6][20];
     int Flipped;
     double v; // Vitesse
     int direction;
@@ -27,5 +27,6 @@ void animerEnnemy(Ennemy *e, Config *Confg);
 void deplacerEnnemy(Ennemy *e, Config *Confg);
 void deplacerIA(Ennemy *e, SDL_Rect posPerso);
 int collisionBB(Ennemy e, Player p);
+void LibererEnnemy(Ennemy e);
 
 #endif
