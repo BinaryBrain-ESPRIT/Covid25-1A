@@ -7,10 +7,10 @@
 
 typedef struct
 {
-
+  int NumPlayer;
   int nbreVie;
   SDL_Rect pos,posABS;
-  SDL_Surface * img[6][10];
+  SDL_Surface * img[10][10];
   double v; 
   int score;
   int direction;
@@ -19,7 +19,6 @@ typedef struct
   int AnimP_Idle, AnimP_Run, AnimP_Attack,AnimP_Die;
 
 } Player;
-
 
 
 void initPerso(Player *p, int NumPlayer);

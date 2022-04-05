@@ -161,17 +161,21 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
 
         animerPerso(&p);
         afficherPerso(p, screen);
-
+        int n = 0;
         // PlayerDie
         if (p.nbreVie == 0)
         {
             if (p.AnimP_Die % 10 == 0)
             {
                 if (!p.flipped)
-                    p.animI = 4;
+                    p.animI = 6;
                 else
-                    p.animI = 5;
-                if (p.animJ >= 8)
+                    p.animI = 7;
+                if (p.NumPlayer != 3)
+                    n = 8;
+                else 
+                    n = 4;
+                if (p.animJ >= n)
                 {
                     isRunning = 0;
                     SDL_Delay(2000);
@@ -234,7 +238,6 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                 e[i].attack = 1;
                 if (e[i].anim_j == 2 && e[i].AnimE_Attack % 10 == 0)
                     p.nbreVie--;
-                printf("NbreVie = %d\n", p.nbreVie);
                 animerEnnemy(&e[i], Confg);
                 afficherEnnemy(e[i], screen);
                 sprintf(HealthImg, "assets/GameUi/Health%d.png", p.nbreVie);

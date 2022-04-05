@@ -146,7 +146,6 @@ void deplacerIA(Ennemy *e, SDL_Rect posPerso)
 }
 int collisionBB(Ennemy e, Player p)
 {
-    
     SDL_Rect posE = e.pos;
     SDL_Rect posP = p.pos;
     if ((posP.x > posE.x && posP.x < posE.x + e.img[e.anim_i][e.anim_j]->w) || (posP.x + p.img[p.animI][p.animJ]->w > posE.x && posP.x + p.img[p.animI][p.animJ]->w < posE.x + e.img[e.anim_i][e.anim_j]->w))
