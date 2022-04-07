@@ -9,6 +9,7 @@ typedef struct
 {
   int NumPlayer;
   int nbreVie;
+  int isGround;
   SDL_Rect pos,posABS;
   SDL_Surface * img[10][10];
   double v; 
@@ -25,6 +26,6 @@ void initPerso(Player *p, int NumPlayer);
 void afficherPerso(Player p, SDL_Surface *screen);
 void deplacerPerso(Player *p, int dt);
 void animerPerso(Player *p);
-void saut(Player *p,int End);
+void saut(Player *p);
 void LibererPlayer(Player p);
 #endif

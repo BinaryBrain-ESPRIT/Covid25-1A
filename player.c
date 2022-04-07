@@ -10,7 +10,7 @@ void initPerso(Player *p, int NumPlayer)
     p->posABS.y = p->pos.y;
     p->nbreVie = 3;
     p->score = 0;
-    p->v = 0.5;
+    p->v = 10;
     p->direction = 0;
     p->animI = 0;
     p->animJ = 0;
@@ -20,6 +20,7 @@ void initPerso(Player *p, int NumPlayer)
     p->AnimP_Run = 0;
     p->AnimP_Die = 0;
     p->NumPlayer = NumPlayer;
+    p->isGround = 1;
 
     for (int i = 0; i < 8; i++)
     {
@@ -62,23 +63,23 @@ void deplacerPerso(Player *p, int dt)
     switch (p->direction)
     {
     case 1:
-        p->pos.x += p->v * dt;
-        p->posABS.x += p->v * dt;
+        p->pos.x += p->v ;
+        p->posABS.x += p->v ;
 
         break;
     case -1:
-        p->pos.x -= p->v * dt;
-        p->posABS.x -= p->v * dt;
+        p->pos.x -= p->v ;
+        p->posABS.x -= p->v ;
 
         break;
     case 2:
-        p->pos.y -= p->v * dt;
-        p->posABS.y -= p->v * dt;
+        p->pos.y -= p->v ;
+        p->posABS.y -= p->v ;
 
         break;
     case -2:
-        p->pos.y += p->v * dt;
-        p->posABS.y += p->v * dt;
+        p->pos.y += p->v ;
+        p->posABS.y += p->v ;
         break;
     }
 }
@@ -150,37 +151,24 @@ void animerPerso(Player *p)
         }
     }
 }
-void saut(Player *p, int End)
+void saut(Player *p)
 {
-
-    int x = 0;
-
-    SDL_Rect posPlayerRel;
-    posPlayerRel.x = -50;
-    posPlayerRel.y = 0;
-
-    posPlayerRel.x++;
-    printf("posABS = %d\nposRel = %d\nx = %d\n", p->pos.x, posPlayerRel.x, x);
-    if (posPlayerRel.x >= 50)
+    int Vitesse = 20;
+    int HeightP = 200;
+    if (!p->isGround && p->pos.y >HeightP)
     {
-        x += 50;
-        posPlayerRel.x = -50;
-        End = 1;
+        p->pos.y -= Vitesse;
+        //SDL_Delay(10);
     }
-
-    // On met à "0" les pos abs:
-    p->pos.x = x;
-    p->pos.y = p->pos.y;
-
-    // On calcule la valeur relative de y:
-    posPlayerRel.y = (-0.04 * (posPlayerRel.x * posPlayerRel.x) + 100);
-
-    // On calcule maintenant les valeurs abs
-    p->pos.x = p->pos.x + posPlayerRel.x + x;
-    p->pos.y = p->pos.y - posPlayerRel.y;
-
-    // Intervalle de 10ms
-    SDL_Delay(10);
+    if (p->pos.y <= HeightP)
+    {
+        p->isGround = 1;
+    }
+    if (p->isGround && p->pos.y < 510)
+        p->pos.y += Vitesse;
+    if (p->isGround && p->pos.y > 510)
+        p->pos.y = 510;
+    //SDL_Delay(10);
 }
 
 void LibererPlayer(Player p)

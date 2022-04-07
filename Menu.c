@@ -281,42 +281,14 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         }
         if (state[SDLK_LEFT])
         {
-
             p.direction = -1;
         }
-
-        if (event.key.keysym.sym == SDLK_SPACE)
-            End = 0;
-
-        if (!End)
+        if (state[SDLK_SPACE])
         {
-            // La position relative de Mario
-
-            posMarioRel.x+= 2;
-            printf("posABS = %d\nposRel = %d\nx = %d\n", p.pos.x, posMarioRel.x, x);
-
-            if (posMarioRel.x >= 50)
-            {
-                x += 50;
-                posMarioRel.x = -50;
-                End = 1;
-            }
-
-            // On met à "0" les pos abs:
-            p.pos.x = x;
-            p.pos.y = 510;
-
-            // On calcule la valeur relative de y:
-            posMarioRel.y = (-0.04 * (posMarioRel.x * posMarioRel.x) + 100);
-
-            // On calcule maintenant les valeurs abs
-            p.pos.x = p.pos.x + posMarioRel.x + x;
-            p.pos.y = p.pos.y - posMarioRel.y;
-
-            // Intervalle de 10ms
-            SDL_Delay(10);
+            if (p.isGround && p.pos.y >= 510)
+                p.isGround = 0;
         }
-
+        saut(&p);
         SDL_PollEvent(&event);
         switch (event.type)
         {

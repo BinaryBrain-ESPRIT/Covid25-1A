@@ -6,9 +6,14 @@ void initEnnemy(Ennemy *e, int x, int y, int vitesse, int direction, int nbreVie
     int n;
     e->pos.x = x;
     e->pos.y = y;
+
+    do
+        direction = rand() % (-1 - 2) - 1;
+    while (direction != 1 && direction != -1);
+
     e->direction = direction;
     e->nbreVie = nbreVie;
-    e->v = 0.2;
+    e->v = 10;
     e->anim_j = 0;
     e->anim_i = 0;
     e->posInit = x;
@@ -33,8 +38,6 @@ void initEnnemy(Ennemy *e, int x, int y, int vitesse, int direction, int nbreVie
             e->img[i][j] = IMG_Load(NomImg);
         }
     }
-
-   
 }
 void afficherEnnemy(Ennemy e, SDL_Surface *screen)
 {
@@ -110,15 +113,15 @@ void deplacerEnnemy(Ennemy *e, Config *Confg)
 {
     if (e->direction == 1)
     {
-        e->pos.x += e->v * 20;
-        e->posABS.x += e->v * 20;
+        e->pos.x += e->v;
+        e->posABS.x += e->v;
         e->Flipped = 0;
     }
 
     else if (e->direction == -1)
     {
-        e->pos.x -= e->v * 20;
-        e->posABS.x -= e->v * 20;
+        e->pos.x -= e->v ;
+        e->posABS.x -= e->v ;
         e->Flipped = 1;
     }
 }
@@ -158,7 +161,7 @@ int collisionBB(Ennemy e, Player p)
 void LibererEnnemy(Ennemy e)
 {
     int n;
-    
+
     for (int i = 0; i < 6; i++)
     {
         if (i == 0 || i == 1)
@@ -172,5 +175,4 @@ void LibererEnnemy(Ennemy e)
             SDL_FreeSurface(e.img[i][j]);
         }
     }
-    
 }
