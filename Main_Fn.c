@@ -22,8 +22,8 @@ int Setup(Config *Confg)
     Confg->Lang = 1;
     Confg->Volume = 1;
     Confg->Fullscr = 1;
-    Confg->LevelR = 1;
-    Confg->Player = 3 ;
+    Confg->LevelR = 3;
+    Confg->Player = 1 ;
 
     return 1;
 }

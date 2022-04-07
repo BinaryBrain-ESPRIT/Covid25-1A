@@ -35,18 +35,17 @@ void initPerso(Player *p, int NumPlayer)
             else
                 n = 7;
         else if (i == 4 || i == 5)
+            n = 8;
+        else if (i == 6 || i == 7)
             if (NumPlayer != 3)
                 n = 9;
             else
-                n = 8;
-        else if (i == 6 || i == 7)
-            n = 5;
+                n = 5;
 
         for (int j = 0; j < n; j++)
         {
-            sprintf(NomImg, "assets/Animation/Player%d/%d/%d.png",NumPlayer, i, j + 1);
+            sprintf(NomImg, "assets/Animation/Player%d/%d/%d.png", NumPlayer, i, j + 1);
             p->img[i][j] = IMG_Load(NomImg);
-            
         }
     }
 }
@@ -85,7 +84,7 @@ void deplacerPerso(Player *p, int dt)
 }
 void animerPerso(Player *p)
 {
-    int n= 0;
+    int n = 0;
     if (p->nbreVie > 0)
     {
         switch (p->direction)
@@ -97,12 +96,12 @@ void animerPerso(Player *p)
                     p->animI = 0;
                 else
                     p->animI = 1;
-                
+
                 if (p->NumPlayer != 3)
                     n = 5;
-                else 
+                else
                     n = 0;
-               
+
                 if (p->animJ >= n)
                     p->animJ = 0;
                 else
@@ -118,7 +117,7 @@ void animerPerso(Player *p)
                 p->animI = 2;
                 if (p->NumPlayer != 3)
                     n = 5;
-                else 
+                else
                     n = 6;
 
                 if (p->animJ >= n)
@@ -136,7 +135,7 @@ void animerPerso(Player *p)
 
                 if (p->NumPlayer != 3)
                     n = 5;
-                else 
+                else
                     n = 6;
 
                 if (p->animJ >= n)
@@ -162,16 +161,22 @@ void LibererPlayer(Player p)
     {
 
         if (i == 0 || i == 1)
-            // n = 7;
-            n = 1;
+            if (p.NumPlayer != 3)
+                n = 7;
+            else
+                n = 1;
         else if (i == 2 || i == 3)
-            // n = 6;
-            n = 7;
+            if (p.NumPlayer != 3)
+                n = 6;
+            else
+                n = 7;
         else if (i == 4 || i == 5)
-            // n = 9;
             n = 8;
         else if (i == 6 || i == 7)
-            n = 5;
+            if (p.NumPlayer != 3)
+                n = 9;
+            else
+                n = 5;
         for (int j = 0; j < n; j++)
         {
             SDL_FreeSurface(p.img[i][j]);
