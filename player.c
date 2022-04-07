@@ -152,6 +152,7 @@ void animerPerso(Player *p)
 }
 void saut(Player *p, int End)
 {
+
     int x = 0;
 
     SDL_Rect posPlayerRel;
@@ -159,7 +160,7 @@ void saut(Player *p, int End)
     posPlayerRel.y = 0;
 
     posPlayerRel.x++;
-
+    printf("posABS = %d\nposRel = %d\nx = %d\n", p->pos.x, posPlayerRel.x, x);
     if (posPlayerRel.x >= 50)
     {
         x += 50;
@@ -179,8 +180,6 @@ void saut(Player *p, int End)
     p->pos.y = p->pos.y - posPlayerRel.y;
 
     // Intervalle de 10ms
-    SDL_Delay(10);
-
     SDL_Delay(10);
 }
 
