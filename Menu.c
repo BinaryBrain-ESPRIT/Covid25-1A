@@ -114,6 +114,8 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     background tabG[3];
     Image tabGameUI[5];
 
+    int End = 1;
+    
     // Init LevelBackg
     InitGameBackg(&tabG[0], "assets/Levels/Level1.png");
 
@@ -279,6 +281,12 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
 
             p.direction = -1;
         }
+        if (state[SDLK_SPACE])
+        {
+            End = 0;
+        }
+
+        saut(&p,End);
 
         SDL_PollEvent(&event);
         switch (event.type)

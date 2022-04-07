@@ -150,8 +150,33 @@ void animerPerso(Player *p)
         }
     }
 }
-void saut(Player *p)
+void saut(Player *p,int End)
 {
+    int x = 0;
+
+    SDL_Rect posPlayerRel;
+    posPlayerRel.x = -50;
+    posPlayerRel.y = 0;
+
+
+    posPlayerRel.x++;
+
+    if (posPlayerRel.x >= 50)
+    {
+        x += 50;
+        posPlayerRel.x = -50; 
+        End = 1;
+    }
+
+    p->pos.x.x = x;
+    p->pos.x.y = 0;
+
+    posPlayerRel.y = (-0.04 * (posPlayerRel.x * posPlayerRel.x) + 100);
+
+    p->pos.x.x = p->pos.x.x + posPlayerRel.x + x;
+    p->pos.x.y = p->pos.x.y - posPlayerRel.y;
+
+    SDL_Delay(10);
 }
 
 void LibererPlayer(Player p)
