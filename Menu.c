@@ -115,7 +115,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     Image tabGameUI[5];
 
     int End = 1;
-    
+
     // Init LevelBackg
     InitGameBackg(&tabG[0], "assets/Levels/Level1.png");
 
@@ -175,7 +175,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                     p.animI = 7;
                 if (p.NumPlayer != 3)
                     n = 8;
-                else 
+                else
                     n = 4;
                 if (p.animJ >= n)
                 {
@@ -285,8 +285,8 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         {
             End = 0;
         }
-
-        saut(&p,End);
+        if (!End)
+            saut(&p, End);
 
         SDL_PollEvent(&event);
         switch (event.type)
