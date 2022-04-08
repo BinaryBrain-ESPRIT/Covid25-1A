@@ -1,1 +1,3 @@
-1 assets/enigmeText/Backg.jpg 3
+1 assets/enigmeText/Backg.jpg 368 534 Which_of_these_cities_has_never_been the_capital_of_Tunisia_? Sfax Mahdia Tunis 1
+2 assets/enigmeText/Backg.jpg 395 738 How_many_governorates_are_there in_Tunisia_? 20 23 24 3
+3 assets/enigmeText/Backg.jpg 317 449 When_was_the_first_participation_in_the World_Cup_For_Tunisia_? 1970 1978 1974  2

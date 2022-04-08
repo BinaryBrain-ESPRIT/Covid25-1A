@@ -2,6 +2,7 @@
 
 void initEnnemy(Ennemy *e, int x, int y, int vitesse, int nbreVie)
 {
+    
     int direction;
     char NomImg[100];
     int n;
@@ -9,8 +10,8 @@ void initEnnemy(Ennemy *e, int x, int y, int vitesse, int nbreVie)
     e->pos.y = y;
 
     do
-        direction = rand() % (-1 - 2) - 1;
-    while (direction != 1 && direction != -1);
+        direction = rand() % (-1 - 2) -1;
+    while (direction == 0);
 
     e->direction = direction;
     e->nbreVie = nbreVie;

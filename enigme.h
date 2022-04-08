@@ -8,14 +8,14 @@ typedef struct
   Image Backg[3];
   FILE *f;
   Image Timer[11];
-  Text Quest;
+  Text Quest,Quest1;
   Text Rep[3];
   int NumRepC;
   int TimerI;
   int NumE;
 } enigme;
 
-void InitEnigme1(enigme *e, char *nomfichier);
+int InitEnigme1(enigme *e, char *nomfichier);
 void afficherEnigme1(enigme e, SDL_Surface *screen);
 void animer1(enigme *e, SDL_Surface *screen);
 void sauvegarder1(Player p, Image b, char *nomfichier);
