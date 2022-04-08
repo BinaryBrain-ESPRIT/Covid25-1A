@@ -119,7 +119,7 @@ int main()
 
                     break;
                 case 3:
-
+                    AffichageCredits(screen, Confg);
                     i = 0;
                     break;
                 case 4:
@@ -155,6 +155,7 @@ int main()
                 i = 0;
                 break;
             case 3:
+                AffichageCredits(screen, Confg);
                 i = 0;
                 break;
             case 4:

@@ -795,3 +795,36 @@ void MenuOpt(SDL_Surface *screen, Config *Confg)
     for (int i = 0; i < 3; i++)
         Liberer_Img(tabMAO[i]);
 }
+
+void AffichageCredits(SDL_Surface *screen, Config *Confg)
+{
+    Image tab[180];
+    char NomBackg[30];
+    int isRunning = 1;
+    SDL_Event event;
+    for (int i = 0; i < 180; i++)
+    {
+        sprintf(NomBackg, "assets/Credits/%d.png");
+        InitBackg(&tab[i], NomBackg);
+    }
+    for (int i = 0; i < 180; i++)
+    {
+        AfficherImg(tab[i], screen);
+        if (i == 89)
+            SDL_Delay(3000);
+    }
+    while (isRunning)
+    {
+        SDL_PollEvent(&event);
+        switch (event.type)
+        {
+        case SDL_QUIT:
+            Confg->isRunning = 0;
+            isRunning = 0;
+            break;
+        case SDL_KEYDOWN:
+            if (event.key.keysym.sym == SDLK_ESCAPE)
+                isRunning = 0;
+            break;
+        }
+    }
