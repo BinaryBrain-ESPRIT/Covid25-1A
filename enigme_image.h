@@ -11,6 +11,7 @@ typedef struct
     int NumRC;
     int NumE;
     int TimerI;
+    Text txt;
 } Enigme;
 
 void InitEnigme(Enigme *e, char *nomfichier);

@@ -16,6 +16,7 @@ int InitEnigme1(enigme *e, char *nomfichier)
   enigme e1;
   int End;
   int n = 0;
+
   FILE *f1 = fopen("SelectedEnigme.txt", "r");
 
   do

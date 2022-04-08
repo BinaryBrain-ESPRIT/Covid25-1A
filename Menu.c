@@ -334,12 +334,25 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                         Confg->isRunning = 0;
                         break;
                     case SDL_MOUSEBUTTONDOWN:
-                        if (event.button.x > 1070 && event.button.x < 1232 && event.button.y > 105 && event.button.y < 270)
-                            Rep = 1;
-                        else if (event.button.x > 1356 && event.button.x < 1518 && event.button.y > 105 && event.button.y < 270)
-                            Rep = 2;
-                        else if (event.button.x > 1212 && event.button.x < 1374 && event.button.y > 363 && event.button.y < 527)
-                            Rep = 3;
+                        printf("x = %d y = %d\n", event.button.x, event.button.y);
+                        if (enig.NumE >= 2 && enig.NumE <= 4)
+                        {
+                            if (event.button.x > 18 && event.button.x < 576 && event.button.y > 687 && event.button.y < 1056)
+                                Rep = 1;
+                            else if (event.button.x > 682 && event.button.x < 1245 && event.button.y > 556 && event.button.y < 924)
+                                Rep = 2;
+                            else if (event.button.x > 1334 && event.button.x < 1903 && event.button.y > 687 && event.button.y < 1057)
+                                Rep = 3;
+                        }
+                        else
+                        {
+                            if (event.button.x > 1070 && event.button.x < 1232 && event.button.y > 105 && event.button.y < 270)
+                                Rep = 1;
+                            else if (event.button.x > 1356 && event.button.x < 1518 && event.button.y > 105 && event.button.y < 270)
+                                Rep = 2;
+                            else if (event.button.x > 1212 && event.button.x < 1374 && event.button.y > 363 && event.button.y < 527)
+                                Rep = 3;
+                        }
 
                         if (Rep > 0 && Rep < 4)
                         {
@@ -449,7 +462,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                     SDL_ShowCursor(SDL_DISABLE);
                     break;
                 }
-                else 
+                else
                     printf("Out Of Choice\n");
                 break;
             case SDLK_f:
