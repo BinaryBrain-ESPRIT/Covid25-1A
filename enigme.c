@@ -17,13 +17,17 @@ int InitEnigme1(enigme *e, char *nomfichier)
   int End;
   int n = 0;
   FILE *f1 = fopen("SelectedEnigme.txt", "r");
+
   do
   {
     End = fscanf(f1, "%d\n", &NumE1) != EOF;
     n++;
   } while (End != 0);
+
   fclose(f1);
+
   f1 = fopen("SelectedEnigme.txt", "r");
+
   do
   {
     NumE = rand() % (4 - 1) + 1;
@@ -34,7 +38,6 @@ int InitEnigme1(enigme *e, char *nomfichier)
 
   } while (NumE1 == NumE && n < 3);
 
-
   if (n >= 3 && NumE1 == NumE)
     return 0;
 
@@ -43,14 +46,7 @@ int InitEnigme1(enigme *e, char *nomfichier)
   f1 = fopen("SelectedEnigme.txt", "a");
 
   fprintf(f1, "%d\n", NumE);
-  /*
-    do
-    {
-      NumE = rand() % (4 - 1) + 1;
-      while (fread(&e1, sizeof(enigme), 1, f1) != EOF && NumE != e1.NumE)
-        ;
-    } while (e1.NumE == NumE);
-  */
+  fclose(f1);
   // Fichier
   e->f = fopen(nomfichier, "r");
   do
@@ -119,7 +115,6 @@ int InitEnigme1(enigme *e, char *nomfichier)
   }
   e->TimerI = 0;
   fclose(e->f);
-  fclose(f1);
   return 1;
 }
 
