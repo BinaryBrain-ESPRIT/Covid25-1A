@@ -1,7 +1,8 @@
 #include "ennemy.h"
 
-void initEnnemy(Ennemy *e, int x, int y, int vitesse, int direction, int nbreVie)
+void initEnnemy(Ennemy *e, int x, int y, int vitesse, int nbreVie)
 {
+    int direction;
     char NomImg[100];
     int n;
     e->pos.x = x;
@@ -120,8 +121,8 @@ void deplacerEnnemy(Ennemy *e, Config *Confg)
 
     else if (e->direction == -1)
     {
-        e->pos.x -= e->v ;
-        e->posABS.x -= e->v ;
+        e->pos.x -= e->v;
+        e->posABS.x -= e->v;
         e->Flipped = 1;
     }
 }

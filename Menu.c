@@ -127,11 +127,11 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     initImg(&tabGameUI[1], 40, 40, "assets/GameUi/Health3.png");
 
     // Init Ennemi
-    initEnnemy(&e[0], 2500, 575, 5, 0, 2);
-    initEnnemy(&e[1], 4270, 575, 5, 0, 2);
-    initEnnemy(&e[2], 5640, 575, 5, 0, 2);
-    initEnnemy(&e[3], 8120, 575, 5, 0, 2);
-    initEnnemy(&e[4], 8800, 575, 5, 0, 2);
+    initEnnemy(&e[0], 2500, 575, 5, 2);
+    initEnnemy(&e[1], 4270, 575, 5, 2);
+    initEnnemy(&e[2], 5640, 575, 5, 2);
+    initEnnemy(&e[3], 8120, 575, 5, 2);
+    initEnnemy(&e[4], 8800, 575, 5, 2);
 
     // Init Player
     initPerso(&p, Confg->Player);
