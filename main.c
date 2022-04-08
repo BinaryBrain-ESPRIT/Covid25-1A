@@ -18,7 +18,7 @@ int main()
     int i = 0, isRunning;
     int last_frame_time = 0;
     float delta_time;
-    Image tabM;
+    Image tabM[3][3];
     Text tabMT[5];
     Text tabMAT[5];
 
@@ -32,15 +32,21 @@ int main()
     {
         InitTxt_en(tabMT, tabMAT);
 
-        sprintf(NomBackg, "assets/MainMenu/Level-%d-Perso-%d.png", Confg->LevelR, Confg->Player);
-        InitBackg(&tabM, NomBackg);
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < i + 1; j++)
+            {
+                sprintf(NomBackg, "assets/MainMenu/Level-%d-Perso-%d.png", i + 1, j + 1);
+                InitBackg(&tabM[i][j], NomBackg);
+            }
+        }
 
         screen = SDL_SetVideoMode(Width, Height, Bpp, SDL_HWSURFACE | SDL_DOUBLEBUF);
 
         PlayMusic("assets/Sound/son.wav", music);
 
         AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
-        
+
         SDL_Flip(screen);
     }
 
@@ -133,7 +139,7 @@ int main()
             {
             case 1:
                 SelectLevel(screen, Confg);
-                
+
                 AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
                 SDL_Flip(screen);
                 i = 0;
@@ -154,6 +160,33 @@ int main()
             case 4:
                 Confg->isRunning = 0;
                 break;
+            case 5:
+                if (Confg->LevelR == 2)
+                    if (Confg->Player == 3)
+                        Confg->Player = 2;
+                    else
+                        Confg->Player = 3;
+                else if (Confg->LevelR == 3)
+                    if (Confg->Player == 3)
+                        Confg->Player = 1;
+                    else if (Confg->Player == 2)
+                        Confg->Player = 3;
+                    else
+                        Confg->Player = 2;
+                AffichageMainMenu(screen, tabMT, tabMAT, tabM, 0, Confg->LevelR, Confg->Player);
+                SDL_Flip(screen);
+                break;
+            case 6:
+                if (Confg->LevelR == 3)
+                    if (Confg->Player == 3)
+                        Confg->Player = 2;
+                    else if (Confg->Player == 2)
+                        Confg->Player = 1;
+                    else
+                        Confg->Player = 3;
+                AffichageMainMenu(screen, tabMT, tabMAT, tabM, 0, Confg->LevelR, Confg->Player);
+                SDL_Flip(screen);
+                break;
             }
 
             break;
@@ -161,8 +194,9 @@ int main()
     }
 
     // Liberer_Mus(music);
-
-    Liberer_Img(tabM);
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < i + 1; j++)
+            Liberer_Img(tabM[i][j]);
 
     for (int i = 0; i < 5; i++)
     {

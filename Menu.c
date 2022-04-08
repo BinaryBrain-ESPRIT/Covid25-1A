@@ -5,9 +5,11 @@
 #include "enigme.h"
 #include "time.h"
 
-void AffichageMainMenu(SDL_Surface *screen, Text tabT[], Text tabAT[], Image tabI, int j, int l, int p)
+void AffichageMainMenu(SDL_Surface *screen, Text tabT[], Text tabAT[], Image tabI[][3], int j, int l, int p)
 {
-    AfficherImg(tabI, screen);
+    printf("Player = %d Level = %d\n", p, l);
+
+    AfficherImg(tabI[l - 1][p - 1], screen);
     if (j != 0)
     {
         for (int i = 1; i < 5; i++)
@@ -334,7 +336,6 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                         Confg->isRunning = 0;
                         break;
                     case SDL_MOUSEBUTTONDOWN:
-                        printf("x = %d y = %d\n", event.button.x, event.button.y);
                         if (enig.NumE >= 2 && enig.NumE <= 4)
                         {
                             if (event.button.x > 18 && event.button.x < 576 && event.button.y > 687 && event.button.y < 1056)

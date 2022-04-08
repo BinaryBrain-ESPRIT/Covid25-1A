@@ -1,11 +1,12 @@
 #include "Mouse.h"
 
-void Motion_MM(Text tabMT[],Text tabMAT[],Image tabM, SDL_Event event, SDL_Surface *screen, int *i, Config *Confg)
+void Motion_MM(Text tabMT[],Text tabMAT[],Image tabM[][3], SDL_Event event, SDL_Surface *screen, int *i, Config *Confg)
 {
     int x, y;
     Mix_Chunk *sound;
     x = event.motion.x;
     y = event.motion.y;
+    //printf("x= %d y =%d\n",x,y);
     SDL_PollEvent(&event);
     if ((x > 50 && x < 380) && (y > 430 && y < 480))
     {
@@ -49,6 +50,17 @@ void Motion_MM(Text tabMT[],Text tabMAT[],Image tabM, SDL_Event event, SDL_Surfa
             AffichageMainMenu(screen, tabMT, tabMAT, tabM, *i, Confg->LevelR, Confg->Player);
             SDL_Flip(screen);
         }
+    }
+    else if (x>1620 && x<1920 && y>300 && y<415)
+    {
+        if (*i != 5)
+            *i = 5;
+    }
+  
+    else if (x>1620 && x<1920 && y>730 && y<850)
+    {
+        if (*i != 6)
+            *i = 6;
     }
 
     else
