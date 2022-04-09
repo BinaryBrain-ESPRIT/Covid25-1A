@@ -129,14 +129,14 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     int Opened = 0;
     int last_frame_time = 0;
     char HealthImg[30];
-    
+    int GameTimeInit, GameTimeS, GameTimeM;
     // Init LevelBackg
     InitGameBackg(&tabG[0], "assets/Levels/Level1.png");
 
     // Init GameUI
     initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
     initImg(&tabGameUI[1], 1654, 81, "assets/GameUi/MoneyTime.png");
-    char Money[20];
+    char Money[20],Time[20];
     sprintf(Money, "%d $", Confg->Money);
     initTxt(&MoneyTxt, 1733, 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
     initTxt(&TimeTxt, 1745, 154, TimeColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", "00:00");
@@ -154,9 +154,18 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     initminimap(&map, "assets/MiniMap/level1mini.png", p, e);
 
     SDL_ShowCursor(SDL_DISABLE);
-
+    GameTimeInit = SDL_GetTicks();
     while (isRunning)
     {
+        GameTimeS = (SDL_GetTicks() - GameTimeInit) / 1000;
+        if (GameTimeS >= 60)
+        {
+            GameTimeS = 0;
+            GameTimeM++;
+        }
+        sprintf(Time,"%02d:%02d\n", GameTimeM, GameTimeS);
+        initTxt(&TimeTxt, 1745, 154, TimeColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Time);
+
         last_frame_time = SDL_GetTicks();
 
         // while (!(SDL_GetTicks() > last_frame_time + FRAME_TARGET_TIME));
