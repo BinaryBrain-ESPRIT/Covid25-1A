@@ -7,7 +7,6 @@
 
 void AffichageMainMenu(SDL_Surface *screen, Text tabT[], Text tabAT[], Image tabI[][3], int j, int l, int p)
 {
-    printf("Player = %d Level = %d\n", p, l);
 
     AfficherImg(tabI[l - 1][p - 1], screen);
     if (j != 0)
@@ -798,20 +797,24 @@ void MenuOpt(SDL_Surface *screen, Config *Confg)
 
 void AffichageCredits(SDL_Surface *screen, Config *Confg)
 {
-    Image tab[180];
+    Image tab[181];
     char NomBackg[30];
     int isRunning = 1;
     SDL_Event event;
-    for (int i = 0; i < 180; i++)
+    for (int i = 0; i < 181; i++)
     {
-        sprintf(NomBackg, "assets/Credits/%d.png");
+        sprintf(NomBackg, "assets/Credits/%d.jpg", i);
         InitBackg(&tab[i], NomBackg);
     }
-    for (int i = 0; i < 180; i++)
+    for (int i = 0; i < 181; i++)
     {
+        SDL_Delay(10);
         AfficherImg(tab[i], screen);
+        SDL_Flip(screen);
         if (i == 89)
-            SDL_Delay(3000);
+            SDL_Delay(5000);
+        if (i == 179)
+            SDL_Delay(5000);
     }
     while (isRunning)
     {
@@ -828,3 +831,8 @@ void AffichageCredits(SDL_Surface *screen, Config *Confg)
             break;
         }
     }
+    for (int i = 0; i < 181; i++)
+    {
+        Liberer_Img(tab[i]);
+    }
+}

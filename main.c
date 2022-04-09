@@ -121,6 +121,8 @@ int main()
                 case 3:
                     AffichageCredits(screen, Confg);
                     i = 0;
+                    AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+                    SDL_Flip(screen);
                     break;
                 case 4:
                     Confg->isRunning = 0;
@@ -157,6 +159,8 @@ int main()
             case 3:
                 AffichageCredits(screen, Confg);
                 i = 0;
+                AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+                SDL_Flip(screen);
                 break;
             case 4:
                 Confg->isRunning = 0;
