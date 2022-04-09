@@ -17,11 +17,12 @@
 
 typedef struct {
     int isRunning;
-    int Volume;
+    int Volume,posVol;
     int Fullscr;
     int Lang;
     int LevelR,Level;
     int Player;
+    int Money;
     double deltaTime;
 }Config;
 
@@ -33,10 +34,12 @@ void Liberer_MusCh(Mix_Chunk * sound);
 
 
 int Setup(Config * Confg);
+void SaveSetting(Config *Confg);
 void InitImg_fr(Image *tabMO,Image * tabMAO);
 void InitImg_en(Image *tabMO,Image * tabMAO);
 void InitTxt_en(Text *tabMT,Text * tabMAT);
 void InitTxt_fr(Text *tabMT,Text * tabMAT);
+
 
 
 #endif 

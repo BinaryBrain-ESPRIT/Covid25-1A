@@ -30,7 +30,10 @@ int main()
 
     if (Confg->isRunning)
     {
-        InitTxt_en(tabMT, tabMAT);
+        if (Confg->Lang > 0)
+            InitTxt_en(tabMT, tabMAT);
+        else
+            InitTxt_fr(tabMT, tabMAT);
 
         for (int i = 0; i < 3; i++)
         {
@@ -40,8 +43,10 @@ int main()
                 InitBackg(&tabM[i][j], NomBackg);
             }
         }
-
-        screen = SDL_SetVideoMode(Width, Height, Bpp, SDL_HWSURFACE | SDL_DOUBLEBUF);
+        if (Confg->Fullscr > 0)
+            screen = SDL_SetVideoMode(Width, Height, Bpp, SDL_HWSURFACE);
+        else
+            screen = SDL_SetVideoMode(Width, Height, Bpp, SDL_HWSURFACE | SDL_FULLSCREEN);
 
         PlayMusic("assets/Sound/son.wav", music);
 
@@ -197,6 +202,8 @@ int main()
             break;
         }
     }
+    // SaveSetting
+    SaveSetting(Confg);
 
     // Liberer_Mus(music);
     for (int i = 0; i < 3; i++)

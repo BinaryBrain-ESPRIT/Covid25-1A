@@ -166,8 +166,8 @@ void saut(Player *p)
     }
     if (p->isGround && p->pos.y < 510)
         p->pos.y += Vitesse;
-    if (p->isGround && p->pos.y > 510)
-        p->pos.y = 510;
+    /*if (p->isGround && p->pos.y > 510)
+        p->pos.y = 510;*/
     //SDL_Delay(10);
 }
 

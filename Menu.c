@@ -127,8 +127,8 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     InitGameBackg(&tabG[0], "assets/Levels/Level1.png");
 
     // Init GameUI
-    initImg(&tabGameUI[0], 1800, 20, "assets/GameUi/MenuBut.png");
-    initImg(&tabGameUI[1], 40, 40, "assets/GameUi/Health3.png");
+    initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
+    initImg(&tabGameUI[1], 1654, 81, "assets/GameUi/MoneyTime.png");
 
     // Init Ennemi
     initEnnemy(&e[0], 2500, 575, 5, 2);
@@ -250,7 +250,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                 animerEnnemy(&e[i], Confg);
                 afficherEnnemy(e[i], screen);
                 sprintf(HealthImg, "assets/GameUi/Health%d.png", p.nbreVie);
-                initImg(&tabGameUI[1], 40, 40, HealthImg);
+                initImg(&tabGameUI[0], 31, 53, HealthImg);
             }
             else
             {
@@ -478,7 +478,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
             }
             break;
         case SDL_KEYUP:
-
+            
             if (p.direction == 1)
                 p.flipped = 0;
             else if (p.direction == -1)
@@ -592,13 +592,77 @@ void MenuOpt(SDL_Surface *screen, Config *Confg)
     // Init Img
     InitBackg(&tabMO[0], "assets/MenuOpt/Background.png");
     initImg(&tabMO[1], Width / 2 - 245, 356.5, "assets/MenuOpt/volumebar.png");
-    initImg(&tabMO[2], 1175, 356.5, "assets/MenuOpt/volumebut.png");
+    initImg(&tabMO[2], Confg->posVol, 356.5, "assets/MenuOpt/volumebut.png");
 
     if (Confg->Lang > 0)
         InitImg_en(tabMO, tabMAO);
     else
         InitImg_fr(tabMO, tabMAO);
 
+    // Config Volume
+
+    int x = tabMO[2].pos.x;
+    if (x < 730)
+    {
+        // Mix_VolumeChunk(sound, 0);
+        Mix_VolumeMusic(0);
+    }
+    else if (x < 770)
+    {
+        // Mix_VolumeChunk(sound, 1 * MIX_MAX_VOLUME / 11);
+        Mix_VolumeMusic(1 * MIX_MAX_VOLUME / 11);
+    }
+    else if (x < 815)
+    {
+        // Mix_VolumeChunk(sound, 2 * MIX_MAX_VOLUME / 11);
+        Mix_VolumeMusic(2 * MIX_MAX_VOLUME / 11);
+    }
+    else if (x < 860)
+    {
+        // Mix_VolumeChunk(sound, 3 * MIX_MAX_VOLUME / 11);
+        Mix_VolumeMusic(3 * MIX_MAX_VOLUME / 11);
+    }
+    else if (x < 905)
+    {
+        // Mix_VolumeChunk(sound, 4 * MIX_MAX_VOLUME / 11);
+        Mix_VolumeMusic(4 * MIX_MAX_VOLUME / 11);
+    }
+    else if (x < 950)
+    {
+        // Mix_VolumeChunk(sound, 5 * MIX_MAX_VOLUME / 11);
+        Mix_VolumeMusic(5 * MIX_MAX_VOLUME / 11);
+    }
+    else if (x < 995)
+    {
+        // Mix_VolumeChunk(sound, 6 * MIX_MAX_VOLUME / 11);
+        Mix_VolumeMusic(6 * MIX_MAX_VOLUME / 11);
+    }
+    else if (x < 1040)
+    {
+        // Mix_VolumeChunk(sound, 7 * MIX_MAX_VOLUME / 11);
+        Mix_VolumeMusic(7 * MIX_MAX_VOLUME / 11);
+    }
+    else if (x < 1085)
+    {
+        // Mix_VolumeChunk(sound, 8 * MIX_MAX_VOLUME / 11);
+        Mix_VolumeMusic(8 * MIX_MAX_VOLUME / 11);
+    }
+    else if (x < 1130)
+    {
+        // Mix_VolumeChunk(sound, 9 * MIX_MAX_VOLUME / 11);
+        Mix_VolumeMusic(9 * MIX_MAX_VOLUME / 11);
+    }
+    else if (x < 1175)
+    {
+        // Mix_VolumeChunk(sound, 10 * MIX_MAX_VOLUME / 11);
+        Mix_VolumeMusic(10 * MIX_MAX_VOLUME / 11);
+    }
+    else if (x < 1180)
+    {
+        // Mix_VolumeChunk(sound, MIX_MAX_VOLUME);
+        Mix_VolumeMusic(MIX_MAX_VOLUME);
+    }
+    
     // End Init
 
     AffichageMenuOpt(screen, tabMO, tabMAO, i);
@@ -788,7 +852,7 @@ void MenuOpt(SDL_Surface *screen, Config *Confg)
             }
         }
     }
-
+    Confg->posVol = tabMO[2].pos.x;
     for (int i = 0; i < 6; i++)
         Liberer_Img(tabMO[i]);
     for (int i = 0; i < 3; i++)

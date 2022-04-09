@@ -2,6 +2,10 @@
 
 int Setup(Config *Confg)
 {
+    FILE *f = fopen("Data/Config.txt", "r");
+    char Nom[50];
+    int Value;
+
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
         printf("ERROR : %s\n", SDL_GetError());
@@ -12,23 +16,50 @@ int Setup(Config *Confg)
         printf("ERROR : %s\n", SDL_GetError());
         return 0;
     }
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS,1024) == -1)
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1)
     {
         printf("%s\n", Mix_GetError());
         return 0;
     }
-    SDL_WM_SetCaption("Covid 25","");
-    
-    Confg->Lang = 1;
-    Confg->Volume = 1;
-    Confg->Fullscr = 1;
-    Confg->LevelR = 3;
-    Confg->Player = 1 ;
+    SDL_WM_SetCaption("Covid 25", "");
 
+    while (fscanf(f, "%s : %d", Nom, &Value) != EOF)
+    {
+        if (strcmp(Nom, "Money") == 0)
+            Confg->Money = Value;
+        else if (strcmp(Nom, "Player") == 0)
+            Confg->Player = Value;
+        else if (strcmp(Nom, "LevelReached") == 0)
+            Confg->LevelR = Value;
+        else if (strcmp(Nom, "Language") == 0)
+            Confg->Lang = Value;
+        else if (strcmp(Nom, "FullScreen") == 0)
+            Confg->Fullscr = Value;
+        else if (strcmp(Nom, "Volume") == 0)
+            Confg->Volume = Value;
+        else if (strcmp(Nom, "PosVol") == 0)
+            Confg->posVol = Value;
+    }
+    fclose(f);
     return 1;
 }
 
-void InitTxt_en(Text *tabMT,Text * tabMAT)
+void SaveSetting(Config *Confg)
+{
+    FILE *f = fopen("Data/Config.txt", "w");
+
+    fprintf(f, "Money : %d\n", Confg->Money);
+    fprintf(f, "Player : %d\n", Confg->Player);
+    fprintf(f, "LevelReached : %d\n", Confg->LevelR);
+    fprintf(f, "Language : %d\n", Confg->Lang);
+    fprintf(f, "FullScreen : %d\n", Confg->Fullscr);
+    fprintf(f, "Volume : %d\n", Confg->Volume);
+    fprintf(f, "PosVol : %d\n", Confg->posVol);
+
+    fclose(f);
+}
+
+void InitTxt_en(Text *tabMT, Text *tabMAT)
 {
     InitTitle(&tabMT[0], "Covid-25");
     iniText(&tabMT[1], 430, "New Game");
@@ -43,7 +74,7 @@ void InitTxt_en(Text *tabMT,Text * tabMAT)
     iniActiveText(&tabMAT[4], 820, "Quit");
 }
 
-void InitImg_fr(Image *tabMO,Image * tabMAO)
+void InitImg_fr(Image *tabMO, Image *tabMAO)
 {
     initImg(&tabMO[3], Width / 2 - 245, 450, "assets/MenuOpt/language_fr.png");
     initImg(&tabMO[4], Width / 2 - 245, 700, "assets/MenuOpt/fullscreen_fr.png");
@@ -54,7 +85,7 @@ void InitImg_fr(Image *tabMO,Image * tabMAO)
     initImg(&tabMAO[2], Width / 2 - 147, 945, "assets/MenuOpt/return_selected_fr.png");
 }
 
-void InitImg_en(Image *tabMO,Image * tabMAO)
+void InitImg_en(Image *tabMO, Image *tabMAO)
 {
     initImg(&tabMO[3], Width / 2 - 245, 450, "assets/MenuOpt/language.png");
     initImg(&tabMO[4], Width / 2 - 245, 700, "assets/MenuOpt/fullscreen.png");
@@ -65,7 +96,7 @@ void InitImg_en(Image *tabMO,Image * tabMAO)
     initImg(&tabMAO[2], Width / 2 - 147, 945, "assets/MenuOpt/return_selected.png");
 }
 
-void InitTxt_fr(Text *tabMT,Text * tabMAT)
+void InitTxt_fr(Text *tabMT, Text *tabMAT)
 {
     iniText(&tabMT[1], 430, "Nouveau Jeu");
     iniText(&tabMT[2], 560, "Parametre");
@@ -99,3 +130,4 @@ void Liberer_Mus(Mix_Music *music)
 {
     Mix_FreeMusic(music);
 }
+
