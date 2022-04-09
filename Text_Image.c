@@ -24,6 +24,15 @@ void iniText(Text *t, int posY, char name[50])
     strcpy(t->Texte, name);
     t->surfaceText = TTF_RenderText_Solid(t->font, t->Texte, t->color);
 }
+void initTxt(Text *t, int x, int y, SDL_Color color, int size, char Font[], char Texte[])
+{
+    t->pos.x = x;
+    t->pos.y = y;
+    t->font = TTF_OpenFont(Font, size);
+    t->color = color;
+    strcpy(t->Texte, Texte);
+    t->surfaceText = TTF_RenderText_Solid(t->font, t->Texte, t->color);
+}
 
 void iniActiveText(Text *t, int posY, char name[50])
 {
@@ -65,7 +74,7 @@ void initImg(Image *Img, int x, int y, char NomImg[])
 
 void AfficherImg(Image img, SDL_Surface *screen)
 {
-    
+
     SDL_BlitSurface(img.img, NULL, screen, &img.pos);
 }
 

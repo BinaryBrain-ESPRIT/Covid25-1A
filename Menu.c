@@ -104,32 +104,42 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
 {
     srand(time(NULL));
     const Uint8 *state = SDL_GetKeyState(NULL);
+
     SDL_Event event;
+    SDL_Rect cam = {0, 0, Width, Height};
+
+    SDL_Color MoneyColor = {57, 181, 74};
+    SDL_Color TimeColor = {193, 39, 45};
+
+    Player p;
+    Ennemy e[5];
+
+    minimap map;
+
+    Enigme enig;
+    enigme enig1;
+
+    background tabG[3];
+
+    Image tabGameUI[5];
+
+    Text MoneyTxt, TimeTxt;
+
     int isRunning = 1;
     int Opened = 0;
     int last_frame_time = 0;
     char HealthImg[30];
-    SDL_Rect cam = {0, 0, Width, Height};
-    Player p;
-    Ennemy e[5];
-    minimap map;
-    Enigme enig;
-    enigme enig1;
-    background tabG[3];
-    Image tabGameUI[5];
-    SDL_Rect posMarioRel;
-    posMarioRel.x = -50;
-    posMarioRel.y = 0;
-
-    int End = 1;
-    int x = 0;
+    
     // Init LevelBackg
     InitGameBackg(&tabG[0], "assets/Levels/Level1.png");
 
     // Init GameUI
     initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
     initImg(&tabGameUI[1], 1654, 81, "assets/GameUi/MoneyTime.png");
-
+    char Money[20];
+    sprintf(Money, "%d $", Confg->Money);
+    initTxt(&MoneyTxt, 1733, 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
+    initTxt(&TimeTxt, 1745, 154, TimeColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", "00:00");
     // Init Ennemi
     initEnnemy(&e[0], 2500, 575, 5, 2);
     initEnnemy(&e[1], 4270, 575, 5, 2);
@@ -160,9 +170,6 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         // Affichage GameUI
         for (int i = 0; i < 2; i++)
             AfficherImg(tabGameUI[i], screen);
-
-        // Affichage MiniMap
-        afficherminimap(map, screen);
 
         MAJMinimap(p.posABS, e, &map, Redim);
 
@@ -262,6 +269,10 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
             }
         }
 
+        // Affichage MiniMap
+        afficherminimap(map, screen);
+        Afficher_txt(MoneyTxt, screen);
+        Afficher_txt(TimeTxt, screen);
         SDL_Flip(screen);
 
         // PlayerMovement
@@ -478,7 +489,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
             }
             break;
         case SDL_KEYUP:
-            
+
             if (p.direction == 1)
                 p.flipped = 0;
             else if (p.direction == -1)
@@ -662,7 +673,7 @@ void MenuOpt(SDL_Surface *screen, Config *Confg)
         // Mix_VolumeChunk(sound, MIX_MAX_VOLUME);
         Mix_VolumeMusic(MIX_MAX_VOLUME);
     }
-    
+
     // End Init
 
     AffichageMenuOpt(screen, tabMO, tabMAO, i);

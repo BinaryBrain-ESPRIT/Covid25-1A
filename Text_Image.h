@@ -23,8 +23,9 @@ typedef struct
 
 // Txt FN
 void InitTitle(Text *text, char Title[]);
-void iniText(Text *t, int posY, char name[50]);
-void iniActiveText(Text *t, int posY, char name[50]);
+void iniText(Text *t, int posY, char name[]);
+void initTxt(Text *t, int x, int y, SDL_Color color, int size, char Font[], char Texte[]);
+void iniActiveText(Text *t, int posY, char name[]);
 void Afficher_txt(Text text, SDL_Surface *screen);
 void Liberer_txt(Text text);
 
