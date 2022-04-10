@@ -1,5 +1,4 @@
 #include "player.h"
-
 void initPerso(Player *p, int NumPlayer)
 {
     int n;
@@ -63,23 +62,23 @@ void deplacerPerso(Player *p, int dt)
     switch (p->direction)
     {
     case 1:
-        p->pos.x += p->v ;
-        p->posABS.x += p->v ;
+        p->pos.x += p->v;
+        p->posABS.x += p->v;
 
         break;
     case -1:
-        p->pos.x -= p->v ;
-        p->posABS.x -= p->v ;
+        p->pos.x -= p->v;
+        p->posABS.x -= p->v;
 
         break;
     case 2:
-        p->pos.y -= p->v ;
-        p->posABS.y -= p->v ;
+        p->pos.y -= p->v;
+        p->posABS.y -= p->v;
 
         break;
     case -2:
-        p->pos.y += p->v ;
-        p->posABS.y += p->v ;
+        p->pos.y += p->v;
+        p->posABS.y += p->v;
         break;
     }
 }
@@ -113,7 +112,7 @@ void animerPerso(Player *p)
 
             break;
         case 1:
-            if (p->AnimP_Run % 10 == 0)
+            if (p->AnimP_Run > 2)
             {
                 p->animI = 2;
                 if (p->NumPlayer != 3)
@@ -127,10 +126,10 @@ void animerPerso(Player *p)
                     p->animJ++;
                 p->AnimP_Run = 0;
             }
-            p->AnimP_Run += 4;
+            p->AnimP_Run ++ ;
             break;
         case -1:
-            if (p->AnimP_Run % 10 == 0)
+            if (p->AnimP_Run > 2)
             {
                 p->animI = 3;
 
@@ -146,29 +145,34 @@ void animerPerso(Player *p)
 
                 p->AnimP_Run = 0;
             }
-            p->AnimP_Run += 4;
+            p->AnimP_Run ++;
             break;
         }
     }
 }
-void saut(Player *p)
+void saut(Player *p, int Collision)
 {
     int Vitesse = 20;
-    int HeightP = 200;
-    if (!p->isGround && p->pos.y >HeightP)
+    int HeightP = 0;
+    //printf("Collision  = %d\n", Collision);
+    if (!p->isGround && p->pos.y > HeightP)
     {
         p->pos.y -= Vitesse;
-        //SDL_Delay(10);
+        p->posABS.y -= Vitesse;
+        // SDL_Delay(10);
     }
     if (p->pos.y <= HeightP)
     {
         p->isGround = 1;
     }
-    if (p->isGround && p->pos.y < 510)
+    if (p->isGround && (Collision != -2))
+    {
         p->pos.y += Vitesse;
+        p->posABS.y += Vitesse;
+    }
     /*if (p->isGround && p->pos.y > 510)
         p->pos.y = 510;*/
-    //SDL_Delay(10);
+    // SDL_Delay(10);
 }
 
 void LibererPlayer(Player p)

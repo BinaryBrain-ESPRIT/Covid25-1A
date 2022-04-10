@@ -26,6 +26,6 @@ void initPerso(Player *p, int NumPlayer);
 void afficherPerso(Player p, SDL_Surface *screen);
 void deplacerPerso(Player *p, int dt);
 void animerPerso(Player *p);
-void saut(Player *p);
+void saut(Player *p,int Collision);
 void LibererPlayer(Player p);
 #endif

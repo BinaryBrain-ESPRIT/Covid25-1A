@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "sdl.h": "c",
+        "ennemy.h": "c",
+        "main_fn.h": "c",
+        "background.h": "c"
+    }
+}

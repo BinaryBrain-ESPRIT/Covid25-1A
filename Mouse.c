@@ -2,159 +2,92 @@
 
 void Motion_MM(Text tabMT[], Text tabMAT[], Image tabM[][3], SDL_Event event, SDL_Surface *screen, int *i, Config *Confg)
 {
-    int x, y;
+    int x, y, j;
     Mix_Chunk *sound;
+    SDL_PollEvent(&event);
+
     x = event.motion.x;
     y = event.motion.y;
-    // printf("x= %d y =%d\n",x,y);
-    SDL_PollEvent(&event);
-    if ((x > 27 && x < 432) && (y > 371 && y < 454))
-    {
-        if (*i != 1)
-        {
-            PlayChunkMusic("assets/Sound/chunk.wav", sound);
-            *i = 1;
-            AffichageMainMenu(screen, tabMT, tabMAT, tabM, *i, Confg->LevelR, Confg->Player);
-            SDL_Flip(screen);
-        }
-    }
 
-    else if ((x > 27 && x < 342) && (y > 482 && y < 565))
+    for (j = 0; j < 6; j++)
     {
-        if (*i != 2)
+        int posX = tabMT[j].pos.x;
+        int posX1 = posX + tabMT[j].surfaceText->w;
+        int posY = tabMT[j].pos.y;
+        int posY1 = posY + tabMT[j].surfaceText->h;
+        if (x > posX && x < posX1 && y > posY && y < posY1)
         {
-            PlayChunkMusic("assets/Sound/chunk.wav", sound);
-            *i = 2;
-            AffichageMainMenu(screen, tabMT, tabMAT, tabM, *i, Confg->LevelR, Confg->Player);
-            SDL_Flip(screen);
+            if (*i != (j + 1))
+            {
+                PlayChunkMusic("assets/Sound/chunk.wav", sound);
+                *i = j + 1;
+                
+            }
+            break;
         }
     }
+    if (j >= 6)
+    {
+        if (x > 1620 && x < 1920 && y > 300 && y < 415)
+        {
+            if (*i != 7)
+                *i = 7;
+        }
 
-    else if ((x > 27 && x < 269) && (y > 594 && y < 676))
-    {
-        if (*i != 3)
+        else if (x > 1620 && x < 1920 && y > 730 && y < 850)
         {
-            PlayChunkMusic("assets/Sound/chunk.wav", sound);
-            *i = 3;
-            AffichageMainMenu(screen, tabMT, tabMAT, tabM, *i, Confg->LevelR, Confg->Player);
-            SDL_Flip(screen);
+            if (*i != 8)
+                *i = 8;
         }
-    }
-
-    else if ((x > 27 && x < 223) && (y > 705 && y < 788))
-    {
-        if (*i != 4)
+        else
         {
-            PlayChunkMusic("assets/Sound/chunk.wav", sound);
-            *i = 4;
-            AffichageMainMenu(screen, tabMT, tabMAT, tabM, *i, Confg->LevelR, Confg->Player);
-            SDL_Flip(screen);
-        }
-    }
-    else if ((x > 27 && x < 363) && (y > 816 && y < 899))
-    {
-        if (*i != 5)
-        {
-            PlayChunkMusic("assets/Sound/chunk.wav", sound);
-            *i = 5;
-            AffichageMainMenu(screen, tabMT, tabMAT, tabM, *i, Confg->LevelR, Confg->Player);
-            SDL_Flip(screen);
-        }
-    }
-    else if ((x > 27 && x < 193) && (y > 927 && y < 1010))
-    {
-        if (*i != 6)
-        {
-            PlayChunkMusic("assets/Sound/chunk.wav", sound);
-            *i = 6;
-            AffichageMainMenu(screen, tabMT, tabMAT, tabM, *i, Confg->LevelR, Confg->Player);
-            SDL_Flip(screen);
-        }
-    }
-    else if (x > 1620 && x < 1920 && y > 300 && y < 415)
-    {
-        if (*i != 7)
-            *i = 7;
-    }
-
-    else if (x > 1620 && x < 1920 && y > 730 && y < 850)
-    {
-        if (*i != 8)
-            *i = 8;
-    }
-
-    else
-    {
-        if (*i != 0)
-        {
-            *i = 0;
-            AffichageMainMenu(screen, tabMT, tabMAT, tabM, *i, Confg->LevelR, Confg->Player);
-            SDL_Flip(screen);
+            if (i != 0)
+            {
+                *i = 0;
+                
+            }
         }
     }
 }
 
 void Motion_MG(Image *tabMG, SDL_Surface *screen, SDL_Event event, int *i)
 {
-    int x, y;
+    Mix_Chunk *sound;
+    int x, y, j;
+    SDL_PollEvent(&event);
     x = event.motion.x;
     y = event.motion.y;
 
-    if (x > 819 && x < 1081 && y > 322 && y < 405)
+    for (j = 0; j < 6; j++)
     {
-        if (*i != 1)
-        {
-            *i = 1;
-            AfficherImg(tabMG[*i + 5], screen);
-            SDL_Flip(screen);
-        }
-    }
+        int posX = tabMG[j].pos.x;
+        int posX1 = posX + tabMG[j].img->w;
+        int posY = tabMG[j].pos.y;
+        int posY1 = posY + tabMG[j].img->h;
 
-    else if (x > 819 && x < 1081 && y > 437 && y < 521)
-    {
-
-        if (*i != 2)
+        if (x > posX && x < posX1 && y > posY && y < posY1)
         {
-            *i = 2;
-            AfficherImg(tabMG[*i + 5], screen);
+            if (*i != (j + 1))
+            {
+                PlayChunkMusic("assets/Sound/chunk.wav", sound);
+                *i = j + 1;
+                AfficherImg(tabMG[*i + 5], screen);
+                SDL_Flip(screen);
+            }
+            break;
+        }
+    }
+    if (j >= 6)
+    {
+        if (*i != 0)
+        {
+            *i = 0;
+            for (int j = 1; j < 6; j++)
+                AfficherImg(tabMG[j], screen);
             SDL_Flip(screen);
         }
     }
-    else if (x > 819 && x < 1081 && y > 553 && y < 637)
-    {
-        if (*i != 3)
-        {
-            *i = 3;
-            AfficherImg(tabMG[*i + 5], screen);
-            SDL_Flip(screen);
-        }
-    }
-
-    else if (x > 819 && x < 1081 && y > 669 && y < 753)
-    {
-        if (*i != 4)
-        {
-            *i = 4;
-            AfficherImg(tabMG[*i + 5], screen);
-            SDL_Flip(screen);
-        }
-    }
-    else if (x > 904 && x < 1016 && y > 801 && y < 900)
-    {
-        if (*i != 5)
-        {
-            *i = 5;
-            AfficherImg(tabMG[*i + 5], screen);
-            SDL_Flip(screen);
-        }
-    }
-    else if (*i != 0)
-    {
-        *i = 0;
-        for (int j = 1; j < 6; j++)
-            AfficherImg(tabMG[j], screen);
-        SDL_Flip(screen);
-    }
+    
 }
 void Motion_MO(SDL_Surface *screen, Config *Confg, SDL_Event event, Image *tabMO, Image *tabMAO, int *i)
 {

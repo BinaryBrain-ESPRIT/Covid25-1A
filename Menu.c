@@ -121,9 +121,9 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     enigme enig1;
 
     background tabG[3];
+    background tabMasque[3];
 
     Image tabGameUI[5];
-
     Text MoneyTxt, GameTimeTxt;
 
     // Enigme
@@ -137,17 +137,17 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     int GameTimeInit, GameTimeS, GameTimeM, GameTimeSPred;
     // Init LevelBackg
     InitGameBackg(&tabG[0], "assets/Levels/Level1.png");
-
+    InitGameBackg(&tabMasque[0], "assets/Levels/Masque.jpg");
     // Init GameUI
     initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
     initImg(&tabGameUI[1], 1654, 81, "assets/GameUi/MoneyTime.png");
     char Money[20];
     sprintf(Money, "%d $", Confg->Money);
-    initTxt(&MoneyTxt, 1733, 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
+    initTxt(&MoneyTxt, 1775, 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
+    initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w /3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
     initTxt(&GameTimeTxt, 1745, 154, TimeColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", "00:00");
     // Init Ennemi
-    initEnnemy(&e[0],
-               2500, 575, 5, 2);
+    initEnnemy(&e[0], 2500, 575, 5, 2);
     initEnnemy(&e[1], 4270, 575, 5, 2);
     initEnnemy(&e[2], 5640, 575, 5, 2);
     initEnnemy(&e[3], 8120, 575, 5, 2);
@@ -164,17 +164,16 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     GameTimeInit = SDL_GetTicks();
     while (isRunning)
     {
-        GameTimeS = (SDL_GetTicks() - GameTimeInit) / 1000;
-
-        if (GameTimeS >= 60)
-        {
-            GameTimeS = 0;
-            GameTimeM++;
-        }
+        GameTimeS = ((SDL_GetTicks() - GameTimeInit) / 1000) % 60;
+        GameTimeM = ((SDL_GetTicks() - GameTimeInit) / 1000) / 60;
+        /* if (GameTimeS >= 60)
+         {
+             GameTimeS = 0;
+             GameTimeM++;
+         }*/
         if (GameTimeSPred != GameTimeS)
         {
             sprintf(GameTimeTxt.Texte, "%02d:%02d", GameTimeM, GameTimeS);
-            printf("%s\n", GameTimeTxt.Texte);
             initTxt(&GameTimeTxt, 1745, 154, Red, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", GameTimeTxt.Texte);
         }
         GameTimeSPred = GameTimeS;
@@ -198,11 +197,14 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         animerPerso(&p);
         afficherPerso(p, screen);
         int n = 0;
+        if (collisionPV(p, tabMasque[0].img) == 3 && p.nbreVie != 0)
+            p.nbreVie = 0;
+
         // PlayerDie
         if (p.nbreVie == 0)
         {
 
-            if (p.AnimP_Die % 10 == 0)
+            if (p.AnimP_Die > 3)
             {
                 if (!p.flipped)
                     p.animI = 6;
@@ -223,53 +225,59 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
 
                 p.AnimP_Die = 0;
             }
-            p.AnimP_Die += 2;
+            p.AnimP_Die++;
         }
-
-        if (p.pos.x >= screen->w / 2 && p.direction == 1 && p.posABS.x < 9390 && !(p.posABS.y > 530 && p.posABS.y < 1310))
+        else 
         {
-            scrolling(&tabG[0], p.direction, 10);
-            p.posABS.x += 10;
-            for (int i = 0; i < 5; i++)
+            if (collisionPH(p, tabMasque[0].img) != p.direction)
             {
-                e[i].posInit -= 10;
-                e[i].pos.x -= 10;
+                if (p.pos.x >= screen->w / 2 && p.direction == 1 && p.posABS.x < 9390 && !(p.posABS.y > 530 && p.posABS.y < 1310))
+                {
+                    scrolling(&tabG[0], &tabMasque[0], p.direction, 10);
+                    p.posABS.x += 10;
+                    for (int i = 0; i < 5; i++)
+                    {
+                        e[i].posInit -= 10;
+                        e[i].pos.x -= 10;
+                    }
+                }
+                else if (p.direction == -1 && p.pos.x <= 500 && p.posABS.x > 500)
+                {
+                    scrolling(&tabG[0], &tabMasque[0], p.direction, 10);
+                    p.posABS.x -= 10;
+                    for (int i = 0; i < 5; i++)
+                    {
+                        e[i].posInit += 10;
+                        e[i].pos.x += 10;
+                    }
+                }
+                else if (p.direction == -2 && p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y < 1340)
+                {
+                    scrolling(&tabG[0], &tabMasque[0], p.direction, 10);
+                    p.posABS.y += 10;
+                    for (int i = 0; i < 5; i++)
+                    {
+                        e[i].pos.y -= 10;
+                    }
+                }
+                else if (p.direction == 2 && p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y > 510)
+                {
+                    scrolling(&tabG[0], &tabMasque[0], p.direction, 10);
+                    p.posABS.y -= 10;
+                    for (int i = 0; i < 5; i++)
+                    {
+                        e[i].pos.y += 10;
+                    }
+                }
+                else
+                    deplacerPerso(&p, Confg->deltaTime);
             }
         }
-        else if (p.direction == -1 && p.pos.x <= 500 && p.posABS.x > 500)
-        {
-            scrolling(&tabG[0], p.direction, 10);
-            p.posABS.x -= 10;
-            for (int i = 0; i < 5; i++)
-            {
-                e[i].posInit += 10;
-                e[i].pos.x += 10;
-            }
-        }
-        else if (p.direction == -2 && p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y < 1340)
-        {
-            scrolling(&tabG[0], p.direction, 10);
-            p.posABS.y += 10;
-            for (int i = 0; i < 5; i++)
-            {
-                e[i].pos.y -= 10;
-            }
-        }
-        else if (p.direction == 2 && p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y > 510)
-        {
-            scrolling(&tabG[0], p.direction, 10);
-            p.posABS.y -= 10;
-            for (int i = 0; i < 5; i++)
-            {
-                e[i].pos.y += 10;
-            }
-        }
-        else
-            deplacerPerso(&p, Confg->deltaTime);
 
         // Ennemy
         for (int i = 0; i < 5; i++)
         {
+
             if (collisionBB(e[i], p) && p.nbreVie > 0)
             {
                 e[i].direction = 0;
@@ -320,12 +328,13 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         {
             p.direction = -1;
         }
-        if (state[SDLK_SPACE])
+        if (state[SDLK_UP])
         {
-            if (p.isGround && p.pos.y >= 510)
+            if (p.isGround && collisionPV(p, tabMasque[0].img) == -2)
                 p.isGround = 0;
         }
-        saut(&p);
+        saut(&p, collisionPV(p, tabMasque[0].img));
+
         SDL_PollEvent(&event);
         switch (event.type)
         {
@@ -449,7 +458,6 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                             GameTimeM++;
                         }
 
-                        
                         animer1(&enig1, screen);
 
                         SDL_PollEvent(&event);

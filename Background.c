@@ -1,5 +1,6 @@
 #include "Background.h"
 #include "Main_Fn.h"
+
 void InitGameBackg(background *Backg, char NameImg[])
 {
     Backg->img = IMG_Load(NameImg);
@@ -37,59 +38,81 @@ SDL_Color GetPixel(SDL_Surface *pSurface, int x, int y)
     return color;
 }
 
-int collisionPP(Player p, SDL_Surface Masque)
+int collisionPH(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
 
-    int posX = p.pos.x;
-    int posY = p.pos.y;
+    int posX = p.posABS.x;
+    int posY = p.posABS.y;
     int posX1 = posX + p.img[p.animI][p.animJ]->w;
     int posY1 = posY + p.img[p.animI][p.animJ]->h;
 
-    for (int i = posY; i <= posY1; i++)
+    for (int i = posY; i <= posY1 - 50; i++)
     {
         // Right
-        color = GetPixel(&Masque, posX1, i);
-        if (color.r == 0 && color.g == 0 && color.b == 0)
+        color = GetPixel(Masque, posX1, i);
+        if (color.r == 255 && color.g == 255 && color.b == 1)
+        {
             return 1;
+        }
         // Left
-        color = GetPixel(&Masque, posX, i);
-        if (color.r == 0 && color.g == 0 && color.b == 0)
+        color = GetPixel(Masque, posX, i);
+        if (color.r == 255 && color.g == 255 && color.b == 1)
             return -1;
-    }
-    for (int i = posX; i <= posX1; i++)
-    {
-        // TOP
-        color = GetPixel(&Masque, i, posY);
-        if (color.r == 0 && color.g == 0 && color.b == 0)
-            return 2;
-        // Bot
-        color = GetPixel(&Masque, i, posY1);
-        if (color.r == 0 && color.g == 0 && color.b == 0)
-            return -2;
     }
 
     return 0;
 }
+int collisionPV(Player p, SDL_Surface *Masque)
+{
+    SDL_Color color;
 
-void scrolling(background *Backg, int direction, int pas_Avancement)
+    int posX = p.posABS.x;
+    int posY = p.posABS.y;
+    int posX1 = posX + p.img[p.animI][p.animJ]->w;
+    int posY1 = posY + p.img[p.animI][p.animJ]->h;
+
+    for (int i = posX; i <= posX1; i++)
+    {
+        color = GetPixel(Masque, i, posY1);
+        //printf(" %d %d %d\n",color.r,color.g,color.b);
+        if (color.r == 254 && color.g == 0 && color.b == 0)
+            return 3;
+        // TOP
+        color = GetPixel(Masque, i, posY);
+        if (color.r == 255 && color.g == 255 && color.b == 1)
+            return 2;
+        // Bot
+        color = GetPixel(Masque, i, posY1);
+        if (color.r == 255 && color.g == 255 && color.b == 1)
+            return -2;
+    }
+    return 0;
+}
+
+void scrolling(background *Backg, background *Masque, int direction, int pas_Avancement)
 {
     switch (direction)
     {
     case 1:
         Backg->cam.x += pas_Avancement;
+        // Masque->cam.x += pas_Avancement;
         break;
     case -1:
         Backg->cam.x -= pas_Avancement;
+        // Masque->cam.x -= pas_Avancement;
         break;
     case 2:
         Backg->cam.y -= pas_Avancement;
+        // Masque->cam.y -= pas_Avancement;
         break;
     case -2:
         Backg->cam.y += pas_Avancement;
+        // Masque->cam.y += pas_Avancement;
         break;
     }
 }
+
 void LibererBackg(background backg)
 {
     SDL_FreeSurface(backg.img);

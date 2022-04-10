@@ -16,8 +16,10 @@ typedef struct
 void InitGameBackg(background *Backg, char NameImg[]);
 void AfficherBackg(background Backg, SDL_Surface *screen);
 void animer_background(background *e);
-int collisionPP(Player p, SDL_Surface Masque);
-void scrolling(background *Backg, int direction, int pas_Avancement);
+int collisionPH(Player p, SDL_Surface *Masque);
+int collisionPV(Player p, SDL_Surface *Masque);
+
+void scrolling(background *Backg, background *Masque, int direction, int pas_Avancement);
 void LibererBackg(background backg);
 
 #endif

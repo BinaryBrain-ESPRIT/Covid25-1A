@@ -1,7 +1,7 @@
-Money : 4250
-Player : 1
+Money : 5000
+Player : 3
 LevelReached : 3
 Language : 1
 FullScreen : 1
 Volume : 100
-PosVol : 726
+PosVol : 730

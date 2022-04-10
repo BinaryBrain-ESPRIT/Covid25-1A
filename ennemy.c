@@ -2,7 +2,7 @@
 
 void initEnnemy(Ennemy *e, int x, int y, int vitesse, int nbreVie)
 {
-    
+
     int direction;
     char NomImg[100];
     int n;
@@ -10,7 +10,7 @@ void initEnnemy(Ennemy *e, int x, int y, int vitesse, int nbreVie)
     e->pos.y = y;
 
     do
-        direction = rand() % (-1 - 2) -1;
+        direction = rand() % (-1 - 2) - 1;
     while (direction == 0);
 
     e->direction = direction;
@@ -160,6 +160,54 @@ int collisionBB(Ennemy e, Player p)
     return 0;
 }
 
+int collisionEH(Ennemy e, SDL_Surface *Masque)
+{
+    SDL_Color color;
+
+    int posX = e.posABS.x;
+    int posY = e.posABS.y;
+    int posX1 = posX + e.img[e.anim_i][e.anim_j]->w;
+    int posY1 = posY + e.img[e.anim_i][e.anim_j]->h;
+
+    for (int i = posY; i <= posY1 - 50; i++)
+    {
+        // Right
+        color = GetPixel1(Masque, posX1, i);
+        if (color.r == 255 && color.g == 255 && color.b == 1)
+        {
+            return 1;
+        }
+        // Left
+        color = GetPixel1(Masque, posX, i);
+        if (color.r == 255 && color.g == 255 && color.b == 1)
+            return -1;
+    }
+
+    return 0;
+}
+int collisionEV(Ennemy e, SDL_Surface *Masque)
+{
+    SDL_Color color;
+
+    int posX = e.posABS.x;
+    int posY = e.posABS.y;
+    int posX1 = posX + e.img[e.anim_i][e.anim_j]->w;
+    int posY1 = posY + e.img[e.anim_i][e.anim_j]->h;
+
+    for (int i = posX; i <= posX1; i++)
+    {
+        // TOP
+        color = GetPixel1(Masque, i, posY);
+        if (color.r == 255 && color.g == 255 && color.b == 1)
+            return 2;
+        // Bot
+        color = GetPixel1(Masque, i, posY1);
+        printf("R = %d G = %d B = %d\n", color.r, color.g, color.b);
+        if (color.r == 255 && color.g == 255 && color.b == 1)
+            return -2;
+    }
+}
+
 void LibererEnnemy(Ennemy e)
 {
     int n;
@@ -177,4 +225,21 @@ void LibererEnnemy(Ennemy e)
             SDL_FreeSurface(e.img[i][j]);
         }
     }
+}
+
+SDL_Color GetPixel1(SDL_Surface *pSurface, int x, int y)
+{
+    SDL_Color color;
+    Uint32 col = 0;
+
+    // Determine Pos
+    char *pPosition = (char *)pSurface->pixels;
+    pPosition += (pSurface->pitch * y);
+    pPosition += (pSurface->format->BytesPerPixel * x);
+    memcpy(&col, pPosition, pSurface->format->BytesPerPixel);
+
+    // convertir color
+    SDL_GetRGB(col, pSurface->format, &color.r, &color.g, &color.b);
+
+    return color;
 }
