@@ -19,9 +19,11 @@ int main()
     int last_frame_time = 0;
     float delta_time;
     Image tabM[3][3];
-    Text tabMT[5];
-    Text tabMAT[5];
-
+    Text tabMT[6];
+    Text tabMAT[6], MoneyTxt;
+    SDL_Color MoneyColor = {57, 181, 74};
+    char Money[5];
+    Image MoneyImg;
     // Init Image
 
     // End Init
@@ -48,9 +50,14 @@ int main()
         else
             screen = SDL_SetVideoMode(Width, Height, Bpp, SDL_HWSURFACE | SDL_FULLSCREEN);
 
+        sprintf(Money, "%d $", Confg->Money);
+        initTxt(&MoneyTxt, 1692, 57, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
+        initImg(&MoneyImg, 1596, 43, "assets/MainMenu/Money.png");
         PlayMusic("assets/Sound/son.wav", music);
 
         AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+        AfficherImg(MoneyImg, screen);
+        Afficher_txt(MoneyTxt, screen);
 
         SDL_Flip(screen);
     }
@@ -91,6 +98,7 @@ int main()
                 else
                     i = 1;
                 AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+                Afficher_txt(MoneyTxt, screen);
                 SDL_Flip(screen);
                 break;
             case SDLK_f:
@@ -100,6 +108,7 @@ int main()
                     screen = SDL_SetVideoMode(Width, Height, Bpp, SDL_HWSURFACE);
                 Confg->Fullscr *= -1;
                 AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+                Afficher_txt(MoneyTxt, screen);
                 SDL_Flip(screen);
                 break;
             case SDLK_RETURN:
@@ -109,6 +118,7 @@ int main()
                     SelectLevel(screen, Confg);
                     i = 0;
                     AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+                    Afficher_txt(MoneyTxt, screen);
                     SDL_Flip(screen);
 
                     break;
@@ -120,16 +130,18 @@ int main()
                         InitTxt_fr(tabMT, tabMAT);
                     i = 0;
                     AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+                    Afficher_txt(MoneyTxt, screen);
                     SDL_Flip(screen);
 
                     break;
-                case 3:
+                case 5:
                     AffichageCredits(screen, Confg);
                     i = 0;
                     AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+                    Afficher_txt(MoneyTxt, screen);
                     SDL_Flip(screen);
                     break;
-                case 4:
+                case 6:
                     Confg->isRunning = 0;
                     break;
                 }
@@ -148,6 +160,7 @@ int main()
                 SelectLevel(screen, Confg);
 
                 AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+                Afficher_txt(MoneyTxt, screen);
                 SDL_Flip(screen);
                 i = 0;
                 break;
@@ -158,19 +171,21 @@ int main()
                 else
                     InitTxt_fr(tabMT, tabMAT);
                 AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+                Afficher_txt(MoneyTxt, screen);
                 SDL_Flip(screen);
                 i = 0;
                 break;
-            case 3:
+            case 5:
                 AffichageCredits(screen, Confg);
                 i = 0;
                 AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+                Afficher_txt(MoneyTxt, screen);
                 SDL_Flip(screen);
                 break;
-            case 4:
+            case 6:
                 Confg->isRunning = 0;
                 break;
-            case 5:
+            case 7:
                 if (Confg->LevelR == 2)
                     if (Confg->Player == 3)
                         Confg->Player = 2;
@@ -184,9 +199,10 @@ int main()
                     else
                         Confg->Player = 2;
                 AffichageMainMenu(screen, tabMT, tabMAT, tabM, 0, Confg->LevelR, Confg->Player);
+                Afficher_txt(MoneyTxt, screen);
                 SDL_Flip(screen);
                 break;
-            case 6:
+            case 8:
                 if (Confg->LevelR == 3)
                     if (Confg->Player == 3)
                         Confg->Player = 2;
@@ -195,6 +211,7 @@ int main()
                     else
                         Confg->Player = 3;
                 AffichageMainMenu(screen, tabMT, tabMAT, tabM, 0, Confg->LevelR, Confg->Player);
+                Afficher_txt(MoneyTxt, screen);
                 SDL_Flip(screen);
                 break;
             }

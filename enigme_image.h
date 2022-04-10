@@ -7,10 +7,10 @@
 typedef struct
 {
     Image Backg[3];
-    Image Timer[10];
+    Text Time;
     int NumRC;
     int NumE;
-    int TimerI;
+    int Duration,TimeInit;
     Text txt;
 } Enigme;
 

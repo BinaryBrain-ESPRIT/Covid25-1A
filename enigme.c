@@ -109,12 +109,8 @@ int InitEnigme1(enigme *e, char *nomfichier)
   e->Rep[0].surfaceText = TTF_RenderText_Solid(e->Rep[0].font, e->Rep[0].Texte, e->Rep[0].color);
   e->Rep[1].surfaceText = TTF_RenderText_Solid(e->Rep[1].font, e->Rep[1].Texte, e->Rep[1].color);
   e->Rep[2].surfaceText = TTF_RenderText_Solid(e->Rep[2].font, e->Rep[2].Texte, e->Rep[2].color);
-  for (int i = 0; i < 11; i++)
-  {
-    sprintf(NomTimer, "assets/enigmeText/Timer/%d.jpg", i);
-    initImg(&e->Timer[i], 1673, 32, NomTimer);
-  }
-  e->TimerI = 0;
+
+  e->Duration = 10;
   fclose(e->f);
   return 1;
 }
@@ -130,6 +126,23 @@ void afficherEnigme1(enigme e, SDL_Surface *screen)
 }
 void animer1(enigme *e, SDL_Surface *screen)
 {
-  AfficherImg(e->Timer[10 - e->TimerI], screen);
-  e->TimerI++;
+  int EnigmeTimeS, EnigmeTimeSPred = -1;
+  SDL_Color Black = {0, 0, 0};
+  SDL_Color Red = {193, 39, 45};
+
+  EnigmeTimeS = (SDL_GetTicks() - e->TimeInit) / 1000;
+
+  if (EnigmeTimeSPred != EnigmeTimeS)
+  {
+    sprintf(e->Time.Texte, "00:%02d", e->Duration - EnigmeTimeS);
+    if (e->Duration - EnigmeTimeS > 5)
+      initTxt(&e->Time, 1707, 26, Black, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", e->Time.Texte);
+    else
+      initTxt(&e->Time, 1707, 26, Red, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", e->Time.Texte);
+
+    afficherEnigme1(*e, screen);
+    Afficher_txt(e->Time, screen);
+    SDL_Flip(screen);
+  }
+  EnigmeTimeSPred = EnigmeTimeS;
 }

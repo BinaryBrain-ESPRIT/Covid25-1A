@@ -61,17 +61,22 @@ void SaveSetting(Config *Confg)
 
 void InitTxt_en(Text *tabMT, Text *tabMAT)
 {
-    InitTitle(&tabMT[0], "Covid-25");
-    iniText(&tabMT[1], 430, "New Game");
-    iniText(&tabMT[2], 560, "Settings");
-    iniText(&tabMT[3], 690, "Credits");
-    iniText(&tabMT[4], 820, "Quit");
+    SDL_Color Blue = {0, 0, 111};
+    SDL_Color Red = {173, 33, 33};
 
-    InitTitle(&tabMAT[0], "Covid-25");
-    iniActiveText(&tabMAT[1], 430, "New Game");
-    iniActiveText(&tabMAT[2], 560, "Settings");
-    iniActiveText(&tabMAT[3], 690, "Credits");
-    iniActiveText(&tabMAT[4], 820, "Quit");
+    initTxt(&tabMT[0], 27, 371, Blue, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "New Game");
+    initTxt(&tabMT[1], 27, 482, Blue, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Options");
+    initTxt(&tabMT[2], 27, 594, Blue, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Score");
+    initTxt(&tabMT[3], 27, 705, Blue, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Shop");
+    initTxt(&tabMT[4], 27, 816, Blue, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Credits");
+    initTxt(&tabMT[5], 27, 927, Blue, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Quit");
+
+    initTxt(&tabMAT[0], 27, 371, Red, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "New Game");
+    initTxt(&tabMAT[1], 27, 482, Red, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Options");
+    initTxt(&tabMAT[2], 27, 594, Red, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Score");
+    initTxt(&tabMAT[3], 27, 705, Red, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Shop");
+    initTxt(&tabMAT[4], 27, 816, Red, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Credits");
+    initTxt(&tabMAT[5], 27, 927, Red, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Quit");
 }
 
 void InitImg_fr(Image *tabMO, Image *tabMAO)
@@ -98,15 +103,22 @@ void InitImg_en(Image *tabMO, Image *tabMAO)
 
 void InitTxt_fr(Text *tabMT, Text *tabMAT)
 {
-    iniText(&tabMT[1], 430, "Nouveau Jeu");
-    iniText(&tabMT[2], 560, "Parametre");
-    iniText(&tabMT[3], 690, "Credits");
-    iniText(&tabMT[4], 820, "Quitter");
+    SDL_Color Blue = {0, 0, 111};
+    SDL_Color Red = {173, 33, 33};
 
-    iniActiveText(&tabMAT[1], 430, "Nouveau Jeu");
-    iniActiveText(&tabMAT[2], 560, "Parametre");
-    iniActiveText(&tabMAT[3], 690, "Credits");
-    iniActiveText(&tabMAT[4], 820, "Quitter");
+    initTxt(&tabMT[0], 27, 371, Blue, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Nouveau Jeu");
+    initTxt(&tabMT[1], 27, 482, Blue, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Parametre");
+    initTxt(&tabMT[2], 27, 594, Blue, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Score");
+    initTxt(&tabMT[3], 27, 705, Blue, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Shop");
+    initTxt(&tabMT[4], 27, 816, Blue, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Credits");
+    initTxt(&tabMT[5], 27, 927, Blue, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Quitter");
+
+    initTxt(&tabMAT[0], 27, 371, Red, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Nouveau Jeu");
+    initTxt(&tabMAT[1], 27, 482, Red, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Parametre");
+    initTxt(&tabMAT[2], 27, 594, Red, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Score");
+    initTxt(&tabMAT[3], 27, 705, Red, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Shop");
+    initTxt(&tabMAT[4], 27, 816, Red, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Credits");
+    initTxt(&tabMAT[5], 27, 927, Red, 82, "assets/Font/AznKnucklesTrial-z85pa.otf", "Quitter");
 }
 
 void PlayMusic(char NameMusic[], Mix_Music *music)
@@ -130,4 +142,3 @@ void Liberer_Mus(Mix_Music *music)
 {
     Mix_FreeMusic(music);
 }
-

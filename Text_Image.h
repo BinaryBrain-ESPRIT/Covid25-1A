@@ -18,6 +18,7 @@ typedef struct
 {
     SDL_Rect pos;
     SDL_Surface *img;
+    char NameImg[100];
 } Image;
 
 

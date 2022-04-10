@@ -11,15 +11,15 @@ void AffichageMainMenu(SDL_Surface *screen, Text tabT[], Text tabAT[], Image tab
     AfficherImg(tabI[l - 1][p - 1], screen);
     if (j != 0)
     {
-        for (int i = 1; i < 5; i++)
-            if (i != j)
+        for (int i = 0; i < 6; i++)
+            if (i != j - 1)
                 Afficher_txt(tabT[i], screen);
 
-        Afficher_txt(tabAT[j], screen);
+        Afficher_txt(tabAT[j - 1], screen);
     }
     else
     {
-        for (int i = 1; i < 5; i++)
+        for (int i = 0; i < 6; i++)
             Afficher_txt(tabT[i], screen);
     }
 }
@@ -110,7 +110,8 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
 
     SDL_Color MoneyColor = {57, 181, 74};
     SDL_Color TimeColor = {193, 39, 45};
-
+    SDL_Color Black = {0, 0, 0};
+    SDL_Color Red = {193, 39, 45};
     Player p;
     Ennemy e[5];
 
@@ -123,25 +124,30 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
 
     Image tabGameUI[5];
 
-    Text MoneyTxt, TimeTxt;
+    Text MoneyTxt, GameTimeTxt;
+
+    // Enigme
+    int EnigmeTimeInit = 0;
+    int EnigmeTimeS = 0;
+    int DurationEnigme;
 
     int isRunning = 1;
     int Opened = 0;
     int last_frame_time = 0;
-    char HealthImg[30];
-    int GameTimeInit, GameTimeS, GameTimeM;
+    int GameTimeInit, GameTimeS, GameTimeM, GameTimeSPred;
     // Init LevelBackg
     InitGameBackg(&tabG[0], "assets/Levels/Level1.png");
 
     // Init GameUI
     initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
     initImg(&tabGameUI[1], 1654, 81, "assets/GameUi/MoneyTime.png");
-    char Money[20],Time[20];
+    char Money[20];
     sprintf(Money, "%d $", Confg->Money);
     initTxt(&MoneyTxt, 1733, 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
-    initTxt(&TimeTxt, 1745, 154, TimeColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", "00:00");
+    initTxt(&GameTimeTxt, 1745, 154, TimeColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", "00:00");
     // Init Ennemi
-    initEnnemy(&e[0], 2500, 575, 5, 2);
+    initEnnemy(&e[0],
+               2500, 575, 5, 2);
     initEnnemy(&e[1], 4270, 575, 5, 2);
     initEnnemy(&e[2], 5640, 575, 5, 2);
     initEnnemy(&e[3], 8120, 575, 5, 2);
@@ -154,21 +160,26 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     initminimap(&map, "assets/MiniMap/level1mini.png", p, e);
 
     SDL_ShowCursor(SDL_DISABLE);
+
     GameTimeInit = SDL_GetTicks();
     while (isRunning)
     {
         GameTimeS = (SDL_GetTicks() - GameTimeInit) / 1000;
+
         if (GameTimeS >= 60)
         {
             GameTimeS = 0;
             GameTimeM++;
         }
-        sprintf(Time,"%02d:%02d\n", GameTimeM, GameTimeS);
-        initTxt(&TimeTxt, 1745, 154, TimeColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Time);
-
-        last_frame_time = SDL_GetTicks();
-
-        // while (!(SDL_GetTicks() > last_frame_time + FRAME_TARGET_TIME));
+        if (GameTimeSPred != GameTimeS)
+        {
+            sprintf(GameTimeTxt.Texte, "%02d:%02d", GameTimeM, GameTimeS);
+            printf("%s\n", GameTimeTxt.Texte);
+            initTxt(&GameTimeTxt, 1745, 154, Red, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", GameTimeTxt.Texte);
+        }
+        GameTimeSPred = GameTimeS;
+        // last_frame_time = SDL_GetTicks();
+        //  while (!(SDL_GetTicks() > last_frame_time + FRAME_TARGET_TIME));
 
         if (Confg->isRunning == 0)
             isRunning = 0;
@@ -190,6 +201,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         // PlayerDie
         if (p.nbreVie == 0)
         {
+
             if (p.AnimP_Die % 10 == 0)
             {
                 if (!p.flipped)
@@ -202,6 +214,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                     n = 4;
                 if (p.animJ >= n)
                 {
+                    Confg->Money -= 250;
                     isRunning = 0;
                     SDL_Delay(2000);
                 }
@@ -265,8 +278,8 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                     p.nbreVie--;
                 animerEnnemy(&e[i], Confg);
                 afficherEnnemy(e[i], screen);
-                sprintf(HealthImg, "assets/GameUi/Health%d.png", p.nbreVie);
-                initImg(&tabGameUI[0], 31, 53, HealthImg);
+                sprintf(tabGameUI[0].NameImg, "assets/GameUi/Health%d.png", p.nbreVie);
+                initImg(&tabGameUI[0], 31, 53, tabGameUI[0].NameImg);
             }
             else
             {
@@ -281,7 +294,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         // Affichage MiniMap
         afficherminimap(map, screen);
         Afficher_txt(MoneyTxt, screen);
-        Afficher_txt(TimeTxt, screen);
+        Afficher_txt(GameTimeTxt, screen);
         SDL_Flip(screen);
 
         // PlayerMovement
@@ -341,12 +354,20 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                 afficherEnigme(enig, screen);
                 SDL_Flip(screen);
                 int done = 0;
-                int TimeSec = 0;
-                int TimerInit = SDL_GetTicks();
+
+                enig.TimeInit = SDL_GetTicks();
                 int Rep = 0;
                 SDL_ShowCursor(SDL_ENABLE);
                 while (!done)
                 {
+                    GameTimeS = (SDL_GetTicks() - GameTimeInit) / 1000;
+                    if (GameTimeS >= 60)
+                    {
+                        GameTimeS = 0;
+                        GameTimeM++;
+                    }
+                    animer(&enig, screen);
+
                     SDL_PollEvent(&event);
                     switch (event.type)
                     {
@@ -392,7 +413,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                         }
                         break;
                     }
-
+                    /*
                     int timer = (SDL_GetTicks() - TimerInit) / 1000;
 
                     if (timer != TimeSec)
@@ -403,6 +424,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                         if (enig.TimerI >= 10)
                             done = 1;
                     }
+                    */
                 }
                 SDL_ShowCursor(SDL_DISABLE);
                 break;
@@ -413,12 +435,23 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                     afficherEnigme1(enig1, screen);
                     SDL_Flip(screen);
                     done = 0;
-                    TimeSec = 0;
-                    TimerInit = SDL_GetTicks();
                     Rep = 0;
+
+                    enig1.TimeInit = SDL_GetTicks();
+
                     SDL_ShowCursor(SDL_ENABLE);
                     while (!done)
                     {
+                        GameTimeS = (SDL_GetTicks() - GameTimeInit) / 1000;
+                        if (GameTimeS >= 60)
+                        {
+                            GameTimeS = 0;
+                            GameTimeM++;
+                        }
+
+                        
+                        animer1(&enig1, screen);
+
                         SDL_PollEvent(&event);
                         switch (event.type)
                         {
@@ -467,7 +500,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                             }
                             done = 1;
                         }
-
+                        /*
                         int timer = (SDL_GetTicks() - TimerInit) / 1000;
 
                         if (timer != TimeSec)
@@ -478,6 +511,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                             if (enig1.TimerI >= 10)
                                 done = 1;
                         }
+                        */
                     }
                     SDL_ShowCursor(SDL_DISABLE);
                     break;
@@ -882,13 +916,12 @@ void MenuOpt(SDL_Surface *screen, Config *Confg)
 void AffichageCredits(SDL_Surface *screen, Config *Confg)
 {
     Image tab[181];
-    char NomBackg[30];
     int isRunning = 1;
     SDL_Event event;
     for (int i = 0; i < 181; i++)
     {
-        sprintf(NomBackg, "assets/Credits/%d.jpg", i);
-        InitBackg(&tab[i], NomBackg);
+        sprintf(tab[i].NameImg, "assets/Credits/%d.jpg", i);
+        InitBackg(&tab[i], tab[i].NameImg);
     }
     for (int i = 0; i < 181; i++)
     {
