@@ -191,7 +191,6 @@ int BehindEnnemy(Player p, Ennemy e)
         }
         else if (posPX < posEX1 + 500 && posPX > posEX1)
         {
-            printf("PosPX = %d posEX1 = %d\n", posPX, posEX1);
             for (int i = posPY; i < posPY1; i++)
                 if (i > posEY && i < posEY1)
                     return 1;

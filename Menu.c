@@ -278,33 +278,20 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         {
             if (BehindEnnemy(p, e[i]) != 2)
             {
-                printf("Behind : %d\n", BehindEnnemy(p, e[i]));
-                printf("IsKilled %d ? %d\n", i, e[i].isKilled);
                 if (event.type == SDL_KEYDOWN)
                 {
                     if (event.key.keysym.sym == SDLK_a)
                     {
-                        // printf("Attack = %d\n", p.AnimP_Attack);
-
-                        /*if (p.AnimP_Attack < 10)
-                        {
-                            p.AnimP_Attack++;
-                        }
-                        else
-                        {
-                            e[i].nbreVie--;
-                            p.AnimP_Attack = 0;
-                        }
-                        */
+                        
                         e[i].nbreVie--;
-                        // SDL_WaitEvent(&event);
+                      
                     }
                 }
             }
             if (e[i].nbreVie == 0 && !e[i].isKilled)
                 e[i].isKilled = 1;
 
-            if (collisionBB(e[i], p) && p.nbreVie > 0)
+            if (collisionBB(e[i], p) && p.nbreVie > 0 && BehindEnnemy(p, e[i]) != 2)
             {
                 e[i].direction = 0;
                 e[i].attack = 1;

@@ -1,4 +1,4 @@
-Money : 5000
+Money : 4750
 Player : 1
 LevelReached : 3
 Language : 1
