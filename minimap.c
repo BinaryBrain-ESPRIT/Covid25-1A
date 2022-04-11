@@ -23,7 +23,7 @@ void afficherminimap(minimap m, SDL_Surface *screen)
 {
     SDL_BlitSurface(m.image1, NULL, screen, &m.pos1);
     SDL_BlitSurface(m.image, NULL, screen, &m.pos);
-    
+
     SDL_BlitSurface(m.playerTag, NULL, screen, &m.playerTagPos);
     for (int i = 0; i < 5; i++)
     {
@@ -41,7 +41,25 @@ void MAJMinimap(SDL_Rect PosJoueur, Ennemy e[], minimap *m, int redimensionnemen
     }
 }
 
-void Liberer (minimap * m){
+void MAJTime(Text *GameTimeTxt, int GameTimeInit)
+{
+    SDL_Color Red = {193, 39, 45};
+    int GameTimeS, GameTimeM,GameTimeSPred;
+
+    GameTimeS = ((SDL_GetTicks() - GameTimeInit) / 1000) % 60;
+    GameTimeM = ((SDL_GetTicks() - GameTimeInit) / 1000) / 60;
+
+    if (GameTimeSPred != GameTimeS)
+    {
+        sprintf(GameTimeTxt->Texte, "%02d:%02d", GameTimeM, GameTimeS);
+        initTxt(GameTimeTxt, 1745, 154, Red, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", GameTimeTxt->Texte);
+    }
+
+    GameTimeSPred = GameTimeS;
+}
+
+void Liberer(minimap *m)
+{
     SDL_FreeSurface(m->image);
     SDL_FreeSurface(m->image1);
 }

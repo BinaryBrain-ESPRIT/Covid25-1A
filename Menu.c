@@ -142,10 +142,10 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     // Init GameUI
     initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
     initImg(&tabGameUI[1], 1654, 81, "assets/GameUi/MoneyTime.png");
-    char Money[20];
-    sprintf(Money, "%d $", Confg->Money);
-    initTxt(&MoneyTxt, 1775, 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
-    initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w / 3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
+
+    sprintf(MoneyTxt.Texte, "%d $", Confg->Money);
+    initTxt(&MoneyTxt, 1775, 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
+    initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w / 3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
     initTxt(&GameTimeTxt, 1745, 154, TimeColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", "00:00");
     // Init Ennemi
     initEnnemy(&e[0], 2500, 575, 5, 2);
@@ -165,6 +165,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     GameTimeInit = SDL_GetTicks();
     while (isRunning)
     {
+        // MAJTime(&GameTimeTxt,GameTimeInit);
         GameTimeS = ((SDL_GetTicks() - GameTimeInit) / 1000) % 60;
         GameTimeM = ((SDL_GetTicks() - GameTimeInit) / 1000) / 60;
 
@@ -401,7 +402,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                     while (!done)
                     {
                         GameTimeS = (SDL_GetTicks() - GameTimeInit) / 1000;
-                       
+
                         animer(&enig, screen);
 
                         SDL_PollEvent(&event);
@@ -432,7 +433,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                             }
                             break;
                         }
-                        
+
                         printf("TimeOut = %d\n", enig.TimeOut);
                         if ((Rep > 0 && Rep < 4) || enig.TimeOut)
                         {
@@ -526,7 +527,6 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                             }
                             done = 1;
                         }
-                        
                     }
                     SDL_ShowCursor(SDL_DISABLE);
                     break;
@@ -559,7 +559,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         }
         Confg->deltaTime = (SDL_GetTicks() - last_frame_time);
     }
-    FILE * f1 = fopen("SelectedEnigme.txt", "w");
+    FILE *f1 = fopen("SelectedEnigme.txt", "w");
     fclose(f1);
     SDL_ShowCursor(SDL_ENABLE);
 

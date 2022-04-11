@@ -17,5 +17,6 @@ void afficherminimap(minimap m,SDL_Surface *screen);
 void Liberer (minimap * m);
 void sauvegarder(int score,char nomjoueur[],char nomfichier[]);
 void meilleur(char nomfichier[],int *score,char nomjoueur[]);
+void MAJTime(Text *GameTimeTxt, int GameTimeInit);
 
 #endif
