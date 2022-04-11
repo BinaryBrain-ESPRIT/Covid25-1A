@@ -7,12 +7,12 @@ typedef struct
 {
   Image Backg[3];
   FILE *f;
-  Text Time;
+  Text Time[20];
   Text Quest,Quest1;
   Text Rep[3];
   int NumRepC;
   int NumE;
-  int Duration,TimeInit;
+  int Duration,TimeInit,TimeOut;
 } enigme;
 
 int InitEnigme1(enigme *e, char *nomfichier);

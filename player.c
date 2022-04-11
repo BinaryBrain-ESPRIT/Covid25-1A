@@ -1,4 +1,5 @@
 #include "player.h"
+#include "Background.h"
 void initPerso(Player *p, int NumPlayer)
 {
     int n;
@@ -19,7 +20,7 @@ void initPerso(Player *p, int NumPlayer)
     p->AnimP_Run = 0;
     p->AnimP_Die = 0;
     p->NumPlayer = NumPlayer;
-    p->isGround = 1;
+    p->isJumped = 0;
 
     for (int i = 0; i < 8; i++)
     {
@@ -126,7 +127,7 @@ void animerPerso(Player *p)
                     p->animJ++;
                 p->AnimP_Run = 0;
             }
-            p->AnimP_Run ++ ;
+            p->AnimP_Run++;
             break;
         case -1:
             if (p->AnimP_Run > 2)
@@ -145,34 +146,32 @@ void animerPerso(Player *p)
 
                 p->AnimP_Run = 0;
             }
-            p->AnimP_Run ++;
+            p->AnimP_Run++;
             break;
         }
     }
 }
-void saut(Player *p, int Collision)
+void saut(Player *p, SDL_Surface *Masque)
 {
     int Vitesse = 20;
-    int HeightP = 0;
-    //printf("Collision  = %d\n", Collision);
-    if (!p->isGround && p->pos.y > HeightP)
+    int HeightP = p->posInit - 300;
+    if (HeightP < 0)
+        HeightP = 0;
+        
+    if (p->isJumped && p->pos.y > HeightP)
     {
         p->pos.y -= Vitesse;
         p->posABS.y -= Vitesse;
-        // SDL_Delay(10);
     }
     if (p->pos.y <= HeightP)
     {
-        p->isGround = 1;
+        p->isJumped = 0;
     }
-    if (p->isGround && (Collision != -2))
+    if (!isGround(*p, Masque) && !p->isJumped && !Interaction(*p, Masque))
     {
         p->pos.y += Vitesse;
         p->posABS.y += Vitesse;
     }
-    /*if (p->isGround && p->pos.y > 510)
-        p->pos.y = 510;*/
-    // SDL_Delay(10);
 }
 
 void LibererPlayer(Player p)

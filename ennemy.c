@@ -15,6 +15,7 @@ void initEnnemy(Ennemy *e, int x, int y, int vitesse, int nbreVie)
 
     e->direction = direction;
     e->nbreVie = nbreVie;
+    e->isKilled = 0;
     e->v = 10;
     e->anim_j = 0;
     e->anim_i = 0;
@@ -43,123 +44,168 @@ void initEnnemy(Ennemy *e, int x, int y, int vitesse, int nbreVie)
 }
 void afficherEnnemy(Ennemy e, SDL_Surface *screen)
 {
-    SDL_BlitSurface(e.img[e.anim_i][e.anim_j], NULL, screen, &e.pos);
+    if (!e.isKilled)
+        SDL_BlitSurface(e.img[e.anim_i][e.anim_j], NULL, screen, &e.pos);
 }
 
 void animerEnnemy(Ennemy *e, Config *Confg)
 {
-    if (e->attack)
+    if (!e->isKilled)
     {
-        if (e->AnimE_Attack % 10 == 0)
+        if (e->attack)
         {
-            if (!e->Flipped)
-                e->anim_i = 4;
-            else
-                e->anim_i = 5;
+            if (e->AnimE_Attack % 10 == 0)
+            {
+                if (!e->Flipped)
+                    e->anim_i = 4;
+                else
+                    e->anim_i = 5;
 
-            if (e->anim_j >= 7)
-                e->anim_j = 0;
-            else
-                e->anim_j++;
+                if (e->anim_j >= 7)
+                    e->anim_j = 0;
+                else
+                    e->anim_j++;
 
-            e->AnimE_Attack = 0;
+                e->AnimE_Attack = 0;
+            }
+            e->AnimE_Attack += 2;
         }
-        e->AnimE_Attack += 2;
-    }
-    else
-    {
-        switch (e->direction)
+        else
         {
-        case 0:
-            if (e->AnimeE_Idle % 10 == 0)
+            switch (e->direction)
             {
-                e->anim_i = 0;
-                if (e->anim_j >= 14)
-                    e->anim_j = 0;
-                else
-                    e->anim_j++;
-                e->AnimeE_Idle = 0;
-            }
-            e->AnimeE_Idle += 4;
-            break;
-        case 1:
+            case 0:
+                if (e->AnimeE_Idle % 10 == 0)
+                {
+                    e->anim_i = 0;
+                    if (e->anim_j >= 14)
+                        e->anim_j = 0;
+                    else
+                        e->anim_j++;
+                    e->AnimeE_Idle = 0;
+                }
+                e->AnimeE_Idle += 4;
+                break;
+            case 1:
 
-            if (e->AnimE_Run % 10 == 0)
-            {
-                e->anim_i = 2;
-                if (e->anim_j >= 9)
-                    e->anim_j = 0;
-                else
-                    e->anim_j++;
-                e->AnimE_Run = 0;
-            }
-            e->AnimE_Run += 4;
-            break;
-        case -1:
-            if (e->AnimE_Run % 10 == 0)
-            {
-                e->anim_i = 3;
-                if (e->anim_j >= 9)
-                    e->anim_j = 0;
-                else
-                    e->anim_j++;
+                if (e->AnimE_Run % 10 == 0)
+                {
+                    e->anim_i = 2;
+                    if (e->anim_j >= 9)
+                        e->anim_j = 0;
+                    else
+                        e->anim_j++;
+                    e->AnimE_Run = 0;
+                }
+                e->AnimE_Run += 4;
+                break;
+            case -1:
+                if (e->AnimE_Run % 10 == 0)
+                {
+                    e->anim_i = 3;
+                    if (e->anim_j >= 9)
+                        e->anim_j = 0;
+                    else
+                        e->anim_j++;
 
-                e->AnimE_Run = 0;
+                    e->AnimE_Run = 0;
+                }
+                e->AnimE_Run += 4;
+                break;
             }
-            e->AnimE_Run += 4;
-            break;
         }
     }
 }
 void deplacerEnnemy(Ennemy *e, Config *Confg)
 {
-    if (e->direction == 1)
+    if (!e->isKilled)
     {
-        e->pos.x += e->v;
-        e->posABS.x += e->v;
-        e->Flipped = 0;
-    }
+        if (e->direction == 1)
+        {
+            e->pos.x += e->v;
+            e->posABS.x += e->v;
+            e->Flipped = 0;
+        }
 
-    else if (e->direction == -1)
-    {
-        e->pos.x -= e->v;
-        e->posABS.x -= e->v;
-        e->Flipped = 1;
+        else if (e->direction == -1)
+        {
+            e->pos.x -= e->v;
+            e->posABS.x -= e->v;
+            e->Flipped = 1;
+        }
     }
 }
-void deplacerIA(Ennemy *e, SDL_Rect posPerso)
+void deplacerIA(Ennemy *e, Player p)
 {
-    if (posPerso.x > e->pos.x - 500 && posPerso.x < e->pos.x)
+    if (!e->isKilled)
     {
-        e->direction = -1;
-    }
-    else if (posPerso.x < e->pos.x + 500 && posPerso.x > (e->pos.x + e->img[e->anim_i][e->anim_j]->w))
-    {
-        e->direction = 1;
-    }
-    else if (posPerso.x > e->pos.x && posPerso.x < e->img[e->anim_i][e->anim_j]->w)
-    {
-        e->direction = 0;
-    }
-    else
-    {
-        if (e->pos.x >= e->posInit + 400)
-            e->direction = -1;
-        else if (e->pos.x <= e->posInit)
-            e->direction = 1;
+        if (BehindEnnemy(p, *e) != 2)
+            e->direction = BehindEnnemy(p, *e);
+        else
+        {
+            if (e->pos.x >= e->posInit + 400)
+                e->direction = -1;
+            else if (e->pos.x <= e->posInit)
+                e->direction = 1;
+        }
     }
 }
 int collisionBB(Ennemy e, Player p)
 {
-    SDL_Rect posE = e.pos;
-    SDL_Rect posP = p.pos;
-    if ((posP.x > posE.x && posP.x < posE.x + e.img[e.anim_i][e.anim_j]->w) || (posP.x + p.img[p.animI][p.animJ]->w > posE.x && posP.x + p.img[p.animI][p.animJ]->w < posE.x + e.img[e.anim_i][e.anim_j]->w))
+    if (!e.isKilled)
     {
-        return 1;
+        int posEX = e.pos.x;
+        int posEY = e.pos.y;
+        int posPX = p.pos.x;
+        int posPY = p.pos.y;
+        int posEX1 = posEX + e.img[e.anim_i][e.anim_j]->w;
+        int posEY1 = posEY + e.img[e.anim_i][e.anim_j]->h;
+        int posPX1 = posPX + p.img[p.animI][p.animJ]->w;
+        int posPY1 = posPY + p.img[p.animI][p.animJ]->h;
+
+        if ((posPX1 > posEX && posPX1 < posEX1) || (posPX < posEX1 && posPX > posEX))
+            return 1;
+
+        return 0;
     }
-    return 0;
 }
 
+int BehindEnnemy(Player p, Ennemy e)
+{
+    int posEX = e.pos.x;
+    int posEY = e.pos.y;
+    int posPX = p.pos.x;
+    int posPY = p.pos.y;
+    int posEX1 = posEX + e.img[e.anim_i][e.anim_j]->w;
+    int posEY1 = posEY + e.img[e.anim_i][e.anim_j]->h;
+    int posPX1 = posPX + p.img[p.animI][p.animJ]->w;
+    int posPY1 = posPY + p.img[p.animI][p.animJ]->h;
+
+    if (!e.isKilled)
+    {
+        if (posPX1 > posEX - 500 && posPX1 < e.pos.x)
+        {
+            for (int i = posPY; i < posPY1; i++)
+                if (i > posEY && i < posEY1)
+                    return -1;
+        }
+        else if (posPX < posEX1 + 500 && posPX > posEX1)
+        {
+            printf("PosPX = %d posEX1 = %d\n", posPX, posEX1);
+            for (int i = posPY; i < posPY1; i++)
+                if (i > posEY && i < posEY1)
+                    return 1;
+        }
+        else if (posPX1 > posEX && posPX1 < posEX1)
+        {
+            for (int i = posPY; i < posPY1; i++)
+                if (i > posEY && i < posEY1)
+                    return 0;
+        }
+    }
+    
+    return 2;
+}
 int collisionEH(Ennemy e, SDL_Surface *Masque)
 {
     SDL_Color color;

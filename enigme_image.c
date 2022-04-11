@@ -38,7 +38,18 @@ void InitEnigme(Enigme *e, char *nomfichier)
     InitBackg(&e->Backg[1], e->Backg[1].NameImg);
     InitBackg(&e->Backg[2], e->Backg[2].NameImg);
 
-    e->Duration = 20;
+    SDL_Color Black = {0, 0, 0};
+    SDL_Color Red = {193, 38, 45};
+    for (int i = 0; i <= e->Duration; i++)
+    {
+        sprintf(e->Time[i].Texte, "00:%02d", i);
+        if (i < 6)
+            initTxt(&e->Time[i], 1707, 26, Red, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", e->Time[i].Texte);
+        else
+            initTxt(&e->Time[i], 1707, 26, Black, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", e->Time[i].Texte);
+    }
+    e->TimeOut = 0;
+    e->Duration = 10;
     fclose(f);
 }
 void afficherEnigme(Enigme e, SDL_Surface *screen)
@@ -51,20 +62,21 @@ void afficherEnigme(Enigme e, SDL_Surface *screen)
 void animer(Enigme *e, SDL_Surface *screen)
 {
     int EnigmeTimeS, EnigmeTimeSPred = -1;
-    SDL_Color Black = {0, 0, 0};
-    SDL_Color Red = {193, 39, 45};
 
+    // printf("R: %d G: %d B: %d\n",Black.r,Black.g,Black.b);
+    /// SDL_Color Red = {193, 38, 45};
     EnigmeTimeS = (SDL_GetTicks() - e->TimeInit) / 1000;
+
+    if (e->Duration - EnigmeTimeS <= 0)
+    {
+        e->TimeOut = 1;
+        return;
+    }
 
     if (EnigmeTimeSPred != EnigmeTimeS)
     {
-        sprintf(e->Time.Texte, "00:%02d", e->Duration - EnigmeTimeS);
-        if (e->Duration - EnigmeTimeS > 5)
-            initTxt(&e->Time, 1707, 26, Black, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", e->Time.Texte);
-        else
-            initTxt(&e->Time, 1707, 26, Red, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", e->Time.Texte);
         afficherEnigme(*e, screen);
-        Afficher_txt(e->Time, screen);
+        Afficher_txt(e->Time[e->Duration - EnigmeTimeS], screen);
         SDL_Flip(screen);
     }
     EnigmeTimeSPred = EnigmeTimeS;
@@ -73,5 +85,6 @@ void Free_Enigme(Enigme *e)
 {
     for (int i = 0; i < 3; i++)
         SDL_FreeSurface(e->Backg[i].img);
-    SDL_FreeSurface(e->Time.surfaceText);
+    for (int i = 0; i <= e->Duration; i++)
+        SDL_FreeSurface(e->Time[i].surfaceText);
 }

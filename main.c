@@ -268,7 +268,7 @@ int main()
 
     free(Confg);
     TTF_Quit();
-    SDL_Quit();
+    //SDL_Quit();
 
     printf("\nGame ShutDown !\n");
 }

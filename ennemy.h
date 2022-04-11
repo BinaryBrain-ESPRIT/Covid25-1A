@@ -14,7 +14,7 @@ typedef struct
     int Flipped;
     double v; // Vitesse
     int direction;
-    int nbreVie;
+    int nbreVie, isKilled;
     int anim_i, anim_j;
     int posInit;
     int attack;
@@ -25,11 +25,12 @@ void initEnnemy(Ennemy *e, int x, int y, int vitesse, int nbreVie);
 void afficherEnnemy(Ennemy e, SDL_Surface *screen);
 void animerEnnemy(Ennemy *e, Config *Confg);
 void deplacerEnnemy(Ennemy *e, Config *Confg);
-void deplacerIA(Ennemy *e, SDL_Rect posPerso);
+void deplacerIA(Ennemy *e, Player p);
 int collisionBB(Ennemy e, Player p);
 void LibererEnnemy(Ennemy e);
 int collisionEH(Ennemy e, SDL_Surface *Masque);
 int collisionEV(Ennemy e, SDL_Surface *Masque);
 SDL_Color GetPixel1(SDL_Surface *pSurface, int x, int y);
+int BehindEnnemy(Player p, Ennemy e);
 
 #endif

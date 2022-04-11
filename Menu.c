@@ -135,6 +135,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     int Opened = 0;
     int last_frame_time = 0;
     int GameTimeInit, GameTimeS, GameTimeM, GameTimeSPred;
+    int done, Rep;
     // Init LevelBackg
     InitGameBackg(&tabG[0], "assets/Levels/Level1.png");
     InitGameBackg(&tabMasque[0], "assets/Levels/Masque.jpg");
@@ -144,7 +145,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     char Money[20];
     sprintf(Money, "%d $", Confg->Money);
     initTxt(&MoneyTxt, 1775, 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
-    initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w /3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
+    initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w / 3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
     initTxt(&GameTimeTxt, 1745, 154, TimeColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", "00:00");
     // Init Ennemi
     initEnnemy(&e[0], 2500, 575, 5, 2);
@@ -157,7 +158,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     initPerso(&p, Confg->Player);
 
     // Init MiniMap
-    initminimap(&map, "assets/MiniMap/level1mini.png", p, e);
+    initminimap(&map, "assets/MiniMap/Level1Mini.jpg", p, e);
 
     SDL_ShowCursor(SDL_DISABLE);
 
@@ -166,16 +167,13 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     {
         GameTimeS = ((SDL_GetTicks() - GameTimeInit) / 1000) % 60;
         GameTimeM = ((SDL_GetTicks() - GameTimeInit) / 1000) / 60;
-        /* if (GameTimeS >= 60)
-         {
-             GameTimeS = 0;
-             GameTimeM++;
-         }*/
+
         if (GameTimeSPred != GameTimeS)
         {
             sprintf(GameTimeTxt.Texte, "%02d:%02d", GameTimeM, GameTimeS);
             initTxt(&GameTimeTxt, 1745, 154, Red, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", GameTimeTxt.Texte);
         }
+
         GameTimeSPred = GameTimeS;
         // last_frame_time = SDL_GetTicks();
         //  while (!(SDL_GetTicks() > last_frame_time + FRAME_TARGET_TIME));
@@ -185,7 +183,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
 
         // Affichage Backg
         AfficherBackg(tabG[0], screen);
-
+        afficherminimap(map, screen);
         // Affichage GameUI
         for (int i = 0; i < 2; i++)
             AfficherImg(tabGameUI[i], screen);
@@ -197,7 +195,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         animerPerso(&p);
         afficherPerso(p, screen);
         int n = 0;
-        if (collisionPV(p, tabMasque[0].img) == 3 && p.nbreVie != 0)
+        if (isTrapped(p, tabMasque[0].img) && p.nbreVie != 0)
             p.nbreVie = 0;
 
         // PlayerDie
@@ -227,7 +225,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
             }
             p.AnimP_Die++;
         }
-        else 
+        else
         {
             if (collisionPH(p, tabMasque[0].img) != p.direction)
             {
@@ -251,7 +249,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                         e[i].pos.x += 10;
                     }
                 }
-                else if (p.direction == -2 && p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y < 1340)
+                else if (p.direction == -2 /*&& p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y < 1340*/)
                 {
                     scrolling(&tabG[0], &tabMasque[0], p.direction, 10);
                     p.posABS.y += 10;
@@ -260,7 +258,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                         e[i].pos.y -= 10;
                     }
                 }
-                else if (p.direction == 2 && p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y > 510)
+                else if (p.direction == 2 /*&& p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y > 510*/)
                 {
                     scrolling(&tabG[0], &tabMasque[0], p.direction, 10);
                     p.posABS.y -= 10;
@@ -277,6 +275,33 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         // Ennemy
         for (int i = 0; i < 5; i++)
         {
+            if (BehindEnnemy(p, e[i]) != 2)
+            {
+                printf("Behind : %d\n", BehindEnnemy(p, e[i]));
+                printf("IsKilled %d ? %d\n", i, e[i].isKilled);
+                if (event.type == SDL_KEYDOWN)
+                {
+                    if (event.key.keysym.sym == SDLK_a)
+                    {
+                        // printf("Attack = %d\n", p.AnimP_Attack);
+
+                        /*if (p.AnimP_Attack < 10)
+                        {
+                            p.AnimP_Attack++;
+                        }
+                        else
+                        {
+                            e[i].nbreVie--;
+                            p.AnimP_Attack = 0;
+                        }
+                        */
+                        e[i].nbreVie--;
+                        // SDL_WaitEvent(&event);
+                    }
+                }
+            }
+            if (e[i].nbreVie == 0 && !e[i].isKilled)
+                e[i].isKilled = 1;
 
             if (collisionBB(e[i], p) && p.nbreVie > 0)
             {
@@ -293,14 +318,14 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
             {
                 e[i].attack = 0;
                 animerEnnemy(&e[i], Confg);
-                deplacerIA(&e[i], p.pos);
+                deplacerIA(&e[i], p);
                 deplacerEnnemy(&e[i], Confg);
                 afficherEnnemy(e[i], screen);
             }
         }
 
         // Affichage MiniMap
-        afficherminimap(map, screen);
+
         Afficher_txt(MoneyTxt, screen);
         Afficher_txt(GameTimeTxt, screen);
         SDL_Flip(screen);
@@ -308,14 +333,14 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         // PlayerMovement
         if (state[SDLK_UP])
         {
-            if (p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y > 510)
+            if (Interaction(p, tabMasque[0].img) > 2)
                 p.direction = 2;
             else
                 p.direction = 0;
         }
         if (state[SDLK_DOWN])
         {
-            if (p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y < 1340)
+            if (Interaction(p, tabMasque[0].img) && !isGround(p, tabMasque[0].img))
                 p.direction = -2;
             else
                 p.direction = 0;
@@ -328,12 +353,15 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         {
             p.direction = -1;
         }
-        if (state[SDLK_UP])
+        if (state[SDLK_SPACE])
         {
-            if (p.isGround && collisionPV(p, tabMasque[0].img) == -2)
-                p.isGround = 0;
+            if (isGround(p, tabMasque[0].img) && !Interaction(p, tabMasque[0].img))
+            {
+                p.posInit = p.pos.y;
+                p.isJumped = 1;
+            }
         }
-        saut(&p, collisionPV(p, tabMasque[0].img));
+        saut(&p, tabMasque[0].img);
 
         SDL_PollEvent(&event);
         switch (event.type)
@@ -359,54 +387,56 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                 break;
             case SDLK_e:
                 // EnigmeImage
-                InitEnigme(&enig, "enigmeImg.txt");
-                afficherEnigme(enig, screen);
-                SDL_Flip(screen);
-                int done = 0;
 
-                enig.TimeInit = SDL_GetTicks();
-                int Rep = 0;
-                SDL_ShowCursor(SDL_ENABLE);
-                while (!done)
+                if (EnigmeDetected(p, tabMasque[0].img))
                 {
-                    GameTimeS = (SDL_GetTicks() - GameTimeInit) / 1000;
-                    if (GameTimeS >= 60)
-                    {
-                        GameTimeS = 0;
-                        GameTimeM++;
-                    }
-                    animer(&enig, screen);
+                    InitEnigme(&enig, "enigmeImg.txt");
+                    afficherEnigme(enig, screen);
+                    SDL_Flip(screen);
+                    done = 0;
 
-                    SDL_PollEvent(&event);
-                    switch (event.type)
+                    enig.TimeInit = SDL_GetTicks();
+                    Rep = 0;
+                    SDL_ShowCursor(SDL_ENABLE);
+                    while (!done)
                     {
-                    case SDL_QUIT:
-                        done = 1;
-                        Confg->isRunning = 0;
-                        break;
-                    case SDL_MOUSEBUTTONDOWN:
-                        if (enig.NumE >= 2 && enig.NumE <= 4)
-                        {
-                            if (event.button.x > 18 && event.button.x < 576 && event.button.y > 687 && event.button.y < 1056)
-                                Rep = 1;
-                            else if (event.button.x > 682 && event.button.x < 1245 && event.button.y > 556 && event.button.y < 924)
-                                Rep = 2;
-                            else if (event.button.x > 1334 && event.button.x < 1903 && event.button.y > 687 && event.button.y < 1057)
-                                Rep = 3;
-                        }
-                        else
-                        {
-                            if (event.button.x > 1070 && event.button.x < 1232 && event.button.y > 105 && event.button.y < 270)
-                                Rep = 1;
-                            else if (event.button.x > 1356 && event.button.x < 1518 && event.button.y > 105 && event.button.y < 270)
-                                Rep = 2;
-                            else if (event.button.x > 1212 && event.button.x < 1374 && event.button.y > 363 && event.button.y < 527)
-                                Rep = 3;
-                        }
+                        GameTimeS = (SDL_GetTicks() - GameTimeInit) / 1000;
+                       
+                        animer(&enig, screen);
 
-                        if (Rep > 0 && Rep < 4)
+                        SDL_PollEvent(&event);
+                        switch (event.type)
                         {
-                            if (Rep == enig.NumRC)
+                        case SDL_QUIT:
+                            done = 1;
+                            Confg->isRunning = 0;
+                            break;
+                        case SDL_MOUSEBUTTONDOWN:
+                            if (enig.NumE >= 2 && enig.NumE <= 4)
+                            {
+                                if (event.button.x > 18 && event.button.x < 576 && event.button.y > 687 && event.button.y < 1056)
+                                    Rep = 1;
+                                else if (event.button.x > 682 && event.button.x < 1245 && event.button.y > 556 && event.button.y < 924)
+                                    Rep = 2;
+                                else if (event.button.x > 1334 && event.button.x < 1903 && event.button.y > 687 && event.button.y < 1057)
+                                    Rep = 3;
+                            }
+                            else
+                            {
+                                if (event.button.x > 1070 && event.button.x < 1232 && event.button.y > 105 && event.button.y < 270)
+                                    Rep = 1;
+                                else if (event.button.x > 1356 && event.button.x < 1518 && event.button.y > 105 && event.button.y < 270)
+                                    Rep = 2;
+                                else if (event.button.x > 1212 && event.button.x < 1374 && event.button.y > 363 && event.button.y < 527)
+                                    Rep = 3;
+                            }
+                            break;
+                        }
+                        
+                        printf("TimeOut = %d\n", enig.TimeOut);
+                        if ((Rep > 0 && Rep < 4) || enig.TimeOut)
+                        {
+                            if (Rep == enig.NumRC && !enig.TimeOut)
                             {
                                 AfficherImg(enig.Backg[1], screen);
                                 SDL_Flip(screen);
@@ -420,20 +450,8 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                             }
                             done = 1;
                         }
-                        break;
                     }
-                    /*
-                    int timer = (SDL_GetTicks() - TimerInit) / 1000;
-
-                    if (timer != TimeSec)
-                    {
-                        TimeSec = timer;
-                        animer(&enig, screen);
-                        SDL_Flip(screen);
-                        if (enig.TimerI >= 10)
-                            done = 1;
-                    }
-                    */
+                    Free_Enigme(&enig);
                 }
                 SDL_ShowCursor(SDL_DISABLE);
                 break;
@@ -490,9 +508,9 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                                 Rep = 3;
                             break;
                         }
-                        if (Rep > 0 && Rep < 4)
+                        if ((Rep > 0 && Rep < 4) || enig1.TimeOut)
                         {
-                            if (Rep == enig1.NumRepC)
+                            if (Rep == enig1.NumRepC && !enig1.TimeOut)
                             {
                                 // AfficherImg(enig1.Backg[1], screen);
                                 printf("Winner\n");
@@ -508,18 +526,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                             }
                             done = 1;
                         }
-                        /*
-                        int timer = (SDL_GetTicks() - TimerInit) / 1000;
-
-                        if (timer != TimeSec)
-                        {
-                            TimeSec = timer;
-                            animer1(&enig1, screen);
-                            SDL_Flip(screen);
-                            if (enig1.TimerI >= 10)
-                                done = 1;
-                        }
-                        */
+                        
                     }
                     SDL_ShowCursor(SDL_DISABLE);
                     break;
@@ -552,6 +559,8 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         }
         Confg->deltaTime = (SDL_GetTicks() - last_frame_time);
     }
+    FILE * f1 = fopen("SelectedEnigme.txt", "w");
+    fclose(f1);
     SDL_ShowCursor(SDL_ENABLE);
 
     // Liberation

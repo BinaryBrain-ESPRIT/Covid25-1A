@@ -2,6 +2,7 @@
 
 int Setup(Config *Confg)
 {
+    
     FILE *f = fopen("Data/Config.txt", "r");
     char Nom[50];
     int Value;
