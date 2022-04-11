@@ -20,7 +20,7 @@ void initminimap(minimap *m, char nameimg[], Player p, Ennemy e[]);
 void MAJMinimap(SDL_Rect PosJoueur, Ennemy e[], minimap *m, int redimensionnement);
 void afficherminimap(minimap m, SDL_Surface *screen);
 void Liberer(minimap *m);
-void SaveScore(int score, char nomjoueur[], char nomfichier[]);
+void SaveScore( char PlayerName[], int Score,char Time[]);
 void LeaderBoard(SDL_Surface *screen, Config *Confg);
 void MAJTime(Text *GameTimeTxt, int GameTimeInit);
 

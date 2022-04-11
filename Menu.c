@@ -39,6 +39,67 @@ void AffichageMenuOpt(SDL_Surface *screen, Image tabMO[], Image tabMAO[], int j)
             AfficherImg(tabMO[i], screen);
 }
 
+void ChoosePlayerName(Player *p, Config *Confg, SDL_Surface *screen)
+{
+    int isRunning = 1, x, y;
+    char c;
+
+    SDL_Event event;
+    SDL_Color PlayerNameColor = {0, 142, 118};
+
+    Text PlayerName;
+    Image Backg;
+
+    SDL_EnableUNICODE(SDL_ENABLE);
+
+    strcpy(PlayerName.Texte, "");
+    InitBackg(&Backg, "assets/PlayerName/Backg.jpg");
+    AfficherImg(Backg, screen);
+    SDL_Flip(screen);
+
+    while (isRunning)
+    {
+        SDL_WaitEvent(&event);
+        switch (event.type)
+        {
+        case SDL_QUIT:
+            Confg->isRunning = 0;
+            isRunning = 0;
+            break;
+        case SDL_KEYDOWN:
+            if (event.key.keysym.sym == SDLK_BACKSPACE && strlen(PlayerName.Texte) > 0)
+                PlayerName.Texte[strlen(PlayerName.Texte) - 1] = '\0';
+            else if (strlen(PlayerName.Texte) < 19)
+            {
+                c = (char)event.key.keysym.unicode;
+                c = toupper(c);
+                if (c > 64 && c < 91)
+                    strncat(PlayerName.Texte, &c, 1);
+            }
+            printf("%s\n", PlayerName.Texte);
+            initTxt(&PlayerName, 775, 470, PlayerNameColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", PlayerName.Texte);
+            AfficherImg(Backg, screen);
+            Afficher_txt(PlayerName, screen);
+            SDL_Flip(screen);
+        case SDL_MOUSEBUTTONDOWN:
+            x = event.button.x;
+            y = event.button.y;
+            printf("x = %d y= %d\n", x, y);
+            if (x > 921 && x < 1000 && y > 578 && y < 654)
+            {
+                if (strlen(PlayerName.Texte) > 1)
+                {
+                    strcpy(p->PlayerName, PlayerName.Texte);
+                    isRunning = 0;
+                }
+            }
+        }
+    }
+
+    SDL_FreeSurface(Backg.img);
+    SDL_FreeSurface(PlayerName.surfaceText);
+    SDL_EnableUNICODE(SDL_DISABLE);
+}
 void SelectLevel(SDL_Surface *screen, Config *Confg)
 {
     SDL_Event event;
@@ -80,18 +141,21 @@ void SelectLevel(SDL_Surface *screen, Config *Confg)
             {
                 Confg->Level = 1;
                 MenuNG(screen, Confg);
+                isRunning = 0;
             }
-            if (x > 846 && x < 1084 && y > 765 && y < 821)
+            else if (x > 846 && x < 1084 && y > 765 && y < 821)
             {
                 Confg->Level = 2;
                 MenuNG(screen, Confg);
+                isRunning = 0;
             }
-            if (x > 1110 && x < 1348 && y > 765 && y < 821)
+            else if (x > 1110 && x < 1348 && y > 765 && y < 821)
             {
                 Confg->Level = 3;
                 MenuNG(screen, Confg);
+                isRunning = 0;
             }
-            isRunning = 0;
+
             break;
         }
     }
@@ -136,6 +200,12 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     int last_frame_time = 0;
     int GameTimeInit, GameTimeS, GameTimeM, GameTimeSPred;
     int done, Rep;
+
+    // Init Player
+    initPerso(&p, Confg->Player);
+    ChoosePlayerName(&p, Confg, screen);
+    printf("PlayerName : %s\n", p.PlayerName);
+
     // Init LevelBackg
     InitGameBackg(&tabG[0], "assets/Levels/Level1.png");
     InitGameBackg(&tabMasque[0], "assets/Levels/Masque.jpg");
@@ -143,7 +213,7 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
     initImg(&tabGameUI[1], 1654, 81, "assets/GameUi/MoneyTime.png");
 
-    sprintf(MoneyTxt.Texte, "%d $", Confg->Money);
+    sprintf(MoneyTxt.Texte, "%d $", p.score);
     initTxt(&MoneyTxt, 1775, 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
     initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w / 3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
     initTxt(&GameTimeTxt, 1745, 154, TimeColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", "00:00");
@@ -153,9 +223,6 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     initEnnemy(&e[2], 5640, 575, 5, 2);
     initEnnemy(&e[3], 8120, 575, 5, 2);
     initEnnemy(&e[4], 8800, 575, 5, 2);
-
-    // Init Player
-    initPerso(&p, Confg->Player);
 
     // Init MiniMap
     initminimap(&map, "assets/MiniMap/Level1Mini.jpg", p, e);
@@ -215,7 +282,9 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                     n = 4;
                 if (p.animJ >= n)
                 {
-                    Confg->Money -= 250;
+                    p.score -= 50;
+                    sprintf(MoneyTxt.Texte, "%d $", p.score);
+                    initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w / 3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
                     isRunning = 0;
                     SDL_Delay(2000);
                 }
@@ -282,14 +351,18 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                 {
                     if (event.key.keysym.sym == SDLK_a)
                     {
-                        
+
                         e[i].nbreVie--;
-                      
                     }
                 }
             }
             if (e[i].nbreVie == 0 && !e[i].isKilled)
+            {
+                p.score += 150;
+                sprintf(MoneyTxt.Texte, "%d $", p.score);
+                initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w / 3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
                 e[i].isKilled = 1;
+            }
 
             if (collisionBB(e[i], p) && p.nbreVie > 0 && BehindEnnemy(p, e[i]) != 2)
             {
@@ -546,11 +619,17 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
         }
         Confg->deltaTime = (SDL_GetTicks() - last_frame_time);
     }
+
+    // Initialise SelectedEnigme
     FILE *f1 = fopen("SelectedEnigme.txt", "w");
     fclose(f1);
+
+    // SaveScore
+    SaveScore(p.PlayerName, p.score, GameTimeTxt.Texte);
+    Confg->Money += p.score;
     SDL_ShowCursor(SDL_ENABLE);
 
-    // Liberation
+    // FreeSurfaces
     for (int i = 0; i < 5; i++)
         LibererEnnemy(e[i]);
 
@@ -957,4 +1036,3 @@ void AffichageCredits(SDL_Surface *screen, Config *Confg)
         Liberer_Img(tab[i]);
     }
 }
-

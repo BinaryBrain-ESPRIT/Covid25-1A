@@ -58,8 +58,11 @@ void MAJTime(Text *GameTimeTxt, int GameTimeInit)
     GameTimeSPred = GameTimeS;
 }
 
-void SaveScore(int score, char nomjoueur[], char nomfichier[])
+void SaveScore( char PlayerName[], int Score,char Time[])
 {
+    FILE *f = fopen("Data/Score.txt", "a");
+    fprintf(f,"%s %s %d\n",PlayerName,Time,Score);
+    fclose(f);
 }
 
 void LeaderBoard(SDL_Surface *screen, Config *Confg)

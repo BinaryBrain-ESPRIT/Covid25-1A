@@ -11,6 +11,7 @@
 void AffichageMainMenu(SDL_Surface *screen, Text tabT[], Text tabAT[], Image tabI[][3], int j, int l, int p);
 void AffichageMenuOpt(SDL_Surface *screen, Image tabMO[], Image tabMAO[], int j);
 void AffichageCredits(SDL_Surface *screen, Config *Confg);
+void ChoosePlayerName(Player *p, Config *Confg,SDL_Surface * screen);
 void SelectLevel(SDL_Surface *screen, Config *Confg);
 void MenuNG(SDL_Surface *screen, Config *Confg);
 void MenuInGame(SDL_Surface *screen, Config *Confg, int *Opened, int *isRunning);

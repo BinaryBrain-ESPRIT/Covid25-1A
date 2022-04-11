@@ -135,7 +135,8 @@ int main()
                 case 1:
                     SelectLevel(screen, Confg);
                     i = 0;
-
+                    sprintf(Money, "%d $", Confg->Money);
+                    initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
                     AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
                     AfficherImg(MoneyImg, screen);
                     Afficher_txt(MoneyTxt, screen);
@@ -181,6 +182,8 @@ int main()
             case 1:
                 SelectLevel(screen, Confg);
                 i = 0;
+                sprintf(Money, "%d $", Confg->Money);
+                initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
                 AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
                 AfficherImg(MoneyImg, screen);
                 Afficher_txt(MoneyTxt, screen);
