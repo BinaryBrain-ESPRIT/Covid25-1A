@@ -199,7 +199,13 @@ int main()
                 AfficherImg(MoneyImg, screen);
                 Afficher_txt(MoneyTxt, screen);
                 SDL_Flip(screen);
-
+                break;
+            case 3:
+                LeaderBoard(screen, Confg);
+                AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+                AfficherImg(MoneyImg, screen);
+                Afficher_txt(MoneyTxt, screen);
+                SDL_Flip(screen);
                 break;
             case 5:
                 AffichageCredits(screen, Confg);
@@ -268,7 +274,7 @@ int main()
 
     free(Confg);
     TTF_Quit();
-    //SDL_Quit();
+    // SDL_Quit();
 
     printf("\nGame ShutDown !\n");
 }

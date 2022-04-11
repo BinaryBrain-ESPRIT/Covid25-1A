@@ -19,6 +19,7 @@ void animer_background(background *e);
 int collisionPH(Player p, SDL_Surface *Masque);
 int isTrapped(Player p, SDL_Surface *Masque);
 int isGround(Player p, SDL_Surface *Masque);
+int HighHeight(Player p, SDL_Surface *Masque);
 int Interaction(Player p, SDL_Surface *Masque);
 int EnigmeDetected(Player p, SDL_Surface *Masque);
 void scrolling(background *Backg, background *Masque, int direction, int pas_Avancement);

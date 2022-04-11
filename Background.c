@@ -63,6 +63,23 @@ int collisionPH(Player p, SDL_Surface *Masque)
 
     return 0;
 }
+int HighHeight(Player p, SDL_Surface *Masque)
+{
+    SDL_Color color;
+    int posX = p.posABS.x;
+    int posY = p.posABS.y;
+    int posX1 = posX + p.img[p.animI][p.animJ]->w;
+    int posY1 = posY + p.img[p.animI][p.animJ]->h;
+
+    for (int i = posX; i <= posX1; i++)
+    {
+        // Bot Yellow
+        color = GetPixel(Masque, i, posY);
+        if (color.r == 255 && color.g == 255 && color.b == 1)
+            return 1;
+    }
+    return 0;
+}
 
 int isTrapped(Player p, SDL_Surface *Masque)
 {
@@ -111,7 +128,7 @@ int EnigmeDetected(Player p, SDL_Surface *Masque)
     {
         // Right Green
         color = GetPixel(Masque, posX, i);
-        printf("R: %d G: %d B: %d\n",color.r,color.g,color.b);
+        printf("R: %d G: %d B: %d\n", color.r, color.g, color.b);
         if (color.r == 0 && color.g == 0 && color.b == 254)
             return 1;
         // Left Green

@@ -44,7 +44,7 @@ void MAJMinimap(SDL_Rect PosJoueur, Ennemy e[], minimap *m, int redimensionnemen
 void MAJTime(Text *GameTimeTxt, int GameTimeInit)
 {
     SDL_Color Red = {193, 39, 45};
-    int GameTimeS, GameTimeM,GameTimeSPred;
+    int GameTimeS, GameTimeM, GameTimeSPred;
 
     GameTimeS = ((SDL_GetTicks() - GameTimeInit) / 1000) % 60;
     GameTimeM = ((SDL_GetTicks() - GameTimeInit) / 1000) / 60;
@@ -56,6 +56,102 @@ void MAJTime(Text *GameTimeTxt, int GameTimeInit)
     }
 
     GameTimeSPred = GameTimeS;
+}
+
+void SaveScore(int score, char nomjoueur[], char nomfichier[])
+{
+}
+
+void LeaderBoard(SDL_Surface *screen, Config *Confg)
+{
+    Image Backg;
+    FILE *f = fopen("Data/Score.txt", "r");
+    Score tabS[6];
+    SDL_Color Blue = {16, 16, 73};
+    SDL_Color Gold = {214, 165, 101};
+    SDL_Color Red = {193, 39, 45};
+    SDL_Rect tabPos[6];
+    SDL_Event event;
+
+    int n = 0;
+    int Done = 0;
+
+    tabPos[0].x = 754;
+    tabPos[0].y = 271;
+    tabPos[1].x = 754;
+    tabPos[1].y = 394;
+    tabPos[2].x = 754;
+    tabPos[2].y = 517;
+    tabPos[3].x = 754;
+    tabPos[3].y = 640;
+    tabPos[4].x = 754;
+    tabPos[4].y = 763;
+    tabPos[5].x = 754;
+    tabPos[5].y = 887;
+
+    InitBackg(&Backg, "assets/LeaderBoard/Background.jpg");
+    AfficherImg(Backg, screen);
+
+    while (fscanf(f, "%s %s %d", tabS[n].PlayerName.Texte, tabS[n].Time.Texte, &tabS[n].Score) != EOF)
+        n++;
+
+    int permut;
+    Score temp;
+    do
+    {
+        permut = 0;
+        for (int i = 0; i < n - 1; i++)
+        {
+            if (tabS[i].Score < tabS[i + 1].Score)
+            {
+                temp = tabS[i];
+                tabS[i] = tabS[i + 1];
+                tabS[i + 1] = temp;
+                permut = 1;
+            }
+        }
+    } while (permut);
+
+    for (int i = 0; i < n; i++)
+        printf("PlayerName: %s Time: %s Score: %d\n", tabS[i].PlayerName.Texte, tabS[i].Time.Texte, tabS[i].Score);
+
+    for (int i = 0; i < n; i++)
+    {
+        initTxt(&tabS[i].PlayerName, tabPos[i].x, tabPos[i].y, Blue, 29, "assets/Font/Montserrat-Bold.ttf", tabS[i].PlayerName.Texte);
+        initTxt(&tabS[i].Time, tabPos[i].x + 277, tabPos[i].y, Gold, 29, "assets/Font/Montserrat-Bold.ttf", tabS[i].Time.Texte);
+        sprintf(tabS[i].ScoreTxt.Texte, "%d", tabS[i].Score);
+        initTxt(&tabS[i].ScoreTxt, tabPos[i].x + 489, tabPos[i].y, Red, 29, "assets/Font/Montserrat-Bold.ttf", tabS[i].ScoreTxt.Texte);
+        Afficher_txt(tabS[i].PlayerName, screen);
+        Afficher_txt(tabS[i].Time, screen);
+        Afficher_txt(tabS[i].ScoreTxt, screen);
+    }
+    SDL_Flip(screen);
+
+    while (!Done)
+    {
+        SDL_PollEvent(&event);
+        switch (event.type)
+        {
+        case SDL_QUIT:
+            Done = 1;
+            Confg->isRunning = 0;
+            break;
+        case SDL_KEYDOWN:
+            if (event.key.keysym.sym == SDLK_ESCAPE)
+                Done = 1;
+            break;
+        }
+    }
+
+    SDL_FreeSurface(Backg.img);
+    for (int i = 0; i < n; i++)
+    {
+        SDL_FreeSurface(tabS[i].PlayerName.surfaceText);
+        SDL_FreeSurface(tabS[i].Time.surfaceText);
+        SDL_FreeSurface(tabS[i].ScoreTxt.surfaceText);
+    }
+
+    fclose(f);
 }
 
 void Liberer(minimap *m)

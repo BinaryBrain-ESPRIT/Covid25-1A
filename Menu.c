@@ -957,3 +957,4 @@ void AffichageCredits(SDL_Surface *screen, Config *Confg)
         Liberer_Img(tab[i]);
     }
 }
+

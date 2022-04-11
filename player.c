@@ -154,16 +154,16 @@ void animerPerso(Player *p)
 void saut(Player *p, SDL_Surface *Masque)
 {
     int Vitesse = 20;
-    int HeightP = p->posInit - 200;
+    int HeightP = p->posInit - 300;
     if (HeightP < 0)
         HeightP = 0;
 
-    if (p->isJumped && p->pos.y > HeightP)
+    if (p->isJumped && p->pos.y > HeightP && !HighHeight(*p,Masque))
     {
         p->pos.y -= Vitesse;
         p->posABS.y -= Vitesse;
     }
-    if (p->pos.y <= HeightP)
+    if (p->pos.y <= HeightP || HighHeight(*p,Masque))
     {
         p->isJumped = 0;
     }
