@@ -114,7 +114,8 @@ void LeaderBoard(SDL_Surface *screen, Config *Confg)
 
     for (int i = 0; i < n; i++)
         printf("PlayerName: %s Time: %s Score: %d\n", tabS[i].PlayerName.Texte, tabS[i].Time.Texte, tabS[i].Score);
-
+    if (n > 6)
+        n = 6;
     for (int i = 0; i < n; i++)
     {
         initTxt(&tabS[i].PlayerName, tabPos[i].x, tabPos[i].y, Blue, 29, "assets/Font/Montserrat-Bold.ttf", tabS[i].PlayerName.Texte);
