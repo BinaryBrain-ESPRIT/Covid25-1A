@@ -9,8 +9,10 @@ void InitEnigme(Enigme *e, char *nomfichier)
     f = fopen(nomfichier, "r");
 
     do
-        fscanf(f, "%d %s %s %s %d", &e->NumE, e->Backg[0].NameImg, e->Backg[1].NameImg, e->Backg[2].NameImg, &e->NumRC);
+        fscanf(f, "%d %s %s %s %d", &e->NumE, e->Backg[0].NameImg, &e->NumRC);
     while (e->NumE != RandNum);
+    strcpy(e->Backg[1].NameImg,"assets/enigmeImage/Win.png");
+    strcpy(e->Backg[2].NameImg,"assets/enigmeImage/Loose.png");
 
     if (e->NumE >= 2 && e->NumE <= 4)
     {
