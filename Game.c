@@ -98,6 +98,7 @@ void ChoosePlayerName(Player *p, Config *Confg, SDL_Surface *screen)
     SDL_FreeSurface(PlayerName.surfaceText);
     SDL_EnableUNICODE(SDL_DISABLE);
 }
+
 void SelectLevel(SDL_Surface *screen, Config *Confg)
 {
     SDL_Event event;
@@ -138,19 +139,19 @@ void SelectLevel(SDL_Surface *screen, Config *Confg)
             if (x > 571 && x < 809 && y > 765 && y < 821)
             {
                 Confg->Level = 1;
-                MenuNG(screen, Confg);
+                Game(screen, Confg);
                 isRunning = 0;
             }
             else if (x > 846 && x < 1084 && y > 765 && y < 821)
             {
                 Confg->Level = 2;
-                MenuNG(screen, Confg);
+                Game(screen, Confg);
                 isRunning = 0;
             }
             else if (x > 1110 && x < 1348 && y > 765 && y < 821)
             {
                 Confg->Level = 3;
-                MenuNG(screen, Confg);
+                Game(screen, Confg);
                 isRunning = 0;
             }
 
@@ -162,7 +163,8 @@ void SelectLevel(SDL_Surface *screen, Config *Confg)
     for (int i = 0; i < 6; i++)
         Liberer_Img(LevelBut[i]);
 }
-void MenuNG(SDL_Surface *screen, Config *Confg)
+
+void Game(SDL_Surface *screen, Config *Confg)
 {
     srand(time(NULL));
     const Uint8 *state = SDL_GetKeyState(NULL);
