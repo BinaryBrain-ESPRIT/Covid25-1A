@@ -39,8 +39,8 @@ int InitEnigme1(enigme *e, char *nomfichier)
 
   } while (NumE1 == NumE && n < 3);
 
-  if (n >= 3 && NumE1 == NumE)
-    return 0;
+  // if (n >= 3 && NumE1 == NumE)
+  // return 0;
 
   fclose(f1);
 
@@ -111,6 +111,7 @@ int InitEnigme1(enigme *e, char *nomfichier)
   e->Rep[2].surfaceText = TTF_RenderText_Solid(e->Rep[2].font, e->Rep[2].Texte, e->Rep[2].color);
   SDL_Color Black = {0, 0, 0};
   SDL_Color Red = {193, 38, 45};
+  e->Duration = 10;
   for (int i = 0; i <= e->Duration; i++)
   {
     sprintf(e->Time[i].Texte, "00:%02d", i);
@@ -119,7 +120,7 @@ int InitEnigme1(enigme *e, char *nomfichier)
     else
       initTxt(&e->Time[i], 1707, 26, Black, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", e->Time[i].Texte);
   }
-  e->Duration = 10;
+
   fclose(e->f);
   return 1;
 }
@@ -137,8 +138,6 @@ void animer1(enigme *e, SDL_Surface *screen)
 {
   int EnigmeTimeS, EnigmeTimeSPred = -1;
 
-  // printf("R: %d G: %d B: %d\n",Black.r,Black.g,Black.b);
-  /// SDL_Color Red = {193, 38, 45};
   EnigmeTimeS = (SDL_GetTicks() - e->TimeInit) / 1000;
 
   if (e->Duration - EnigmeTimeS < 0)

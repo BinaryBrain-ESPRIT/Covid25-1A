@@ -76,7 +76,6 @@ void ChoosePlayerName(Player *p, Config *Confg, SDL_Surface *screen)
                 if (c > 64 && c < 91)
                     strncat(PlayerName.Texte, &c, 1);
             }
-            printf("%s\n", PlayerName.Texte);
             initTxt(&PlayerName, 775, 470, PlayerNameColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", PlayerName.Texte);
             AfficherImg(Backg, screen);
             Afficher_txt(PlayerName, screen);
@@ -84,7 +83,6 @@ void ChoosePlayerName(Player *p, Config *Confg, SDL_Surface *screen)
         case SDL_MOUSEBUTTONDOWN:
             x = event.button.x;
             y = event.button.y;
-            printf("x = %d y= %d\n", x, y);
             if (x > 921 && x < 1000 && y > 578 && y < 654)
             {
                 if (strlen(PlayerName.Texte) > 1)
@@ -204,7 +202,6 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     // Init Player
     initPerso(&p, Confg->Player);
     ChoosePlayerName(&p, Confg, screen);
-    printf("PlayerName : %s\n", p.PlayerName);
 
     // Init LevelBackg
     InitGameBackg(&tabG[0], "assets/Levels/Level1.png");
@@ -494,7 +491,6 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                             break;
                         }
 
-                        printf("TimeOut = %d\n", enig.TimeOut);
                         if ((Rep > 0 && Rep < 4) || enig.TimeOut)
                         {
                             if (Rep == enig.NumRC && !enig.TimeOut)
