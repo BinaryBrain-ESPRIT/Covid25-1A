@@ -128,7 +128,7 @@ int EnigmeDetected(Player p, SDL_Surface *Masque)
     {
         // Right Green
         color = GetPixel(Masque, posX, i);
-        printf("R: %d G: %d B: %d\n", color.r, color.g, color.b);
+        //("R: %d G: %d B: %d\n", color.r, color.g, color.b);
         if (color.r == 0 && color.g == 0 && color.b == 254)
             return 1;
         // Left Green

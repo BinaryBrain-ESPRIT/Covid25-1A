@@ -174,13 +174,11 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
     SDL_Color TimeColor = {193, 39, 45};
     SDL_Color Black = {0, 0, 0};
     SDL_Color Red = {193, 39, 45};
+    
     Player p;
     Ennemy e[5];
 
     minimap map;
-
-    Enigme enig;
-    enigme enig1;
 
     background tabG[3];
     background tabMasque[3];
@@ -445,150 +443,11 @@ void MenuNG(SDL_Surface *screen, Config *Confg)
                 break;
             case SDLK_e:
                 // EnigmeImage
-
-                if (EnigmeDetected(p, tabMasque[0].img))
-                {
-                    InitEnigme(&enig, "enigmeImg.txt");
-                    afficherEnigme(enig, screen);
-                    SDL_Flip(screen);
-                    done = 0;
-
-                    enig.TimeInit = SDL_GetTicks();
-                    Rep = 0;
-                    SDL_ShowCursor(SDL_ENABLE);
-                    while (!done)
-                    {
-                        GameTimeS = (SDL_GetTicks() - GameTimeInit) / 1000;
-
-                        animer(&enig, screen);
-
-                        SDL_PollEvent(&event);
-                        switch (event.type)
-                        {
-                        case SDL_QUIT:
-                            done = 1;
-                            Confg->isRunning = 0;
-                            break;
-                        case SDL_MOUSEBUTTONDOWN:
-                            if (enig.NumE >= 2 && enig.NumE <= 4)
-                            {
-                                if (event.button.x > 18 && event.button.x < 576 && event.button.y > 687 && event.button.y < 1056)
-                                    Rep = 1;
-                                else if (event.button.x > 682 && event.button.x < 1245 && event.button.y > 556 && event.button.y < 924)
-                                    Rep = 2;
-                                else if (event.button.x > 1334 && event.button.x < 1903 && event.button.y > 687 && event.button.y < 1057)
-                                    Rep = 3;
-                            }
-                            else
-                            {
-                                if (event.button.x > 1070 && event.button.x < 1232 && event.button.y > 105 && event.button.y < 270)
-                                    Rep = 1;
-                                else if (event.button.x > 1356 && event.button.x < 1518 && event.button.y > 105 && event.button.y < 270)
-                                    Rep = 2;
-                                else if (event.button.x > 1212 && event.button.x < 1374 && event.button.y > 363 && event.button.y < 527)
-                                    Rep = 3;
-                            }
-                            break;
-                        }
-
-                        if ((Rep > 0 && Rep < 4) || enig.TimeOut)
-                        {
-                            if (Rep == enig.NumRC && !enig.TimeOut)
-                            {
-                                AfficherImg(enig.Backg[1], screen);
-                                SDL_Flip(screen);
-                                SDL_Delay(2000);
-                            }
-                            else
-                            {
-                                AfficherImg(enig.Backg[2], screen);
-                                SDL_Flip(screen);
-                                SDL_Delay(2000);
-                            }
-                            done = 1;
-                        }
-                    }
-                    Free_Enigme(&enig);
-                }
-                SDL_ShowCursor(SDL_DISABLE);
+                AfficherEnigmeImage(screen, Confg, GameTimeInit, tabMasque[0].img, p);
                 break;
             case SDLK_t:
                 // EnigmeTexte
-                if (InitEnigme1(&enig1, "enigme.txt"))
-                {
-                    afficherEnigme1(enig1, screen);
-                    SDL_Flip(screen);
-                    done = 0;
-                    Rep = 0;
-
-                    enig1.TimeInit = SDL_GetTicks();
-
-                    SDL_ShowCursor(SDL_ENABLE);
-                    while (!done)
-                    {
-                        GameTimeS = (SDL_GetTicks() - GameTimeInit) / 1000;
-                        if (GameTimeS >= 60)
-                        {
-                            GameTimeS = 0;
-                            GameTimeM++;
-                        }
-
-                        animer1(&enig1, screen);
-
-                        SDL_PollEvent(&event);
-                        switch (event.type)
-                        {
-                        case SDL_QUIT:
-                            done = 1;
-                            Confg->isRunning = 0;
-                            break;
-                        case SDL_KEYDOWN:
-                            switch (event.key.keysym.sym)
-                            {
-                            case SDLK_1:
-                                Rep = 1;
-                                break;
-                            case SDLK_2:
-                                Rep = 2;
-                                break;
-                            case SDLK_3:
-                                Rep = 3;
-                                break;
-                            }
-                            break;
-                        case SDL_MOUSEBUTTONDOWN:
-                            if (event.button.x > 261 && event.button.x < 596 && event.button.y > 427 && event.button.y < 565)
-                                Rep = 1;
-                            else if (event.button.x > 1340 && event.button.x < 1700 && event.button.y > 427 && event.button.y < 565)
-                                Rep = 2;
-                            else if (event.button.x > 775 && event.button.x < 1132 && event.button.y > 661 && event.button.y < 820)
-                                Rep = 3;
-                            break;
-                        }
-                        if ((Rep > 0 && Rep < 4) || enig1.TimeOut)
-                        {
-                            if (Rep == enig1.NumRepC && !enig1.TimeOut)
-                            {
-                                // AfficherImg(enig1.Backg[1], screen);
-                                printf("Winner\n");
-                                // SDL_Flip(screen);
-                                // SDL_Delay(2000);
-                            }
-                            else
-                            {
-                                // AfficherImg(enig1.Backg[2], screen);
-                                printf("Looser\n");
-                                // SDL_Flip(screen);
-                                // SDL_Delay(2000);
-                            }
-                            done = 1;
-                        }
-                    }
-                    SDL_ShowCursor(SDL_DISABLE);
-                    break;
-                }
-                else
-                    printf("Out Of Choice\n");
+                AfficherEnigmeTexte(screen, Confg, GameTimeInit, tabMasque[0].img);
                 break;
             case SDLK_f:
                 if (Confg->Fullscr > 0)
@@ -1031,4 +890,155 @@ void AffichageCredits(SDL_Surface *screen, Config *Confg)
     {
         Liberer_Img(tab[i]);
     }
+}
+
+void AfficherEnigmeImage(SDL_Surface *screen, Config *Confg, int GameTimeInit, SDL_Surface *Masque, Player p)
+{
+    int done = 0, GameTimeS, Rep, GameTimeM;
+    SDL_Event event;
+    Enigme e;
+    if (EnigmeDetected(p, Masque))
+    {
+        InitEnigme(&e, "enigmeImg.txt");
+        afficherEnigme(e, screen);
+        SDL_Flip(screen);
+        done = 0;
+
+        e.TimeInit = SDL_GetTicks();
+        Rep = 0;
+        SDL_ShowCursor(SDL_ENABLE);
+        while (!done)
+        {
+            GameTimeS = ((SDL_GetTicks() - GameTimeInit) / 1000) % 60;
+            GameTimeM = ((SDL_GetTicks() - GameTimeInit) / 1000) / 60;
+
+            animer(&e, screen);
+
+            SDL_PollEvent(&event);
+            switch (event.type)
+            {
+            case SDL_QUIT:
+                done = 1;
+                Confg->isRunning = 0;
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+                if (e.NumE >= 2 && e.NumE <= 4)
+                {
+                    if (event.button.x > 18 && event.button.x < 576 && event.button.y > 687 && event.button.y < 1056)
+                        Rep = 1;
+                    else if (event.button.x > 682 && event.button.x < 1245 && event.button.y > 556 && event.button.y < 924)
+                        Rep = 2;
+                    else if (event.button.x > 1334 && event.button.x < 1903 && event.button.y > 687 && event.button.y < 1057)
+                        Rep = 3;
+                }
+                else
+                {
+                    if (event.button.x > 1070 && event.button.x < 1232 && event.button.y > 105 && event.button.y < 270)
+                        Rep = 1;
+                    else if (event.button.x > 1356 && event.button.x < 1518 && event.button.y > 105 && event.button.y < 270)
+                        Rep = 2;
+                    else if (event.button.x > 1212 && event.button.x < 1374 && event.button.y > 363 && event.button.y < 527)
+                        Rep = 3;
+                }
+                break;
+            }
+
+            if ((Rep > 0 && Rep < 4) || e.TimeOut)
+            {
+                if (Rep == e.NumRC && !e.TimeOut)
+                {
+                    AfficherImg(e.Backg[1], screen);
+                    SDL_Flip(screen);
+                    SDL_Delay(2000);
+                }
+                else
+                {
+                    AfficherImg(e.Backg[2], screen);
+                    SDL_Flip(screen);
+                    SDL_Delay(2000);
+                }
+                done = 1;
+            }
+        }
+        Free_Enigme(&e);
+    }
+    SDL_ShowCursor(SDL_DISABLE);
+}
+
+void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, SDL_Surface *Masque)
+{
+    enigme e;
+    int done = 0, GameTimeS, Rep, GameTimeM;
+    SDL_Event event;
+    if (InitEnigme1(&e, "enigme.txt"))
+    {
+        afficherEnigme1(e, screen);
+        SDL_Flip(screen);
+        done = 0;
+        Rep = 0;
+
+        e.TimeInit = SDL_GetTicks();
+
+        SDL_ShowCursor(SDL_ENABLE);
+        while (!done)
+        {
+            GameTimeS = ((SDL_GetTicks() - GameTimeInit) / 1000) % 60;
+            GameTimeM = ((SDL_GetTicks() - GameTimeInit) / 1000) / 60;
+
+            animer1(&e, screen);
+
+            SDL_PollEvent(&event);
+            switch (event.type)
+            {
+            case SDL_QUIT:
+                done = 1;
+                Confg->isRunning = 0;
+                break;
+            case SDL_KEYDOWN:
+                switch (event.key.keysym.sym)
+                {
+                case SDLK_1:
+                    Rep = 1;
+                    break;
+                case SDLK_2:
+                    Rep = 2;
+                    break;
+                case SDLK_3:
+                    Rep = 3;
+                    break;
+                }
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+                if (event.button.x > 261 && event.button.x < 596 && event.button.y > 427 && event.button.y < 565)
+                    Rep = 1;
+                else if (event.button.x > 1340 && event.button.x < 1700 && event.button.y > 427 && event.button.y < 565)
+                    Rep = 2;
+                else if (event.button.x > 775 && event.button.x < 1132 && event.button.y > 661 && event.button.y < 820)
+                    Rep = 3;
+                break;
+            }
+
+            if ((Rep > 0 && Rep < 4) || e.TimeOut)
+            {
+                if (Rep == e.NumRepC && !e.TimeOut)
+                {
+                    // AfficherImg(e.Backg[1], screen);
+                    printf("Winner\n");
+                    // SDL_Flip(screen);
+                    // SDL_Delay(2000);
+                }
+                else
+                {
+                    // AfficherImg(e.Backg[2], screen);
+                    printf("Looser\n");
+                    // SDL_Flip(screen);
+                    // SDL_Delay(2000);
+                }
+                done = 1;
+            }
+        }
+        SDL_ShowCursor(SDL_DISABLE);
+    }
+    else
+        printf("Out Of Choice\n");
 }

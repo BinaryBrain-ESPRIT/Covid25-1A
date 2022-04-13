@@ -9,10 +9,10 @@ void InitEnigme(Enigme *e, char *nomfichier)
     f = fopen(nomfichier, "r");
 
     do
-        fscanf(f, "%d %s %s %s %d", &e->NumE, e->Backg[0].NameImg, &e->NumRC);
+        fscanf(f, "%d %s %d", &e->NumE, e->Backg[0].NameImg, &e->NumRC);
     while (e->NumE != RandNum);
-    strcpy(e->Backg[1].NameImg,"assets/enigmeImage/Win.png");
-    strcpy(e->Backg[2].NameImg,"assets/enigmeImage/Loose.png");
+    strcpy(e->Backg[1].NameImg, "assets/enigmeImage/Win.png");
+    strcpy(e->Backg[2].NameImg, "assets/enigmeImage/Loose.png");
 
     if (e->NumE >= 2 && e->NumE <= 4)
     {
@@ -39,6 +39,8 @@ void InitEnigme(Enigme *e, char *nomfichier)
     InitBackg(&e->Backg[0], e->Backg[0].NameImg);
     InitBackg(&e->Backg[1], e->Backg[1].NameImg);
     InitBackg(&e->Backg[2], e->Backg[2].NameImg);
+    e->TimeOut = 0;
+    e->Duration = 10;
 
     SDL_Color Black = {0, 0, 0};
     SDL_Color Red = {193, 38, 45};
@@ -50,8 +52,7 @@ void InitEnigme(Enigme *e, char *nomfichier)
         else
             initTxt(&e->Time[i], 1707, 26, Black, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", e->Time[i].Texte);
     }
-    e->TimeOut = 0;
-    e->Duration = 10;
+
     fclose(f);
 }
 void afficherEnigme(Enigme e, SDL_Surface *screen)
