@@ -176,15 +176,15 @@ void Game(SDL_Surface *screen, Config *Confg)
     SDL_Color TimeColor = {193, 39, 45};
     SDL_Color Black = {0, 0, 0};
     SDL_Color Red = {193, 39, 45};
-    
+
     Player p;
     Ennemy e[5];
 
     minimap map;
 
     background tabG[3];
-    background tabMasque[3];
-
+    SDL_Surface *Masque[3];
+    Masque[0] = IMG_Load("assets/Levels/Masque.jpg");
     Image tabGameUI[5];
     Text MoneyTxt, GameTimeTxt;
 
@@ -205,7 +205,6 @@ void Game(SDL_Surface *screen, Config *Confg)
 
     // Init LevelBackg
     InitGameBackg(&tabG[0], "assets/Levels/Level1.png");
-    InitGameBackg(&tabMasque[0], "assets/Levels/Masque.jpg");
     // Init GameUI
     initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
     initImg(&tabGameUI[1], 1654, 81, "assets/GameUi/MoneyTime.png");
@@ -256,17 +255,16 @@ void Game(SDL_Surface *screen, Config *Confg)
         MAJMinimap(p.posABS, e, &map, Redim);
 
         // Perso
-
         animerPerso(&p);
         afficherPerso(p, screen);
+
         int n = 0;
-        if (isTrapped(p, tabMasque[0].img) && p.nbreVie != 0)
+        if (isTrapped(p, Masque[0]) && p.nbreVie != 0)
             p.nbreVie = 0;
 
         // PlayerDie
         if (p.nbreVie == 0)
         {
-
             if (p.AnimP_Die > 3)
             {
                 if (!p.flipped)
@@ -294,11 +292,11 @@ void Game(SDL_Surface *screen, Config *Confg)
         }
         else
         {
-            if (collisionPH(p, tabMasque[0].img) != p.direction)
+            if (collisionPH(p, Masque[0]) != p.direction)
             {
                 if (p.pos.x >= screen->w / 2 && p.direction == 1 && p.posABS.x < 9390 && !(p.posABS.y > 530 && p.posABS.y < 1310))
                 {
-                    scrolling(&tabG[0], &tabMasque[0], p.direction, 10);
+                    scrolling(&tabG[0], p.direction, 10);
                     p.posABS.x += 10;
                     for (int i = 0; i < 5; i++)
                     {
@@ -308,7 +306,7 @@ void Game(SDL_Surface *screen, Config *Confg)
                 }
                 else if (p.direction == -1 && p.pos.x <= 500 && p.posABS.x > 500)
                 {
-                    scrolling(&tabG[0], &tabMasque[0], p.direction, 10);
+                    scrolling(&tabG[0], p.direction, 10);
                     p.posABS.x -= 10;
                     for (int i = 0; i < 5; i++)
                     {
@@ -318,7 +316,7 @@ void Game(SDL_Surface *screen, Config *Confg)
                 }
                 else if (p.direction == -2 /*&& p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y < 1340*/)
                 {
-                    scrolling(&tabG[0], &tabMasque[0], p.direction, 10);
+                    scrolling(&tabG[0], p.direction, 10);
                     p.posABS.y += 10;
                     for (int i = 0; i < 5; i++)
                     {
@@ -327,7 +325,7 @@ void Game(SDL_Surface *screen, Config *Confg)
                 }
                 else if (p.direction == 2 /*&& p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y > 510*/)
                 {
-                    scrolling(&tabG[0], &tabMasque[0], p.direction, 10);
+                    scrolling(&tabG[0], p.direction, 10);
                     p.posABS.y -= 10;
                     for (int i = 0; i < 5; i++)
                     {
@@ -391,14 +389,14 @@ void Game(SDL_Surface *screen, Config *Confg)
         // PlayerMovement
         if (state[SDLK_UP])
         {
-            if (Interaction(p, tabMasque[0].img) > 2)
+            if (Interaction(p, Masque[0]) > 2)
                 p.direction = 2;
             else
                 p.direction = 0;
         }
         if (state[SDLK_DOWN])
         {
-            if (Interaction(p, tabMasque[0].img) && !isGround(p, tabMasque[0].img))
+            if (Interaction(p, Masque[0]) && !isGround(p, Masque[0]))
                 p.direction = -2;
             else
                 p.direction = 0;
@@ -413,13 +411,13 @@ void Game(SDL_Surface *screen, Config *Confg)
         }
         if (state[SDLK_SPACE])
         {
-            if (isGround(p, tabMasque[0].img) && !Interaction(p, tabMasque[0].img))
+            if (isGround(p, Masque[0]) && !Interaction(p, Masque[0]))
             {
                 p.posInit = p.pos.y;
                 p.isJumped = 1;
             }
         }
-        saut(&p, tabMasque[0].img);
+        saut(&p, Masque[0]);
 
         SDL_PollEvent(&event);
         switch (event.type)
@@ -445,11 +443,11 @@ void Game(SDL_Surface *screen, Config *Confg)
                 break;
             case SDLK_e:
                 // EnigmeImage
-                AfficherEnigmeImage(screen, Confg, GameTimeInit, tabMasque[0].img, p);
+                AfficherEnigmeImage(screen, Confg, GameTimeInit, Masque[0], p);
                 break;
             case SDLK_t:
                 // EnigmeTexte
-                AfficherEnigmeTexte(screen, Confg, GameTimeInit, tabMasque[0].img);
+                AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque[0]);
                 break;
             case SDLK_f:
                 if (Confg->Fullscr > 0)

@@ -22,7 +22,7 @@ int isGround(Player p, SDL_Surface *Masque);
 int HighHeight(Player p, SDL_Surface *Masque);
 int Interaction(Player p, SDL_Surface *Masque);
 int EnigmeDetected(Player p, SDL_Surface *Masque);
-void scrolling(background *Backg, background *Masque, int direction, int pas_Avancement);
+void scrolling(background *Backg, int direction, int pas_Avancement);
 void LibererBackg(background backg);
 
 #endif

@@ -173,25 +173,21 @@ int Interaction(Player p, SDL_Surface *Masque)
     return 0;
 }
 
-void scrolling(background *Backg, background *Masque, int direction, int pas_Avancement)
+void scrolling(background *Backg, int direction, int pas_Avancement)
 {
     switch (direction)
     {
     case 1:
         Backg->cam.x += pas_Avancement;
-        // Masque->cam.x += pas_Avancement;
         break;
     case -1:
         Backg->cam.x -= pas_Avancement;
-        // Masque->cam.x -= pas_Avancement;
         break;
     case 2:
         Backg->cam.y -= pas_Avancement;
-        // Masque->cam.y -= pas_Avancement;
         break;
     case -2:
         Backg->cam.y += pas_Avancement;
-        // Masque->cam.y += pas_Avancement;
         break;
     }
 }
