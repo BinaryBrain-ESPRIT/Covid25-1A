@@ -1,15 +1,18 @@
 #include "Background.h"
 #include "Main_Fn.h"
 
-void InitGameBackg(background *Backg, char NameImg[])
+void InitGameBackg(background *Backg, int x, int y, int W, int H, char NameImg[])
 {
     Backg->img = IMG_Load(NameImg);
-    Backg->pos.x = 0;
-    Backg->pos.y = 0;
+    Backg->pos.x = x;
+    Backg->pos.y = y;
+    Backg->pos.w = W;
+    Backg->pos.h = H;
+
     Backg->cam.x = 0;
     Backg->cam.y = 0;
-    Backg->cam.w = Width;
-    Backg->cam.h = Height;
+    Backg->cam.w = W;
+    Backg->cam.h = H;
 }
 
 void AfficherBackg(background Backg, SDL_Surface *screen)

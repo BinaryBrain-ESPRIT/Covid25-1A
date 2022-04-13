@@ -1,5 +1,5 @@
-Money : 4400
-Player : 2
+Money : 5700
+Player : 1
 LevelReached : 3
 Language : 1
 FullScreen : 1

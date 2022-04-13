@@ -1,7 +1,6 @@
 #ifndef Background_H
 #define Background_H
 
-
 #include <SDL/SDL.h>
 #include "player.h"
 
@@ -12,8 +11,7 @@ typedef struct
     SDL_Rect cam;
 } background;
 
-
-void InitGameBackg(background *Backg, char NameImg[]);
+void InitGameBackg(background *Backg, int x, int y, int W, int H, char NameImg[]);
 void AfficherBackg(background Backg, SDL_Surface *screen);
 void animer_background(background *e);
 int collisionPH(Player p, SDL_Surface *Masque);
