@@ -3,7 +3,7 @@
 
 #include "Text_Image.h"
 #include "Main_Fn.h"
-#include "Menu.h"
+#include "Game.h"
 
 void Motion_MM(Text tabMT[],Text tabMAT[],Image tabM[][3], SDL_Event event, SDL_Surface *screen, int *i, Config *Confg);
 void Motion_MG(Image *tabMG, SDL_Surface *screen,SDL_Event event, int *i);
