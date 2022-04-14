@@ -1,6 +1,6 @@
 #include "player.h"
 #include "Background.h"
-void initPerso(Player *p, int x, int y, int NumPlayer)
+void initPerso(Player *p, int x, int y, int NumPlayer) 
 {
     int n;
     char NomImg[100];
