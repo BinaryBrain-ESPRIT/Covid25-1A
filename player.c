@@ -24,7 +24,6 @@ void initPerso(Player *p, int x, int y, int NumPlayer)
 
     for (int i = 0; i < 8; i++)
     {
-
         if (i == 0 || i == 1)
             if (NumPlayer != 3)
                 n = 7;

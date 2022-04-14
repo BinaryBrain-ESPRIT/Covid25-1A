@@ -3,17 +3,23 @@
 void InitEnigme(Enigme *e, char *nomfichier)
 {
     SDL_Color White = {255, 255, 255};
-    FILE *f;
+    SDL_Color Black = {0, 0, 0};
+    SDL_Color Red = {193, 38, 45};
 
+    FILE *f;
+    // Random 1->4
     int RandNum = rand() % (5 - 1) + 1;
     f = fopen(nomfichier, "r");
 
+    //Fichier (NumeroEnigme Background NumeroReponseCorrecte)
     do
         fscanf(f, "%d %s %d", &e->NumE, e->Backg[0].NameImg, &e->NumRC);
     while (e->NumE != RandNum);
+
     strcpy(e->Backg[1].NameImg, "assets/enigmeImage/Win.png");
     strcpy(e->Backg[2].NameImg, "assets/enigmeImage/Loose.png");
 
+    //Init Enigme 2.3.4
     if (e->NumE >= 2 && e->NumE <= 4)
     {
         e->txt.color = White;
@@ -36,14 +42,14 @@ void InitEnigme(Enigme *e, char *nomfichier)
         e->txt.pos.y = 182;
     }
 
-    InitBackg(&e->Backg[0], e->Backg[0].NameImg);
-    InitBackg(&e->Backg[1], e->Backg[1].NameImg);
-    InitBackg(&e->Backg[2], e->Backg[2].NameImg);
+    //InitBackg
+    for (int i = 0; i < 3; i++)
+        InitBackg(&e->Backg[i], e->Backg[i].NameImg);
+
     e->TimeOut = 0;
     e->Duration = 10;
 
-    SDL_Color Black = {0, 0, 0};
-    SDL_Color Red = {193, 38, 45};
+    //Init Time
     for (int i = 0; i <= e->Duration; i++)
     {
         sprintf(e->Time[i].Texte, "00:%02d", i);
@@ -66,16 +72,17 @@ void animer(Enigme *e, SDL_Surface *screen)
 {
     int EnigmeTimeS, EnigmeTimeSPred = -1;
 
-    // printf("R: %d G: %d B: %d\n",Black.r,Black.g,Black.b);
-    /// SDL_Color Red = {193, 38, 45};
+    //TimeSeconds
     EnigmeTimeS = (SDL_GetTicks() - e->TimeInit) / 1000;
 
-    if (e->Duration - EnigmeTimeS <= 0)
+    //Check if Not TimeOut
+    if (e->Duration - EnigmeTimeS < 0)
     {
         e->TimeOut = 1;
         return;
     }
 
+    //Check That a Sec Passed
     if (EnigmeTimeSPred != EnigmeTimeS)
     {
         afficherEnigme(*e, screen);

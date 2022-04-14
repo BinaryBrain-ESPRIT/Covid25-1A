@@ -5,6 +5,7 @@
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
 #include "Background.h"
+
 typedef struct
 {
     SDL_Rect pos;
