@@ -34,6 +34,7 @@ int InitEnigme1(enigme *e, char *nomfichier)
   do
   {
     NumE = rand() % (4 - 1) + 1;
+    // Existence NumE dans SelectedEnigme
     do
     {
       End = fscanf(f1, "%d\n", &NumE1) != EOF;
@@ -112,19 +113,20 @@ int InitEnigme1(enigme *e, char *nomfichier)
   e->Rep[1].font = TTF_OpenFont("assets/Font/ChopinScript.ttf", 120);
   e->Rep[2].font = TTF_OpenFont("assets/Font/ChopinScript.ttf", 120);
 
-  // RenderText
+  // Render Surface Text
   e->Quest.surfaceText = TTF_RenderText_Solid(e->Quest.font, e->Quest.Texte, e->Quest.color);
   e->Quest1.surfaceText = TTF_RenderText_Solid(e->Quest1.font, e->Quest1.Texte, e->Quest1.color);
   e->Rep[0].surfaceText = TTF_RenderText_Solid(e->Rep[0].font, e->Rep[0].Texte, e->Rep[0].color);
   e->Rep[1].surfaceText = TTF_RenderText_Solid(e->Rep[1].font, e->Rep[1].Texte, e->Rep[1].color);
   e->Rep[2].surfaceText = TTF_RenderText_Solid(e->Rep[2].font, e->Rep[2].Texte, e->Rep[2].color);
 
-  // Couleur
+  // Couleur Time
   SDL_Color Black = {0, 0, 0};
   SDL_Color Red = {193, 38, 45};
 
   // Durée
   e->Duration = 10;
+  e->TimeOut = 0;
 
   // Init Timer
   for (int i = 0; i <= e->Duration; i++)
@@ -142,14 +144,13 @@ int InitEnigme1(enigme *e, char *nomfichier)
 
 void afficherEnigme1(enigme e, SDL_Surface *screen)
 {
-  
-  SDL_BlitSurface(e.Backg[0].img, NULL, screen, &e.Backg[0].pos);
-  SDL_BlitSurface(e.Quest.surfaceText, NULL, screen, &e.Quest.pos);
-  SDL_BlitSurface(e.Quest1.surfaceText, NULL, screen, &e.Quest1.pos);
+  AfficherImg(e.Backg[0], screen);
+  Afficher_txt(e.Quest, screen);
+  Afficher_txt(e.Quest1, screen);
   for (int i = 0; i < 3; i++)
-    SDL_BlitSurface(e.Rep[i].surfaceText, NULL, screen, &e.Rep[i].pos);
-
+    Afficher_txt(e.Rep[i], screen);
 }
+
 void animer1(enigme *e, SDL_Surface *screen)
 {
   int EnigmeTimeS, EnigmeTimeSPred = -1;

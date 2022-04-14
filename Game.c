@@ -139,8 +139,8 @@ void SelectLevel(SDL_Surface *screen, Config *Confg)
             if (x > 571 && x < 809 && y > 765 && y < 821)
             {
                 Confg->Level = 1;
-                // Game(screen, Confg);
-                MultiPlayerGame(screen, Confg);
+                Game(screen, Confg);
+                // MultiPlayerGame(screen, Confg);
                 isRunning = 0;
             }
             else if (x > 846 && x < 1084 && y > 765 && y < 821)
@@ -275,7 +275,7 @@ void Game(SDL_Surface *screen, Config *Confg)
                 if (p.NumPlayer != 3)
                     n = 8;
                 else
-                    n = 4;
+                    n = 5;
                 if (p.animJ >= n)
                 {
                     p.score -= 50;
@@ -430,6 +430,13 @@ void Game(SDL_Surface *screen, Config *Confg)
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym)
             {
+            case SDLK_t:
+                // EnigmeTexte
+                printf("d5all\n");
+                AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque[0]);
+                SDL_WaitEvent(&event);
+
+                break;
             case SDLK_TAB:
                 if (!Opened)
                 {
@@ -446,10 +453,7 @@ void Game(SDL_Surface *screen, Config *Confg)
                 // EnigmeImage
                 AfficherEnigmeImage(screen, Confg, GameTimeInit, Masque[0], p);
                 break;
-            case SDLK_t:
-                // EnigmeTexte
-                AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque[0]);
-                break;
+
             case SDLK_f:
                 if (Confg->Fullscr > 0)
                     screen = SDL_SetVideoMode(Width, Height, Bpp, SDL_HWSURFACE | SDL_FULLSCREEN);
@@ -625,7 +629,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 if (p.NumPlayer != 3)
                     n = 8;
                 else
-                    n = 4;
+                    n = 5;
                 if (p.animJ >= n)
                 {
                     p.score -= 50;
@@ -785,7 +789,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                     }
                 }
             }
-            //Ennemy2
+            // Ennemy2
             if (BehindEnnemy(p1, e1[i]) != 2)
             {
                 if (event.type == SDL_KEYDOWN)
@@ -803,7 +807,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w / 3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
                 e[i].isKilled = 1;
             }
-            //Ennemy2
+            // Ennemy2
             if (e1[i].nbreVie == 0 && !e1[i].isKilled)
             {
                 p1.score += 150;
@@ -833,7 +837,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 if (e[i].pos.x < (1000 - e[i].img[e->anim_i][e->anim_j]->w))
                     afficherEnnemy(e[i], screen);
             }
-            //Ennemy2
+            // Ennemy2
 
             if (collisionBB(e1[i], p1) && p1.nbreVie > 0 && BehindEnnemy(p1, e1[i]) != 2)
             {
@@ -842,7 +846,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 if (e1[i].anim_j == 2 && e1[i].AnimE_Attack % 10 == 0)
                     p1.nbreVie--;
                 animerEnnemy(&e[i], Confg);
-                if (e1[i].pos.x > Width /2)
+                if (e1[i].pos.x > Width / 2)
                     afficherEnnemy(e1[i], screen);
                 sprintf(tabGameUI[0].NameImg, "assets/GameUi/Health%d.png", p1.nbreVie);
                 initImg(&tabGameUI[0], 31, 53, tabGameUI[0].NameImg);
@@ -853,7 +857,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 animerEnnemy(&e1[i], Confg);
                 deplacerIA(&e1[i], p);
                 deplacerEnnemy(&e1[i], Confg);
-                if (e1[i].pos.x > Width /2)
+                if (e1[i].pos.x > Width / 2)
                     afficherEnnemy(e1[i], screen);
             }
         }
@@ -956,7 +960,8 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 break;
             case SDLK_t:
                 // EnigmeTexte
-                AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque[0]);
+                // AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque[0]);
+                printf("Test\n");
                 break;
             case SDLK_f:
                 if (Confg->Fullscr > 0)
@@ -1488,14 +1493,14 @@ void AfficherEnigmeImage(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
 void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, SDL_Surface *Masque)
 {
     enigme e;
-    int done = 0, GameTimeS, Rep, GameTimeM;
+    int done = 0, GameTimeS, Rep = 0, GameTimeM;
     SDL_Event event;
+
     if (InitEnigme1(&e, "enigme.txt"))
     {
         afficherEnigme1(e, screen);
         SDL_Flip(screen);
         done = 0;
-        Rep = 0;
 
         e.TimeInit = SDL_GetTicks();
 
@@ -1504,7 +1509,7 @@ void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
         {
             GameTimeS = ((SDL_GetTicks() - GameTimeInit) / 1000) % 60;
             GameTimeM = ((SDL_GetTicks() - GameTimeInit) / 1000) / 60;
-
+            printf("Rep: %d\n", Rep);
             animer1(&e, screen);
 
             SDL_PollEvent(&event);
@@ -1528,6 +1533,7 @@ void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
                     break;
                 }
                 break;
+
             case SDL_MOUSEBUTTONDOWN:
                 if (event.button.x > 261 && event.button.x < 596 && event.button.y > 427 && event.button.y < 565)
                     Rep = 1;
@@ -1537,7 +1543,11 @@ void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
                     Rep = 3;
                 break;
             }
-
+<<<<<<< HEAD
+            printf("REP: %d\n", Rep);
+=======
+            printf("Rep: %d\n", Rep);
+>>>>>>> 424190c5159dcdd87ee0a77ccbeaf43e2e1f0a38
             if ((Rep > 0 && Rep < 4) || e.TimeOut)
             {
                 if (Rep == e.NumRepC && !e.TimeOut)

@@ -61,6 +61,7 @@ void MAJTime(Text *GameTimeTxt, int GameTimeInit)
 void SaveScore( char PlayerName[], int Score,char Time[])
 {
     FILE *f = fopen("Data/Score.txt", "a");
+
     fprintf(f,"%s %s %d\n",PlayerName,Time,Score);
     fclose(f);
 }
@@ -91,7 +92,6 @@ void LeaderBoard(SDL_Surface *screen, Config *Confg)
     tabPos[4].y = 763;
     tabPos[5].x = 754;
     tabPos[5].y = 887;
-
     InitBackg(&Backg, "assets/LeaderBoard/Background.jpg");
     AfficherImg(Backg, screen);
 
