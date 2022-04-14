@@ -1,7 +1,8 @@
 # Prerequisites
 *.d
 
-Data
+Data/Config.txt
+Data/Score.txt
 
 game
 
