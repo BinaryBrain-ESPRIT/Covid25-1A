@@ -139,8 +139,8 @@ void SelectLevel(SDL_Surface *screen, Config *Confg)
             if (x > 571 && x < 809 && y > 765 && y < 821)
             {
                 Confg->Level = 1;
-                // Game(screen, Confg);
-                MultiPlayerGame(screen, Confg);
+                Game(screen, Confg);
+                // MultiPlayerGame(screen, Confg);
                 isRunning = 0;
             }
             else if (x > 846 && x < 1084 && y > 765 && y < 821)
@@ -785,7 +785,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                     }
                 }
             }
-            //Ennemy2
+            // Ennemy2
             if (BehindEnnemy(p1, e1[i]) != 2)
             {
                 if (event.type == SDL_KEYDOWN)
@@ -803,7 +803,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w / 3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
                 e[i].isKilled = 1;
             }
-            //Ennemy2
+            // Ennemy2
             if (e1[i].nbreVie == 0 && !e1[i].isKilled)
             {
                 p1.score += 150;
@@ -833,7 +833,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 if (e[i].pos.x < (1000 - e[i].img[e->anim_i][e->anim_j]->w))
                     afficherEnnemy(e[i], screen);
             }
-            //Ennemy2
+            // Ennemy2
 
             if (collisionBB(e1[i], p1) && p1.nbreVie > 0 && BehindEnnemy(p1, e1[i]) != 2)
             {
@@ -842,7 +842,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 if (e1[i].anim_j == 2 && e1[i].AnimE_Attack % 10 == 0)
                     p1.nbreVie--;
                 animerEnnemy(&e[i], Confg);
-                if (e1[i].pos.x > Width /2)
+                if (e1[i].pos.x > Width / 2)
                     afficherEnnemy(e1[i], screen);
                 sprintf(tabGameUI[0].NameImg, "assets/GameUi/Health%d.png", p1.nbreVie);
                 initImg(&tabGameUI[0], 31, 53, tabGameUI[0].NameImg);
@@ -853,7 +853,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 animerEnnemy(&e1[i], Confg);
                 deplacerIA(&e1[i], p);
                 deplacerEnnemy(&e1[i], Confg);
-                if (e1[i].pos.x > Width /2)
+                if (e1[i].pos.x > Width / 2)
                     afficherEnnemy(e1[i], screen);
             }
         }
@@ -1528,6 +1528,7 @@ void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
                     break;
                 }
                 break;
+
             case SDL_MOUSEBUTTONDOWN:
                 if (event.button.x > 261 && event.button.x < 596 && event.button.y > 427 && event.button.y < 565)
                     Rep = 1;
@@ -1537,7 +1538,7 @@ void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
                     Rep = 3;
                 break;
             }
-
+            printf("REP: %d\n", Rep);
             if ((Rep > 0 && Rep < 4) || e.TimeOut)
             {
                 if (Rep == e.NumRepC && !e.TimeOut)
