@@ -1,6 +1,8 @@
 # Prerequisites
 *.d
 
+Data/Config.txt
+Data/Score.txt
 game
 
 # Object files
