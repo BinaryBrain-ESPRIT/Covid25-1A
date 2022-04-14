@@ -44,8 +44,8 @@ void initPerso(Player *p, int x, int y, int NumPlayer)
 
         for (int j = 0; j < n; j++)
         {
-            sprintf(NomImg, "assets/Animation/Player%d/%d/%d.png", NumPlayer, i, j + 1);
-            p->img[i][j] = IMG_Load(NomImg);
+            sprintf(NomImg, "assets/Animation/Player%d/%d/%d.png", NumPlayer, i, j + 1); // selecting player Images
+            p->img[i][j] = IMG_Load(NomImg); // Loading IMages
         }
     }
 }
