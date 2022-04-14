@@ -1,13 +1,13 @@
 #include "player.h"
 #include "Background.h"
-void initPerso(Player *p, int NumPlayer)
+void initPerso(Player *p,int x,int y, int NumPlayer)
 {
     int n;
     char NomImg[100];
-    p->pos.x = 250;
-    p->pos.y = 510;
-    p->posABS.x = p->pos.x;
-    p->posABS.y = p->pos.y;
+    p->pos.x = x;
+    p->pos.y = y;
+    p->posABS.x = 250;
+    p->posABS.y = y;
     p->nbreVie = 3;
     p->score = 0;
     p->v = 10;

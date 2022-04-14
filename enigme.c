@@ -17,6 +17,7 @@ int InitEnigme1(enigme *e, char *nomfichier)
   int End;
   int n = 0;
 
+  // Calcul Nbre De Ligne
   FILE *f1 = fopen("SelectedEnigme.txt", "r");
 
   do
@@ -27,6 +28,7 @@ int InitEnigme1(enigme *e, char *nomfichier)
 
   fclose(f1);
 
+  // Trouver NumEnigme Aleatoire (Pour Tester qu'il n'est pas encore choisis)
   f1 = fopen("SelectedEnigme.txt", "r");
 
   do
@@ -39,20 +41,27 @@ int InitEnigme1(enigme *e, char *nomfichier)
 
   } while (NumE1 == NumE && n < 3);
 
-  if (n >= 3 && NumE1 == NumE)
-    return 0;
+  // Dans Le cas Qui a choisis tous Les enigmes Il n'affche pas
+
+  // if (n >= 3 && NumE1 == NumE)
+  // return 0;
 
   fclose(f1);
 
+  // Enregistrer L'enigme selectionne
   f1 = fopen("SelectedEnigme.txt", "a");
 
   fprintf(f1, "%d\n", NumE);
+
   fclose(f1);
-  // Fichier
+
+  // Recuperer L'enigme par Le NumE
   e->f = fopen(nomfichier, "r");
   do
     fscanf(e->f, "%d %s %d %d %s %s %s %s %s %d", &e->NumE, NomBackg, &posX, &posX1, Quest, Quest1, Rep1, Rep2, Rep3, &e->NumRepC);
   while (e->NumE != NumE);
+
+  // Remplacer le Caractere '_' par un espace
   for (int i = 0; i < strlen(Quest); i++)
   {
     if (Quest[i] == '_')
@@ -109,8 +118,15 @@ int InitEnigme1(enigme *e, char *nomfichier)
   e->Rep[0].surfaceText = TTF_RenderText_Solid(e->Rep[0].font, e->Rep[0].Texte, e->Rep[0].color);
   e->Rep[1].surfaceText = TTF_RenderText_Solid(e->Rep[1].font, e->Rep[1].Texte, e->Rep[1].color);
   e->Rep[2].surfaceText = TTF_RenderText_Solid(e->Rep[2].font, e->Rep[2].Texte, e->Rep[2].color);
+
+  // Couleur
   SDL_Color Black = {0, 0, 0};
   SDL_Color Red = {193, 38, 45};
+
+  // Durée
+  e->Duration = 10;
+
+  // Init Timer
   for (int i = 0; i <= e->Duration; i++)
   {
     sprintf(e->Time[i].Texte, "00:%02d", i);
@@ -119,26 +135,25 @@ int InitEnigme1(enigme *e, char *nomfichier)
     else
       initTxt(&e->Time[i], 1707, 26, Black, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", e->Time[i].Texte);
   }
-  e->Duration = 10;
+
   fclose(e->f);
   return 1;
 }
 
 void afficherEnigme1(enigme e, SDL_Surface *screen)
 {
+  
   SDL_BlitSurface(e.Backg[0].img, NULL, screen, &e.Backg[0].pos);
   SDL_BlitSurface(e.Quest.surfaceText, NULL, screen, &e.Quest.pos);
   SDL_BlitSurface(e.Quest1.surfaceText, NULL, screen, &e.Quest1.pos);
-  SDL_BlitSurface(e.Rep[0].surfaceText, NULL, screen, &e.Rep[0].pos);
-  SDL_BlitSurface(e.Rep[1].surfaceText, NULL, screen, &e.Rep[1].pos);
-  SDL_BlitSurface(e.Rep[2].surfaceText, NULL, screen, &e.Rep[2].pos);
+  for (int i = 0; i < 3; i++)
+    SDL_BlitSurface(e.Rep[i].surfaceText, NULL, screen, &e.Rep[i].pos);
+
 }
 void animer1(enigme *e, SDL_Surface *screen)
 {
   int EnigmeTimeS, EnigmeTimeSPred = -1;
 
-  // printf("R: %d G: %d B: %d\n",Black.r,Black.g,Black.b);
-  /// SDL_Color Red = {193, 38, 45};
   EnigmeTimeS = (SDL_GetTicks() - e->TimeInit) / 1000;
 
   if (e->Duration - EnigmeTimeS < 0)

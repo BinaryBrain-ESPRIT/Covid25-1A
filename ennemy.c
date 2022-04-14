@@ -137,13 +137,14 @@ void deplacerEnnemy(Ennemy *e, Config *Confg)
 }
 void deplacerIA(Ennemy *e, Player p)
 {
+    int ReachPosX = rand()%(500-200)+200;
     if (!e->isKilled)
     {
         if (BehindEnnemy(p, *e) != 2)
             e->direction = BehindEnnemy(p, *e);
         else
         {
-            if (e->pos.x >= e->posInit + 400)
+            if (e->pos.x >= e->posInit + ReachPosX)
                 e->direction = -1;
             else if (e->pos.x <= e->posInit)
                 e->direction = 1;
