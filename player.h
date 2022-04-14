@@ -9,7 +9,7 @@ typedef struct
   int NumPlayer;
   char PlayerName[50];
   int nbreVie;
-  int isJumped, posInit;
+  int isJumped, posInit; //PosInit Position Before Jump
   SDL_Rect pos, posABS;
   SDL_Surface *img[10][10];
   double v;

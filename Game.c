@@ -176,8 +176,9 @@ void Game(SDL_Surface *screen, Config *Confg)
     SDL_Color TimeColor = {193, 39, 45};
     SDL_Color Black = {0, 0, 0};
     SDL_Color Red = {193, 39, 45};
-
+    //Declara Player 
     Player p;
+    //Declara Ennemy
     Ennemy e[5];
 
     minimap map;
