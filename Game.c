@@ -140,7 +140,7 @@ void SelectLevel(SDL_Surface *screen, Config *Confg)
             {
                 Confg->Level = 1;
                 Game(screen, Confg);
-                // MultiPlayerGame(screen, Confg);
+                //MultiPlayerGame(screen, Confg);
                 isRunning = 0;
             }
             else if (x > 846 && x < 1084 && y > 765 && y < 821)
@@ -452,6 +452,7 @@ void Game(SDL_Surface *screen, Config *Confg)
             case SDLK_e:
                 // EnigmeImage
                 AfficherEnigmeImage(screen, Confg, GameTimeInit, Masque[0], p);
+                SDL_WaitEvent(&event);
                 break;
 
             case SDLK_f:
