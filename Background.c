@@ -41,6 +41,7 @@ SDL_Color GetPixel(SDL_Surface *pSurface, int x, int y)
     return color;
 }
 
+//Jaune Droite Gauche
 int collisionPH(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -55,9 +56,8 @@ int collisionPH(Player p, SDL_Surface *Masque)
         // Right
         color = GetPixel(Masque, posX1, i);
         if (color.r == 255 && color.g == 255 && color.b == 1)
-        {
             return 1;
-        }
+
         // Left
         color = GetPixel(Masque, posX, i);
         if (color.r == 255 && color.g == 255 && color.b == 1)
@@ -66,6 +66,8 @@ int collisionPH(Player p, SDL_Surface *Masque)
 
     return 0;
 }
+
+//Jaune
 int HighHeight(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -76,7 +78,7 @@ int HighHeight(Player p, SDL_Surface *Masque)
 
     for (int i = posX; i <= posX1; i++)
     {
-        // Bot Yellow
+        // TOP Yellow
         color = GetPixel(Masque, i, posY);
         if (color.r == 255 && color.g == 255 && color.b == 1)
             return 1;
@@ -84,6 +86,7 @@ int HighHeight(Player p, SDL_Surface *Masque)
     return 0;
 }
 
+//Rouge
 int isTrapped(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -101,6 +104,7 @@ int isTrapped(Player p, SDL_Surface *Masque)
     return 0;
 }
 
+//Jaune
 int isGround(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -119,6 +123,7 @@ int isGround(Player p, SDL_Surface *Masque)
     return 0;
 }
 
+//Bleu
 int EnigmeDetected(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -130,17 +135,18 @@ int EnigmeDetected(Player p, SDL_Surface *Masque)
     for (int i = posY; i <= posY1 - 10; i++)
     {
         // Right Green
-        color = GetPixel(Masque, posX, i);
-        //("R: %d G: %d B: %d\n", color.r, color.g, color.b);
+        color = GetPixel(Masque, posX1, i);
         if (color.r == 0 && color.g == 0 && color.b == 254)
             return 1;
         // Left Green
-        /*color = GetPixel(Masque, posX1, i);
+        /*color = GetPixel(Masque, posX, i);
         if (color.r == 0 && color.g == 0 && color.b == 254)
             return 1;*/
     }
     return 0;
 }
+
+//Vert
 int Interaction(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;

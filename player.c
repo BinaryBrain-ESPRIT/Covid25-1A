@@ -1,6 +1,6 @@
 #include "player.h"
 #include "Background.h"
-void initPerso(Player *p,int x,int y, int NumPlayer)
+void initPerso(Player *p, int x, int y, int NumPlayer)
 {
     int n;
     char NomImg[100];
@@ -41,7 +41,7 @@ void initPerso(Player *p,int x,int y, int NumPlayer)
             if (NumPlayer != 3)
                 n = 9;
             else
-                n = 5;
+                n = 6;
 
         for (int j = 0; j < n; j++)
         {
@@ -158,12 +158,12 @@ void saut(Player *p, SDL_Surface *Masque)
     if (HeightP < 0)
         HeightP = 0;
 
-    if (p->isJumped && p->pos.y > HeightP && !HighHeight(*p,Masque))
+    if (p->isJumped && p->pos.y > HeightP && !HighHeight(*p, Masque))
     {
         p->pos.y -= Vitesse;
         p->posABS.y -= Vitesse;
     }
-    if (p->pos.y <= HeightP || HighHeight(*p,Masque))
+    if (p->pos.y <= HeightP || HighHeight(*p, Masque))
     {
         p->isJumped = 0;
     }
@@ -199,7 +199,7 @@ void LibererPlayer(Player p)
             if (p.NumPlayer != 3)
                 n = 9;
             else
-                n = 5;
+                n = 6;
         for (int j = 0; j < n; j++)
         {
             SDL_FreeSurface(p.img[i][j]);
