@@ -1543,11 +1543,6 @@ void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
                     Rep = 3;
                 break;
             }
-<<<<<<< HEAD
-            printf("REP: %d\n", Rep);
-=======
-            printf("Rep: %d\n", Rep);
->>>>>>> 424190c5159dcdd87ee0a77ccbeaf43e2e1f0a38
             if ((Rep > 0 && Rep < 4) || e.TimeOut)
             {
                 if (Rep == e.NumRepC && !e.TimeOut)
