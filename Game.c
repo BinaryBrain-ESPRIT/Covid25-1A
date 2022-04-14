@@ -275,7 +275,7 @@ void Game(SDL_Surface *screen, Config *Confg)
                 if (p.NumPlayer != 3)
                     n = 8;
                 else
-                    n = 4;
+                    n = 5;
                 if (p.animJ >= n)
                 {
                     p.score -= 50;
@@ -430,6 +430,13 @@ void Game(SDL_Surface *screen, Config *Confg)
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym)
             {
+            case SDLK_t:
+                // EnigmeTexte
+                printf("d5all\n");
+                AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque[0]);
+                SDL_WaitEvent(&event);
+
+                break;
             case SDLK_TAB:
                 if (!Opened)
                 {
@@ -446,10 +453,7 @@ void Game(SDL_Surface *screen, Config *Confg)
                 // EnigmeImage
                 AfficherEnigmeImage(screen, Confg, GameTimeInit, Masque[0], p);
                 break;
-            case SDLK_t:
-                // EnigmeTexte
-                AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque[0]);
-                break;
+
             case SDLK_f:
                 if (Confg->Fullscr > 0)
                     screen = SDL_SetVideoMode(Width, Height, Bpp, SDL_HWSURFACE | SDL_FULLSCREEN);
@@ -625,7 +629,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 if (p.NumPlayer != 3)
                     n = 8;
                 else
-                    n = 4;
+                    n = 5;
                 if (p.animJ >= n)
                 {
                     p.score -= 50;
@@ -956,7 +960,8 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 break;
             case SDLK_t:
                 // EnigmeTexte
-                AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque[0]);
+                // AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque[0]);
+                printf("Test\n");
                 break;
             case SDLK_f:
                 if (Confg->Fullscr > 0)
@@ -1488,14 +1493,14 @@ void AfficherEnigmeImage(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
 void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, SDL_Surface *Masque)
 {
     enigme e;
-    int done = 0, GameTimeS, Rep, GameTimeM;
+    int done = 0, GameTimeS, Rep = 0, GameTimeM;
     SDL_Event event;
+
     if (InitEnigme1(&e, "enigme.txt"))
     {
         afficherEnigme1(e, screen);
         SDL_Flip(screen);
         done = 0;
-        Rep = 0;
 
         e.TimeInit = SDL_GetTicks();
 
@@ -1504,7 +1509,7 @@ void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
         {
             GameTimeS = ((SDL_GetTicks() - GameTimeInit) / 1000) % 60;
             GameTimeM = ((SDL_GetTicks() - GameTimeInit) / 1000) / 60;
-
+            printf("Rep: %d\n", Rep);
             animer1(&e, screen);
 
             SDL_PollEvent(&event);
@@ -1538,7 +1543,11 @@ void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
                     Rep = 3;
                 break;
             }
+<<<<<<< HEAD
             printf("REP: %d\n", Rep);
+=======
+            printf("Rep: %d\n", Rep);
+>>>>>>> 424190c5159dcdd87ee0a77ccbeaf43e2e1f0a38
             if ((Rep > 0 && Rep < 4) || e.TimeOut)
             {
                 if (Rep == e.NumRepC && !e.TimeOut)

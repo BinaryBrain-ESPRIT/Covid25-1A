@@ -22,7 +22,7 @@ int Setup(Config *Confg)
         printf("%s\n", Mix_GetError());
         return 0;
     }
-    SDL_WM_SetCaption("Covid 25", "");
+    SDL_WM_SetCaption("Covid 25", NULL);
 
     while (fscanf(f, "%s : %d", Nom, &Value) != EOF)
     {
