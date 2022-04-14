@@ -1534,6 +1534,7 @@ void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
                     break;
                 }
                 break;
+
             case SDL_MOUSEBUTTONDOWN:
                 if (event.button.x > 261 && event.button.x < 596 && event.button.y > 427 && event.button.y < 565)
                     Rep = 1;
