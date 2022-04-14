@@ -1,9 +1,6 @@
 # Prerequisites
 *.d
 
-Data/Config.txt
-Data/Score.txt
-
 game
 
 # Object files
@@ -55,3 +52,6 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+Data/Config.txt
+Data/Score.txt
