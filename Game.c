@@ -1586,3 +1586,10 @@ void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
     else
         printf("Out Of Choice\n");
 }
+
+
+
+
+
+
+
