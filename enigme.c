@@ -4,6 +4,8 @@ int InitEnigme1(enigme *e, char *nomfichier)
   // Declaration
   SDL_Color black = {0, 0, 0};
   char NomBackg[30];
+  char NomBackgW[30];
+  char NomBackgL[30];
   char NomTimer[35];
   char Quest[100];
   char Quest1[100];
@@ -74,8 +76,13 @@ int InitEnigme1(enigme *e, char *nomfichier)
       Quest1[i] = ' ';
   }
 
+  strcpy(NomBackgW, "assets/enigmeImage/Win.png");
+  strcpy(NomBackgL, "assets/enigmeImage/Loose.png");
+
   // Init Backg
   InitBackg(&e->Backg[0], NomBackg);
+  InitBackg(&e->Backg[1], NomBackgW);
+  InitBackg(&e->Backg[2], NomBackgL);
 
   // Init Couleurs
   e->Quest.color = black;
@@ -170,4 +177,18 @@ void animer1(enigme *e, SDL_Surface *screen)
     SDL_Flip(screen);
   }
   EnigmeTimeSPred = EnigmeTimeS;
+}
+
+void Free_Enigme1(enigme *e)
+{
+  for (int i = 0; i < 3; i++)
+    SDL_FreeSurface(e->Backg[i].img);
+
+  for (int i = 0; i <= e->Duration; i++)
+    SDL_FreeSurface(e->Time[i].surfaceText);
+  Liberer_txt(e->Quest);
+  Liberer_txt(e->Quest1);
+  for (int i = 0; i < 3; i++)
+    Liberer_txt(e->Rep[i]);
+  
 }

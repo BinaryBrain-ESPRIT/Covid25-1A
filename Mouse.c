@@ -21,7 +21,6 @@ void Motion_MM(Text tabMT[], Text tabMAT[], Image tabM[][3], SDL_Event event, SD
             {
                 PlayChunkMusic("assets/Sound/chunk.wav", sound);
                 *i = j + 1;
-                
             }
             break;
         }
@@ -44,13 +43,12 @@ void Motion_MM(Text tabMT[], Text tabMAT[], Image tabM[][3], SDL_Event event, SD
             if (i != 0)
             {
                 *i = 0;
-                
             }
         }
     }
 }
 
-void Motion_MG(Image *tabMG, SDL_Surface *screen, SDL_Event event, int *i)
+void Motion_MG(Image tabMG[], SDL_Surface *screen, SDL_Event event, int *i)
 {
     Mix_Chunk *sound;
     int x, y, j;
@@ -58,7 +56,7 @@ void Motion_MG(Image *tabMG, SDL_Surface *screen, SDL_Event event, int *i)
     x = event.motion.x;
     y = event.motion.y;
 
-    for (j = 0; j < 6; j++)
+    for (j = 1; j < 6; j++)
     {
         int posX = tabMG[j].pos.x;
         int posX1 = posX + tabMG[j].img->w;
@@ -71,23 +69,22 @@ void Motion_MG(Image *tabMG, SDL_Surface *screen, SDL_Event event, int *i)
             {
                 PlayChunkMusic("assets/Sound/chunk.wav", sound);
                 *i = j + 1;
-                AfficherImg(tabMG[*i + 5], screen);
+                AfficherImg(tabMG[*i + 4], screen);
                 SDL_Flip(screen);
             }
             break;
         }
-    }
-    if (j >= 6)
-    {
-        if (*i != 0)
+        else 
         {
-            *i = 0;
-            for (int j = 1; j < 6; j++)
-                AfficherImg(tabMG[j], screen);
-            SDL_Flip(screen);
+            if (*i != 0)
+            {
+                *i = 0;
+                for (int j = 1; j < 6; j++)
+                    AfficherImg(tabMG[j], screen);
+                SDL_Flip(screen);
+            }
         }
     }
-    
 }
 void Motion_MO(SDL_Surface *screen, Config *Confg, SDL_Event event, Image *tabMO, Image *tabMAO, int *i)
 {
