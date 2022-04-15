@@ -169,7 +169,7 @@ void Game(SDL_Surface *screen, Config *Confg)
 {
     srand(time(NULL));
     const Uint8 *state = SDL_GetKeyState(NULL);
-
+    char NameAnimImg[50];
     SDL_Event event;
 
     SDL_Color MoneyColor = {57, 181, 74};
@@ -180,13 +180,18 @@ void Game(SDL_Surface *screen, Config *Confg)
     Player p;
     // Declara Ennemy
     Ennemy e[5];
-
+    Image AnimBackg[10];
     minimap map;
 
-    //Init Backround Masque
+    // Init Backround Masque
     background Backg;
     SDL_Surface *Masque[3];
     Masque[0] = IMG_Load("assets/Levels/Masque.jpg");
+    for (int i = 0; i < 9; i++)
+    {
+        sprintf(AnimBackg[i].NameImg, "assets/Animation/Backg/%d.png", i + 1);
+        initImg(&AnimBackg[i], 2641, 600, AnimBackg[i].NameImg);
+    }
 
     Image tabGameUI[5];
     Text MoneyTxt, GameTimeTxt;
@@ -231,7 +236,7 @@ void Game(SDL_Surface *screen, Config *Confg)
 
     GameTimeInit = SDL_GetTicks();
 
-    //GameLoop
+    // GameLoop
     while (isRunning)
     {
         // MAJTime(&GameTimeTxt,GameTimeInit);
@@ -253,6 +258,10 @@ void Game(SDL_Surface *screen, Config *Confg)
 
         // Affichage Backg
         AfficherBackg(Backg, screen);
+        for (int i = 0; i < 9; i++)
+        {
+            AfficherImg(AnimBackg[i], screen);
+        }
 
         afficherminimap(map, screen);
         // Affichage GameUI
@@ -299,7 +308,7 @@ void Game(SDL_Surface *screen, Config *Confg)
         }
         else
         {
-            //Scrolling 
+            // Scrolling
             if (collisionPH(p, Masque[0]) != p.direction)
             {
                 if (p.pos.x >= screen->w / 2 && p.direction == 1)
@@ -322,7 +331,7 @@ void Game(SDL_Surface *screen, Config *Confg)
                         e[i].pos.x += 10;
                     }
                 }
-                else if (p.direction == -2 )
+                else if (p.direction == -2)
                 {
                     scrolling(&Backg, p.direction, 10);
                     p.posABS.y += 10;
@@ -331,7 +340,7 @@ void Game(SDL_Surface *screen, Config *Confg)
                         e[i].pos.y -= 10;
                     }
                 }
-                else if (p.direction == 2 )
+                else if (p.direction == 2)
                 {
                     scrolling(&Backg, p.direction, 10);
                     p.posABS.y -= 10;
@@ -439,7 +448,6 @@ void Game(SDL_Surface *screen, Config *Confg)
             {
             case SDLK_t:
                 // EnigmeTexte
-                printf("d5all\n");
                 AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque[0]);
                 SDL_WaitEvent(&event);
 
@@ -469,6 +477,10 @@ void Game(SDL_Surface *screen, Config *Confg)
                     screen = SDL_SetVideoMode(Width, Height, Bpp, SDL_HWSURFACE);
                 Confg->Fullscr *= -1;
                 AfficherBackg(Backg, screen);
+
+                for (int i = 0; i < 9; i++)
+                    AfficherImg(AnimBackg[i], screen);
+
                 AfficherImg(tabGameUI[0], screen);
                 SDL_Flip(screen);
                 break;
@@ -771,9 +783,6 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 }
                 else
                 {
-                    printf("posX: %d", p1.pos.x);
-                    printf("width /2 = %d\n", Width / 2);
-
                     if (p1.direction == -1 && p1.pos.x < (Width / 2))
                     {
                         p1.direction = 0;
