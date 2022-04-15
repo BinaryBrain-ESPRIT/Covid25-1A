@@ -3,6 +3,7 @@
 
 void InitGameBackg(background *Backg, int x, int y, int W, int H, char NameImg[])
 {
+
     Backg->img = IMG_Load(NameImg);
     Backg->pos.x = x;
     Backg->pos.y = y;
@@ -13,6 +14,14 @@ void InitGameBackg(background *Backg, int x, int y, int W, int H, char NameImg[]
     Backg->cam.y = 0;
     Backg->cam.w = W;
     Backg->cam.h = H;
+    Backg->Anim = 0;
+    for (int i = 0; i < 9; i++)
+    {
+        sprintf(Backg->AnimBackg[i].NameImg, "assets/Animation/Backg/%d.png", i + 1);
+        Backg->AnimBackg[i].img = IMG_Load(Backg->AnimBackg[i].NameImg);
+        Backg->AnimBackg[i].pos.x = 2640;
+        Backg->AnimBackg[i].pos.y = 627;
+    }
 }
 
 void AfficherBackg(background Backg, SDL_Surface *screen)
@@ -20,8 +29,28 @@ void AfficherBackg(background Backg, SDL_Surface *screen)
     SDL_BlitSurface(Backg.img, &Backg.cam, screen, &Backg.pos);
 }
 
-void animer_background(background *e)
+int animer_background(background *Backg, SDL_Surface *screen, int Anim)
 {
+    printf("%d\n", Backg->Anim);
+    if (Backg->Anim > 5)
+    {
+        printf("Anim 1: %d\n", Anim);
+        if (Anim < 8    )
+        {
+            printf("Name : %s\n", Backg->AnimBackg[Anim].NameImg);
+            SDL_BlitSurface(Backg->AnimBackg[Anim].img, NULL, screen, &Backg->AnimBackg[Anim].pos);
+            Anim++;
+        }
+        else
+            Anim = 0;
+        Backg->Anim = 0;
+    }
+    else
+    {
+        SDL_BlitSurface(Backg->AnimBackg[Anim].img, NULL, screen, &Backg->AnimBackg[Anim].pos);
+        Backg->Anim++;
+    }
+    return Anim;
 }
 
 SDL_Color GetPixel(SDL_Surface *pSurface, int x, int y)
@@ -41,7 +70,7 @@ SDL_Color GetPixel(SDL_Surface *pSurface, int x, int y)
     return color;
 }
 
-//Jaune Droite Gauche
+// Jaune Droite Gauche
 int collisionPH(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -56,7 +85,7 @@ int collisionPH(Player p, SDL_Surface *Masque)
         // Right
         color = GetPixel(Masque, posX1, i);
         if (color.r == 255 && color.g == 255 && color.b == 1)
-            return 1;
+            return 1;  
 
         // Left
         color = GetPixel(Masque, posX, i);
@@ -67,7 +96,7 @@ int collisionPH(Player p, SDL_Surface *Masque)
     return 0;
 }
 
-//Jaune
+// Jaune
 int HighHeight(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -86,7 +115,7 @@ int HighHeight(Player p, SDL_Surface *Masque)
     return 0;
 }
 
-//Rouge
+// Rouge
 int isTrapped(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -104,7 +133,7 @@ int isTrapped(Player p, SDL_Surface *Masque)
     return 0;
 }
 
-//Jaune
+// Jaune
 int isGround(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -123,7 +152,7 @@ int isGround(Player p, SDL_Surface *Masque)
     return 0;
 }
 
-//Bleu
+// Bleu
 int EnigmeDetected(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -146,7 +175,7 @@ int EnigmeDetected(Player p, SDL_Surface *Masque)
     return 0;
 }
 
-//Vert
+// Vert
 int Interaction(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;

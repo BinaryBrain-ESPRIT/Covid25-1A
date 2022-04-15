@@ -1,7 +1,12 @@
+<<<<<<< HEAD
 Money : 7550
 Player : 3
+=======
+Money : 7800
+Player : 2
+>>>>>>> 0e2cee914b1e64201b741ce862f4c32e93ca23a4
 LevelReached : 3
 Language : 1
-FullScreen : -1
+FullScreen : 1
 Volume : 100
 PosVol : 730

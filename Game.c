@@ -7,7 +7,6 @@
 
 void AffichageMainMenu(SDL_Surface *screen, Text tabT[], Text tabAT[], Image tabI[][3], int j, int l, int p)
 {
-
     AfficherImg(tabI[l - 1][p - 1], screen);
     if (j != 0)
     {
@@ -169,9 +168,9 @@ void Game(SDL_Surface *screen, Config *Confg)
 {
     srand(time(NULL));
     const Uint8 *state = SDL_GetKeyState(NULL);
-
+    char NameAnimImg[50];
     SDL_Event event;
-
+    int Anim = 0;
     SDL_Color MoneyColor = {57, 181, 74};
     SDL_Color TimeColor = {193, 39, 45};
     SDL_Color Black = {0, 0, 0};
@@ -183,10 +182,12 @@ void Game(SDL_Surface *screen, Config *Confg)
 
     minimap map;
 
-    //Init Backround Masque
+    // Init Backround Masque
     background Backg;
     SDL_Surface *Masque[3];
     Masque[0] = IMG_Load("assets/Levels/Masque.jpg");
+
+    Image1 AnimBackg[10];
 
     Image tabGameUI[5];
     Text MoneyTxt, GameTimeTxt;
@@ -231,7 +232,7 @@ void Game(SDL_Surface *screen, Config *Confg)
 
     GameTimeInit = SDL_GetTicks();
 
-    //GameLoop
+    // GameLoop
     while (isRunning)
     {
         // MAJTime(&GameTimeTxt,GameTimeInit);
@@ -253,6 +254,9 @@ void Game(SDL_Surface *screen, Config *Confg)
 
         // Affichage Backg
         AfficherBackg(Backg, screen);
+        printf("Anim 1: %d\n", Anim);
+        Anim = animer_background(&Backg, screen, Anim);
+        printf("Anim 2: %d\n", Anim);
 
         afficherminimap(map, screen);
         // Affichage GameUI
@@ -299,7 +303,7 @@ void Game(SDL_Surface *screen, Config *Confg)
         }
         else
         {
-            //Scrolling 
+            // Scrolling
             if (collisionPH(p, Masque[0]) != p.direction)
             {
                 if (p.pos.x >= screen->w / 2 && p.direction == 1)
@@ -322,7 +326,7 @@ void Game(SDL_Surface *screen, Config *Confg)
                         e[i].pos.x += 10;
                     }
                 }
-                else if (p.direction == -2 )
+                else if (p.direction == -2)
                 {
                     scrolling(&Backg, p.direction, 10);
                     p.posABS.y += 10;
@@ -331,7 +335,7 @@ void Game(SDL_Surface *screen, Config *Confg)
                         e[i].pos.y -= 10;
                     }
                 }
-                else if (p.direction == 2 )
+                else if (p.direction == 2)
                 {
                     scrolling(&Backg, p.direction, 10);
                     p.posABS.y -= 10;
@@ -439,7 +443,6 @@ void Game(SDL_Surface *screen, Config *Confg)
             {
             case SDLK_t:
                 // EnigmeTexte
-                printf("d5all\n");
                 AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque[0]);
                 SDL_WaitEvent(&event);
 
@@ -469,6 +472,8 @@ void Game(SDL_Surface *screen, Config *Confg)
                     screen = SDL_SetVideoMode(Width, Height, Bpp, SDL_HWSURFACE);
                 Confg->Fullscr *= -1;
                 AfficherBackg(Backg, screen);
+                Anim = animer_background(&Backg, screen, Anim);
+
                 AfficherImg(tabGameUI[0], screen);
                 SDL_Flip(screen);
                 break;
@@ -771,9 +776,6 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 }
                 else
                 {
-                    printf("posX: %d", p1.pos.x);
-                    printf("width /2 = %d\n", Width / 2);
-
                     if (p1.direction == -1 && p1.pos.x < (Width / 2))
                     {
                         p1.direction = 0;
@@ -1552,7 +1554,6 @@ void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
                     Rep = 3;
                 break;
             }
-            printf("Rep: %d\n", Rep);
             if ((Rep > 0 && Rep < 4) || e.TimeOut)
             {
                 if (Rep == e.NumRepC && !e.TimeOut)
@@ -1573,6 +1574,7 @@ void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
             }
         }
         SDL_ShowCursor(SDL_DISABLE);
+        Free_Enigme1(&e);
     }
     else
         printf("Out Of Choice\n");
