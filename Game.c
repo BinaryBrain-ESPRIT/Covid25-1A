@@ -183,9 +183,11 @@ void Game(SDL_Surface *screen, Config *Confg)
 
     minimap map;
 
+    //Init Backround Masque
     background Backg;
     SDL_Surface *Masque[3];
     Masque[0] = IMG_Load("assets/Levels/Masque.jpg");
+
     Image tabGameUI[5];
     Text MoneyTxt, GameTimeTxt;
 
@@ -206,6 +208,7 @@ void Game(SDL_Surface *screen, Config *Confg)
 
     // Init LevelBackg
     InitGameBackg(&Backg, 0, 0, Width, Height, "assets/Levels/Level1.png");
+
     // Init GameUI
     initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
     initImg(&tabGameUI[1], 1654, 81, "assets/GameUi/MoneyTime.png");
@@ -227,6 +230,8 @@ void Game(SDL_Surface *screen, Config *Confg)
     SDL_ShowCursor(SDL_DISABLE);
 
     GameTimeInit = SDL_GetTicks();
+
+    //GameLoop
     while (isRunning)
     {
         // MAJTime(&GameTimeTxt,GameTimeInit);
@@ -294,9 +299,10 @@ void Game(SDL_Surface *screen, Config *Confg)
         }
         else
         {
+            //Scrolling 
             if (collisionPH(p, Masque[0]) != p.direction)
             {
-                if (p.pos.x >= screen->w / 2 && p.direction == 1 && p.posABS.x < 9390 && !(p.posABS.y > 530 && p.posABS.y < 1310))
+                if (p.pos.x >= screen->w / 2 && p.direction == 1)
                 {
                     scrolling(&Backg, p.direction, 10);
                     p.posABS.x += 10;
@@ -316,7 +322,7 @@ void Game(SDL_Surface *screen, Config *Confg)
                         e[i].pos.x += 10;
                     }
                 }
-                else if (p.direction == -2 /*&& p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y < 1340*/)
+                else if (p.direction == -2 )
                 {
                     scrolling(&Backg, p.direction, 10);
                     p.posABS.y += 10;
@@ -325,7 +331,7 @@ void Game(SDL_Surface *screen, Config *Confg)
                         e[i].pos.y -= 10;
                     }
                 }
-                else if (p.direction == 2 /*&& p.posABS.x > 6800 && p.posABS.x < 6850 && p.posABS.y > 510*/)
+                else if (p.direction == 2 )
                 {
                     scrolling(&Backg, p.direction, 10);
                     p.posABS.y -= 10;
@@ -1023,6 +1029,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
     for (int i = 0; i < 2; i++)
         Liberer_Img(tabGameUI[i]);
 }
+
 void MenuInGame(SDL_Surface *screen, Config *Confg, int *Opened, int *isRunning)
 {
     Image tabMG[11];
