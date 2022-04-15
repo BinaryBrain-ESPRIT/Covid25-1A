@@ -140,7 +140,7 @@ void SelectLevel(SDL_Surface *screen, Config *Confg)
             {
                 Confg->Level = 1;
                 Game(screen, Confg);
-                //MultiPlayerGame(screen, Confg);
+                // MultiPlayerGame(screen, Confg);
                 isRunning = 0;
             }
             else if (x > 846 && x < 1084 && y > 765 && y < 821)
@@ -176,9 +176,9 @@ void Game(SDL_Surface *screen, Config *Confg)
     SDL_Color TimeColor = {193, 39, 45};
     SDL_Color Black = {0, 0, 0};
     SDL_Color Red = {193, 39, 45};
-    //Declara Player 
+    // Declara Player
     Player p;
-    //Declara Ennemy
+    // Declara Ennemy
     Ennemy e[5];
 
     minimap map;
@@ -1511,7 +1511,7 @@ void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
         {
             GameTimeS = ((SDL_GetTicks() - GameTimeInit) / 1000) % 60;
             GameTimeM = ((SDL_GetTicks() - GameTimeInit) / 1000) / 60;
-            printf("Rep: %d\n", Rep);
+
             animer1(&e, screen);
 
             SDL_PollEvent(&event);
@@ -1549,17 +1549,17 @@ void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
             {
                 if (Rep == e.NumRepC && !e.TimeOut)
                 {
-                    // AfficherImg(e.Backg[1], screen);
+                    AfficherImg(e.Backg[1], screen);
                     printf("Winner\n");
-                    // SDL_Flip(screen);
-                    // SDL_Delay(2000);
+                    SDL_Flip(screen);
+                    SDL_Delay(2000);
                 }
                 else
                 {
-                    // AfficherImg(e.Backg[2], screen);
+                    AfficherImg(e.Backg[2], screen);
                     printf("Looser\n");
-                    // SDL_Flip(screen);
-                    // SDL_Delay(2000);
+                    SDL_Flip(screen);
+                    SDL_Delay(2000);
                 }
                 done = 1;
             }
