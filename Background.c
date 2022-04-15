@@ -56,7 +56,7 @@ int collisionPH(Player p, SDL_Surface *Masque)
         // Right
         color = GetPixel(Masque, posX1, i);
         if (color.r == 255 && color.g == 255 && color.b == 1)
-            return 1;
+            return 1;  
 
         // Left
         color = GetPixel(Masque, posX, i);
