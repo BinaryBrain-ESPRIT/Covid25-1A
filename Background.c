@@ -3,6 +3,8 @@
 
 void InitGameBackg(background *Backg, int x, int y, int W, int H, char NameImg[])
 {
+    Image AnimBackg[10];
+
     Backg->img = IMG_Load(NameImg);
     Backg->pos.x = x;
     Backg->pos.y = y;
@@ -13,6 +15,12 @@ void InitGameBackg(background *Backg, int x, int y, int W, int H, char NameImg[]
     Backg->cam.y = 0;
     Backg->cam.w = W;
     Backg->cam.h = H;
+
+    for (int i = 0; i < 9; i++)
+    {
+        sprintf(AnimBackg[i].NameImg, "assets/Animation/Backg/%d.png", i + 1);
+        initImg(&AnimBackg[i], 2641, 600, AnimBackg[i].NameImg);
+    }
 }
 
 void AfficherBackg(background Backg, SDL_Surface *screen)
@@ -20,8 +28,11 @@ void AfficherBackg(background Backg, SDL_Surface *screen)
     SDL_BlitSurface(Backg.img, &Backg.cam, screen, &Backg.pos);
 }
 
-void animer_background(background *e)
+void animer_background(Image1 AnimBackg[], SDL_Surface *screen)
 {
+    for (int i = 0; i < 9; i++)
+        SDL_BlitSurface(AnimBackg[i].img,NULL,screen,&AnimBackg[i].pos);
+    
 }
 
 SDL_Color GetPixel(SDL_Surface *pSurface, int x, int y)
@@ -41,7 +52,7 @@ SDL_Color GetPixel(SDL_Surface *pSurface, int x, int y)
     return color;
 }
 
-//Jaune Droite Gauche
+// Jaune Droite Gauche
 int collisionPH(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -67,7 +78,7 @@ int collisionPH(Player p, SDL_Surface *Masque)
     return 0;
 }
 
-//Jaune
+// Jaune
 int HighHeight(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -86,7 +97,7 @@ int HighHeight(Player p, SDL_Surface *Masque)
     return 0;
 }
 
-//Rouge
+// Rouge
 int isTrapped(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -104,7 +115,7 @@ int isTrapped(Player p, SDL_Surface *Masque)
     return 0;
 }
 
-//Jaune
+// Jaune
 int isGround(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -123,7 +134,7 @@ int isGround(Player p, SDL_Surface *Masque)
     return 0;
 }
 
-//Bleu
+// Bleu
 int EnigmeDetected(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -146,7 +157,7 @@ int EnigmeDetected(Player p, SDL_Surface *Masque)
     return 0;
 }
 
-//Vert
+// Vert
 int Interaction(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;

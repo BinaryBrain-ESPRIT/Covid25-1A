@@ -3,6 +3,8 @@
         "sdl.h": "c",
         "ennemy.h": "c",
         "main_fn.h": "c",
-        "background.h": "c"
+        "background.h": "c",
+        "text_image.h": "c",
+        "player.h": "c"
     }
 }

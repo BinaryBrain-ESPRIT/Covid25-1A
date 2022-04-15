@@ -179,18 +179,15 @@ void Game(SDL_Surface *screen, Config *Confg)
     Player p;
     // Declara Ennemy
     Ennemy e[5];
-    Image AnimBackg[10];
+
     minimap map;
 
     // Init Backround Masque
     background Backg;
     SDL_Surface *Masque[3];
     Masque[0] = IMG_Load("assets/Levels/Masque.jpg");
-    for (int i = 0; i < 9; i++)
-    {
-        sprintf(AnimBackg[i].NameImg, "assets/Animation/Backg/%d.png", i + 1);
-        initImg(&AnimBackg[i], 2641, 600, AnimBackg[i].NameImg);
-    }
+
+    Image1 AnimBackg[10];
 
     Image tabGameUI[5];
     Text MoneyTxt, GameTimeTxt;
@@ -257,12 +254,9 @@ void Game(SDL_Surface *screen, Config *Confg)
 
         // Affichage Backg
         AfficherBackg(Backg, screen);
-        for (int i = 0; i < 9; i++)
-        {
-            AfficherImg(AnimBackg[i], screen);
-        }
+        animer_background(AnimBackg,screen);
 
-        afficherminimap(map, screen);
+            afficherminimap(map, screen);
         // Affichage GameUI
         for (int i = 0; i < 2; i++)
             AfficherImg(tabGameUI[i], screen);
@@ -475,10 +469,8 @@ void Game(SDL_Surface *screen, Config *Confg)
                 else
                     screen = SDL_SetVideoMode(Width, Height, Bpp, SDL_HWSURFACE);
                 Confg->Fullscr *= -1;
-                AfficherBackg(Backg, screen);
-
-                for (int i = 0; i < 9; i++)
-                    AfficherImg(AnimBackg[i], screen);
+                AfficherBackg(Backg, screen);   
+                animer_background(AnimBackg,screen);
 
                 AfficherImg(tabGameUI[0], screen);
                 SDL_Flip(screen);
@@ -1560,7 +1552,6 @@ void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
                     Rep = 3;
                 break;
             }
-            printf("Rep: %d\n", Rep);
             if ((Rep > 0 && Rep < 4) || e.TimeOut)
             {
                 if (Rep == e.NumRepC && !e.TimeOut)
@@ -1586,10 +1577,3 @@ void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
     else
         printf("Out Of Choice\n");
 }
-
-
-
-
-
-
-

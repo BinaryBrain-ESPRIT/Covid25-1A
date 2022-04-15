@@ -11,9 +11,16 @@ typedef struct
     SDL_Rect cam;
 } background;
 
+typedef struct
+{
+    SDL_Rect pos;
+    SDL_Surface *img;
+    char NameImg[100];
+} Image1;
+
 void InitGameBackg(background *Backg, int x, int y, int W, int H, char NameImg[]);
 void AfficherBackg(background Backg, SDL_Surface *screen);
-void animer_background(background *e);
+void animer_background(Image1 AnimBackg[], SDL_Surface *screen);
 int collisionPH(Player p, SDL_Surface *Masque);
 int isTrapped(Player p, SDL_Surface *Masque);
 int isGround(Player p, SDL_Surface *Masque);
