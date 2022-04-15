@@ -1581,6 +1581,7 @@ void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
             }
         }
         SDL_ShowCursor(SDL_DISABLE);
+        Free_Enigme1(&e);
     }
     else
         printf("Out Of Choice\n");
