@@ -9,7 +9,7 @@ typedef struct
   int NumPlayer;
   char PlayerName[50];
   int nbreVie;
-  int isJumped, posInit;
+  int isJumped, posInit; //PosInit Position Before Jump
   SDL_Rect pos, posABS;
   SDL_Surface *img[10][10];
   double v;
@@ -21,7 +21,7 @@ typedef struct
 
 } Player;
 
-void initPerso(Player *p, int NumPlayer);
+void initPerso(Player *p,int x,int y, int NumPlayer);
 void afficherPerso(Player p, SDL_Surface *screen);
 void deplacerPerso(Player *p, int dt);
 void animerPerso(Player *p);

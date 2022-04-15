@@ -1,15 +1,18 @@
 #include "Background.h"
 #include "Main_Fn.h"
 
-void InitGameBackg(background *Backg, char NameImg[])
+void InitGameBackg(background *Backg, int x, int y, int W, int H, char NameImg[])
 {
     Backg->img = IMG_Load(NameImg);
-    Backg->pos.x = 0;
-    Backg->pos.y = 0;
+    Backg->pos.x = x;
+    Backg->pos.y = y;
+    Backg->pos.w = W;
+    Backg->pos.h = H;
+
     Backg->cam.x = 0;
     Backg->cam.y = 0;
-    Backg->cam.w = Width;
-    Backg->cam.h = Height;
+    Backg->cam.w = W;
+    Backg->cam.h = H;
 }
 
 void AfficherBackg(background Backg, SDL_Surface *screen)
@@ -38,6 +41,7 @@ SDL_Color GetPixel(SDL_Surface *pSurface, int x, int y)
     return color;
 }
 
+//Jaune Droite Gauche
 int collisionPH(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -52,9 +56,8 @@ int collisionPH(Player p, SDL_Surface *Masque)
         // Right
         color = GetPixel(Masque, posX1, i);
         if (color.r == 255 && color.g == 255 && color.b == 1)
-        {
             return 1;
-        }
+
         // Left
         color = GetPixel(Masque, posX, i);
         if (color.r == 255 && color.g == 255 && color.b == 1)
@@ -63,6 +66,8 @@ int collisionPH(Player p, SDL_Surface *Masque)
 
     return 0;
 }
+
+//Jaune
 int HighHeight(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -73,7 +78,7 @@ int HighHeight(Player p, SDL_Surface *Masque)
 
     for (int i = posX; i <= posX1; i++)
     {
-        // Bot Yellow
+        // TOP Yellow
         color = GetPixel(Masque, i, posY);
         if (color.r == 255 && color.g == 255 && color.b == 1)
             return 1;
@@ -81,6 +86,7 @@ int HighHeight(Player p, SDL_Surface *Masque)
     return 0;
 }
 
+//Rouge
 int isTrapped(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -98,6 +104,7 @@ int isTrapped(Player p, SDL_Surface *Masque)
     return 0;
 }
 
+//Jaune
 int isGround(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -116,6 +123,7 @@ int isGround(Player p, SDL_Surface *Masque)
     return 0;
 }
 
+//Bleu
 int EnigmeDetected(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -127,17 +135,18 @@ int EnigmeDetected(Player p, SDL_Surface *Masque)
     for (int i = posY; i <= posY1 - 10; i++)
     {
         // Right Green
-        color = GetPixel(Masque, posX, i);
-        printf("R: %d G: %d B: %d\n", color.r, color.g, color.b);
+        color = GetPixel(Masque, posX1, i);
         if (color.r == 0 && color.g == 0 && color.b == 254)
             return 1;
         // Left Green
-        /*color = GetPixel(Masque, posX1, i);
+        /*color = GetPixel(Masque, posX, i);
         if (color.r == 0 && color.g == 0 && color.b == 254)
             return 1;*/
     }
     return 0;
 }
+
+//Vert
 int Interaction(Player p, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -173,25 +182,21 @@ int Interaction(Player p, SDL_Surface *Masque)
     return 0;
 }
 
-void scrolling(background *Backg, background *Masque, int direction, int pas_Avancement)
+void scrolling(background *Backg, int direction, int pas_Avancement)
 {
     switch (direction)
     {
     case 1:
         Backg->cam.x += pas_Avancement;
-        // Masque->cam.x += pas_Avancement;
         break;
     case -1:
         Backg->cam.x -= pas_Avancement;
-        // Masque->cam.x -= pas_Avancement;
         break;
     case 2:
         Backg->cam.y -= pas_Avancement;
-        // Masque->cam.y -= pas_Avancement;
         break;
     case -2:
         Backg->cam.y += pas_Avancement;
-        // Masque->cam.y += pas_Avancement;
         break;
     }
 }
