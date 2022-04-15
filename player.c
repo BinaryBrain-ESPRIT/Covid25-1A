@@ -1,34 +1,40 @@
 #include "player.h"
 #include "Background.h"
-void initPerso(Player *p, int x, int y, int NumPlayer)
+void initPerso(Player *p, int x, int y, int NumPlayer) 
 {
     int n;
     char NomImg[100];
+    //Player Position on screen
     p->pos.x = x;
     p->pos.y = y;
+    //Player Position on Map
     p->posABS.x = 250;
     p->posABS.y = y;
     p->nbreVie = 3;
     p->score = 0;
+    //Vitesse
     p->v = 10;
     p->direction = 0;
+    //Index I J Matrice
     p->animI = 0;
     p->animJ = 0;
+    //Flipped Picture
     p->flipped = 0;
+
     p->AnimP_Idle = 0;
     p->AnimP_Attack = 0;
     p->AnimP_Run = 0;
     p->AnimP_Die = 0;
+
     p->NumPlayer = NumPlayer;
     p->isJumped = 0;
 
     for (int i = 0; i < 8; i++)
     {
-
         if (i == 0 || i == 1)
-            if (NumPlayer != 3)
+            if (NumPlayer != 3) 
                 n = 7;
-            else
+            else // player 3 is malek 
                 n = 1;
         else if (i == 2 || i == 3)
             if (NumPlayer != 3)
@@ -45,8 +51,12 @@ void initPerso(Player *p, int x, int y, int NumPlayer)
 
         for (int j = 0; j < n; j++)
         {
-            sprintf(NomImg, "assets/Animation/Player%d/%d/%d.png", NumPlayer, i, j + 1);
-            p->img[i][j] = IMG_Load(NomImg);
+            sprintf(NomImg, "assets/Animation/Player%d/%d/%d.png", NumPlayer, i, j + 1); // selecting player Images
+            /**
+             * i = Animation Type
+             * j = Animation Image
+             **/
+            p->img[i][j] = IMG_Load(NomImg); // Loading Images
         }
     }
 }
@@ -91,7 +101,7 @@ void animerPerso(Player *p)
         switch (p->direction)
         {
         case 0:
-            if (p->AnimP_Idle % 10 == 0)
+            if (p->AnimP_Idle > 10)
             {
                 if (!p->flipped)
                     p->animI = 0;
@@ -102,14 +112,14 @@ void animerPerso(Player *p)
                     n = 5;
                 else
                     n = 0;
-
+                // n: NbreImage
                 if (p->animJ >= n)
                     p->animJ = 0;
                 else
                     p->animJ++;
                 p->AnimP_Idle = 0;
             }
-            p->AnimP_Idle += 2;
+            p->AnimP_Idle ++;
 
             break;
         case 1:
