@@ -170,7 +170,7 @@ void Game(SDL_Surface *screen, Config *Confg)
     const Uint8 *state = SDL_GetKeyState(NULL);
     char NameAnimImg[50];
     SDL_Event event;
-
+    int Anim = 0;
     SDL_Color MoneyColor = {57, 181, 74};
     SDL_Color TimeColor = {193, 39, 45};
     SDL_Color Black = {0, 0, 0};
@@ -254,9 +254,11 @@ void Game(SDL_Surface *screen, Config *Confg)
 
         // Affichage Backg
         AfficherBackg(Backg, screen);
-        animer_background(AnimBackg,screen);
+        printf("Anim 1: %d\n", Anim);
+        Anim = animer_background(&Backg, screen, Anim);
+        printf("Anim 2: %d\n", Anim);
 
-            afficherminimap(map, screen);
+        afficherminimap(map, screen);
         // Affichage GameUI
         for (int i = 0; i < 2; i++)
             AfficherImg(tabGameUI[i], screen);
@@ -469,8 +471,8 @@ void Game(SDL_Surface *screen, Config *Confg)
                 else
                     screen = SDL_SetVideoMode(Width, Height, Bpp, SDL_HWSURFACE);
                 Confg->Fullscr *= -1;
-                AfficherBackg(Backg, screen);   
-                animer_background(AnimBackg,screen);
+                AfficherBackg(Backg, screen);
+                Anim = animer_background(&Backg, screen, Anim);
 
                 AfficherImg(tabGameUI[0], screen);
                 SDL_Flip(screen);

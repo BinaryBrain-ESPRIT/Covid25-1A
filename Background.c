@@ -3,7 +3,6 @@
 
 void InitGameBackg(background *Backg, int x, int y, int W, int H, char NameImg[])
 {
-    Image AnimBackg[10];
 
     Backg->img = IMG_Load(NameImg);
     Backg->pos.x = x;
@@ -15,11 +14,13 @@ void InitGameBackg(background *Backg, int x, int y, int W, int H, char NameImg[]
     Backg->cam.y = 0;
     Backg->cam.w = W;
     Backg->cam.h = H;
-
+    Backg->Anim = 0;
     for (int i = 0; i < 9; i++)
     {
-        sprintf(AnimBackg[i].NameImg, "assets/Animation/Backg/%d.png", i + 1);
-        initImg(&AnimBackg[i], 2641, 600, AnimBackg[i].NameImg);
+        sprintf(Backg->AnimBackg[i].NameImg, "assets/Animation/Backg/%d.png", i + 1);
+        Backg->AnimBackg[i].img = IMG_Load(Backg->AnimBackg[i].NameImg);
+        Backg->AnimBackg[i].pos.x = 2640;
+        Backg->AnimBackg[i].pos.y = 627;
     }
 }
 
@@ -28,11 +29,28 @@ void AfficherBackg(background Backg, SDL_Surface *screen)
     SDL_BlitSurface(Backg.img, &Backg.cam, screen, &Backg.pos);
 }
 
-void animer_background(Image1 AnimBackg[], SDL_Surface *screen)
+int animer_background(background *Backg, SDL_Surface *screen, int Anim)
 {
-    for (int i = 0; i < 9; i++)
-        SDL_BlitSurface(AnimBackg[i].img,NULL,screen,&AnimBackg[i].pos);
-    
+    printf("%d\n", Backg->Anim);
+    if (Backg->Anim > 5)
+    {
+        printf("Anim 1: %d\n", Anim);
+        if (Anim < 8    )
+        {
+            printf("Name : %s\n", Backg->AnimBackg[Anim].NameImg);
+            SDL_BlitSurface(Backg->AnimBackg[Anim].img, NULL, screen, &Backg->AnimBackg[Anim].pos);
+            Anim++;
+        }
+        else
+            Anim = 0;
+        Backg->Anim = 0;
+    }
+    else
+    {
+        SDL_BlitSurface(Backg->AnimBackg[Anim].img, NULL, screen, &Backg->AnimBackg[Anim].pos);
+        Backg->Anim++;
+    }
+    return Anim;
 }
 
 SDL_Color GetPixel(SDL_Surface *pSurface, int x, int y)

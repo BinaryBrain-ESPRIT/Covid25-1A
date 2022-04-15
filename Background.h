@@ -8,19 +8,20 @@ typedef struct
 {
     SDL_Rect pos;
     SDL_Surface *img;
-    SDL_Rect cam;
-} background;
-
+    char NameImg[100];
+} Image1;
 typedef struct
 {
     SDL_Rect pos;
     SDL_Surface *img;
-    char NameImg[100];
-} Image1;
+    SDL_Rect cam;
+    Image1 AnimBackg[10];
+    int Anim;
+} background;
 
 void InitGameBackg(background *Backg, int x, int y, int W, int H, char NameImg[]);
 void AfficherBackg(background Backg, SDL_Surface *screen);
-void animer_background(Image1 AnimBackg[], SDL_Surface *screen);
+int animer_background(background *Backg, SDL_Surface *screen, int Anim);
 int collisionPH(Player p, SDL_Surface *Masque);
 int isTrapped(Player p, SDL_Surface *Masque);
 int isGround(Player p, SDL_Surface *Masque);
