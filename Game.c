@@ -7,7 +7,6 @@
 
 void AffichageMainMenu(SDL_Surface *screen, Text tabT[], Text tabAT[], Image tabI[][3], int j, int l, int p)
 {
-
     AfficherImg(tabI[l - 1][p - 1], screen);
     if (j != 0)
     {
@@ -1582,6 +1581,7 @@ void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
             }
         }
         SDL_ShowCursor(SDL_DISABLE);
+        Free_Enigme1(&e);
     }
     else
         printf("Out Of Choice\n");
