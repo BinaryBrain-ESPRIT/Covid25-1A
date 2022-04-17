@@ -19,4 +19,5 @@ int MenuInGame(SDL_Surface *screen, Config *Confg, int *Opened, int *isRunning);
 void MenuOpt(SDL_Surface *screen, Config *Confg);
 void AfficherEnigmeImage(SDL_Surface *screen, Config *Confg, int GameTimeInit, SDL_Surface *Masque, Player p);
 void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, SDL_Surface *Masque);
+
 #endif

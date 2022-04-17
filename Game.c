@@ -1516,7 +1516,7 @@ void MenuOpt(SDL_Surface *screen, Config *Confg)
                         SDL_Flip(screen);
                     }
                     int x = tabMO[2].pos.x;
-                    if (x < 730)
+                    if (x < 750)
                     {
                         // Mix_VolumeChunk(sound, 0);
                         Mix_VolumeMusic(0);
@@ -1611,7 +1611,6 @@ void AffichageCredits(SDL_Surface *screen, Config *Confg)
 
     while (isRunning)
     {
-
         SDL_PollEvent(&event);
         switch (event.type)
         {
