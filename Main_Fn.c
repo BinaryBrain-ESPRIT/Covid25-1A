@@ -22,6 +22,7 @@ int Setup(Config *Confg)
         printf("%s\n", Mix_GetError());
         return 0;
     }
+
     SDL_WM_SetCaption("Covid 25", NULL);
 
     while (fscanf(f, "%s : %d", Nom, &Value) != EOF)
@@ -64,7 +65,6 @@ void InitTxt_en(Text *tabMT, Text *tabMAT)
 {
     SDL_Color Black = {0, 0, 0};
     SDL_Color Red = {173, 33, 33};
-    SDL_Color White = {255,255,255};
     initTxt(&tabMT[0], 31, 380, Black, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", "New Game");
     initTxt(&tabMT[1], 31, 490, Black, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", "Options");
     initTxt(&tabMT[2], 31, 600, Black, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", "Score");
@@ -104,15 +104,15 @@ void InitImg_en(Image *tabMO, Image *tabMAO)
 
 void InitTxt_fr(Text *tabMT, Text *tabMAT)
 {
-    SDL_Color White = {0, 0, 111};
+    SDL_Color Black = {0, 0, 0};
     SDL_Color Red = {173, 33, 33};
 
-    initTxt(&tabMT[0], 31, 380, White, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", "Nouveau Jeu");
-    initTxt(&tabMT[1], 31, 490, White, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", "Parametre");
-    initTxt(&tabMT[2], 31, 600, White, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", "Score");
-    initTxt(&tabMT[3], 31, 710, White, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", "Shop");
-    initTxt(&tabMT[4], 31, 821, White, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", "Credits");
-    initTxt(&tabMT[5], 31, 931, White, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", "Quitter");
+    initTxt(&tabMT[0], 31, 380, Black, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", "Nouveau Jeu");
+    initTxt(&tabMT[1], 31, 490, Black, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", "Parametre");
+    initTxt(&tabMT[2], 31, 600, Black, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", "Score");
+    initTxt(&tabMT[3], 31, 710, Black, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", "Shop");
+    initTxt(&tabMT[4], 31, 821, Black, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", "Credits");
+    initTxt(&tabMT[5], 31, 931, Black, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", "Quitter");
 
     initTxt(&tabMAT[0], 31, 380, Red, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", "Nouveau Jeu");
     initTxt(&tabMAT[1], 31, 490, Red, 70, "assets/Font/AznKnucklesTrial-z85pa.otf", "Parametre");
@@ -131,12 +131,12 @@ void PlayMusic(char NameMusic[], Mix_Music *music)
 void PlayChunkMusic(char NameMusic[], Mix_Chunk *sound)
 {
     sound = Mix_LoadWAV(NameMusic);
-    Mix_PlayChannel(-1, sound, 0);
+    Mix_PlayChannel(-1, sound, 0);   
 }
 
 void Liberer_MusCh(Mix_Chunk *sound)
 {
-    Mix_FreeChunk(sound);
+    Mix_FreeChunk(sound); 
 }
 
 void Liberer_Mus(Mix_Music *music)

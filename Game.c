@@ -40,7 +40,7 @@ void AffichageMenuOpt(SDL_Surface *screen, Image tabMO[], Image tabMAO[], int j)
 
 void ChoosePlayerName(Player *p, Config *Confg, SDL_Surface *screen)
 {
-    int isRunning = 1, x, y;
+    int isRunning = 1, x, y, i = 0;
     char c;
 
     SDL_Event event;
@@ -48,12 +48,16 @@ void ChoosePlayerName(Player *p, Config *Confg, SDL_Surface *screen)
 
     Text PlayerName;
     Image Backg;
+    Image But[2];
 
     SDL_EnableUNICODE(SDL_ENABLE);
 
     strcpy(PlayerName.Texte, "");
     InitBackg(&Backg, "assets/PlayerName/Backg.jpg");
+    initImg(&But[0], 906, 595, "assets/PlayerName/ok.png");
+    initImg(&But[1], 906, 595, "assets/PlayerName/okS.png");
     AfficherImg(Backg, screen);
+    AfficherImg(But[0], screen);
     SDL_Flip(screen);
 
     while (isRunning)
@@ -74,15 +78,14 @@ void ChoosePlayerName(Player *p, Config *Confg, SDL_Surface *screen)
                 c = toupper(c);
                 if (c > 64 && c < 91)
                     strncat(PlayerName.Texte, &c, 1);
+                initTxt(&PlayerName, 775, 470, PlayerNameColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", PlayerName.Texte);
+                AfficherImg(Backg, screen);
+                AfficherImg(But[0], screen);
+                Afficher_txt(PlayerName, screen);
+                SDL_Flip(screen);
             }
-            initTxt(&PlayerName, 775, 470, PlayerNameColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", PlayerName.Texte);
-            AfficherImg(Backg, screen);
-            Afficher_txt(PlayerName, screen);
-            SDL_Flip(screen);
-        case SDL_MOUSEBUTTONDOWN:
-            x = event.button.x;
-            y = event.button.y;
-            if (x > 921 && x < 1000 && y > 578 && y < 654)
+
+            if (event.key.keysym.sym == SDLK_RETURN)
             {
                 if (strlen(PlayerName.Texte) > 1)
                 {
@@ -90,11 +93,55 @@ void ChoosePlayerName(Player *p, Config *Confg, SDL_Surface *screen)
                     isRunning = 0;
                 }
             }
+            break;
+        case SDL_MOUSEMOTION:
+            x = event.button.x;
+            y = event.button.y;
+            int posX = But[0].pos.x;
+            int posY = But[0].pos.y;
+            int posX1 = posX + But[0].img->w;
+            int posY1 = posY + But[0].img->h;
+
+            if (x > posX && x < posX1 && y > posY && y < posY1)
+            {
+                AfficherImg(Backg, screen);
+                AfficherImg(But[1], screen);
+                Afficher_txt(PlayerName, screen);
+                SDL_Flip(screen);
+                i = 1;
+            }
+            else if (i != 0)
+            {
+                AfficherImg(Backg, screen);
+                AfficherImg(But[0], screen);
+                Afficher_txt(PlayerName, screen);
+                SDL_Flip(screen);
+                i = 0;
+            }
+
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+            x = event.button.x;
+            y = event.button.y;
+            posX = But[0].pos.x;
+            posY = But[0].pos.y;
+            posX1 = posX + But[0].img->w;
+            posY1 = posX + But[0].img->h;
+
+            if (x > posX && x < posX1 && y > posY && y < posY1)
+            {
+                if (strlen(PlayerName.Texte) > 1)
+                {
+                    strcpy(p->PlayerName, PlayerName.Texte);
+                    isRunning = 0;
+                }
+            }
+            break;
         }
     }
 
-    SDL_FreeSurface(Backg.img);
-    SDL_FreeSurface(PlayerName.surfaceText);
+    Liberer_Img(Backg);
+    Liberer_txt(PlayerName);
     SDL_EnableUNICODE(SDL_DISABLE);
 }
 
@@ -279,7 +326,7 @@ void SelectLevel(SDL_Surface *screen, Config *Confg)
     }
 
     Liberer_Img(Backg);
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 20; i++)
         Liberer_Img(LevelBut[i]);
 }
 
@@ -568,8 +615,31 @@ void Game(SDL_Surface *screen, Config *Confg)
                 if (!Opened)
                 {
                     Opened = 1;
-                    if (MenuInGame(screen, Confg, &Opened, &isRunning))
+                    int etat = MenuInGame(screen, Confg, &Opened, &isRunning);
+                    if (etat == 1)
+                    {
+                        AfficherBackg(Backg, screen);
+                        afficherPerso(p, screen);
+                        for (int i = 0; i < 5; i++)
+                            afficherEnnemy(e[i], screen);
+                        afficherminimap(map, screen);
                         MenuInGame(screen, Confg, &Opened, &isRunning);
+                    }
+                    else if (etat == -1)
+                    {
+                        for (int i = 0; i < 5; i++)
+                            LibererEnnemy(e[i]);
+
+                        LibererPlayer(p);
+
+                        LibererBackg(Backg);
+
+                        for (int i = 0; i < 2; i++)
+                            Liberer_Img(tabGameUI[i]);
+                        Game(screen, Confg);
+                        isRunning = 0;
+                    }
+                    Opened = 0;
                     SDL_WaitEvent(&event);
                 }
 
@@ -628,8 +698,19 @@ void Game(SDL_Surface *screen, Config *Confg)
 
     LibererBackg(Backg);
 
+    Liberer(&map);
+
+    for (int i = 0; i < 3; i++)
+        SDL_FreeSurface(Masque[i]);
+
     for (int i = 0; i < 2; i++)
         Liberer_Img(tabGameUI[i]);
+
+    for (int i = 0; i < 10; i++)
+        SDL_FreeSurface(AnimBackg[i].img);
+
+    Liberer_txt(MoneyTxt);
+    Liberer_txt(GameTimeTxt);
 }
 
 void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
@@ -1201,6 +1282,10 @@ int MenuInGame(SDL_Surface *screen, Config *Confg, int *Opened, int *isRunning)
         case SDL_MOUSEBUTTONDOWN:
             switch (i)
             {
+            case 1:
+                return 0;
+            case 2:
+                return -1;
             case 3:
                 MenuOpt(screen, Confg);
                 return 1;
@@ -1511,21 +1596,22 @@ void AffichageCredits(SDL_Surface *screen, Config *Confg)
     SDL_Event event;
     for (int i = 0; i < 181; i++)
     {
+        if (i > 0)
+            Liberer_Img(tab[i - 1]);
         sprintf(tab[i].NameImg, "assets/Credits/%d.jpg", i);
         InitBackg(&tab[i], tab[i].NameImg);
-    }
-    for (int i = 0; i < 181; i++)
-    {
-        SDL_Delay(10);
         AfficherImg(tab[i], screen);
         SDL_Flip(screen);
+        SDL_Delay(10);
         if (i == 89)
             SDL_Delay(5000);
         if (i == 179)
             SDL_Delay(5000);
     }
+
     while (isRunning)
     {
+
         SDL_PollEvent(&event);
         switch (event.type)
         {
@@ -1538,10 +1624,6 @@ void AffichageCredits(SDL_Surface *screen, Config *Confg)
                 isRunning = 0;
             break;
         }
-    }
-    for (int i = 0; i < 181; i++)
-    {
-        Liberer_Img(tab[i]);
     }
 }
 

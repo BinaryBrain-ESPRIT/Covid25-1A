@@ -215,4 +215,5 @@ void LibererPlayer(Player p)
             SDL_FreeSurface(p.img[i][j]);
         }
     }
+    
 }

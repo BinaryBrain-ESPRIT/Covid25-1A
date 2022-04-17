@@ -9,6 +9,7 @@ typedef struct
 {
     SDL_Surface *image, *image1, *playerTag, *zombieTag[5];
     SDL_Rect pos, pos1, playerTagPos, zombieTagPos[5];
+    int EnnemyDie[5];
 } minimap;
 typedef struct Score
 {

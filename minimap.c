@@ -27,7 +27,8 @@ void afficherminimap(minimap m, SDL_Surface *screen)
     SDL_BlitSurface(m.playerTag, NULL, screen, &m.playerTagPos);
     for (int i = 0; i < 5; i++)
     {
-        SDL_BlitSurface(m.zombieTag[i], NULL, screen, &m.zombieTagPos[i]);
+        if (!m.EnnemyDie[i])
+            SDL_BlitSurface(m.zombieTag[i], NULL, screen, &m.zombieTagPos[i]);
     }
 }
 void MAJMinimap(SDL_Rect PosJoueur, Ennemy e[], minimap *m, int redimensionnement)
@@ -36,6 +37,8 @@ void MAJMinimap(SDL_Rect PosJoueur, Ennemy e[], minimap *m, int redimensionnemen
     m->playerTagPos.y = m->pos.y + ((PosJoueur.y * redimensionnement) / 100);
     for (int i = 0; i < 5; i++)
     {
+        if (e[i].isKilled)
+            m->EnnemyDie[i] = 1;
         m->zombieTagPos[i].x = m->pos.x + ((e[i].posABS.x * redimensionnement) / 100);
         m->zombieTagPos[i].y = m->pos.y + ((e[i].posABS.y * redimensionnement) / 100);
     }
@@ -58,11 +61,11 @@ void MAJTime(Text *GameTimeTxt, int GameTimeInit)
     GameTimeSPred = GameTimeS;
 }
 
-void SaveScore( char PlayerName[], int Score,char Time[])
+void SaveScore(char PlayerName[], int Score, char Time[])
 {
     FILE *f = fopen("Data/Score.txt", "a");
 
-    fprintf(f,"%s %s %d\n",PlayerName,Time,Score);
+    fprintf(f, "%s %s %d\n", PlayerName, Time, Score);
     fclose(f);
 }
 
