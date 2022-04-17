@@ -74,7 +74,7 @@ void Motion_MG(Image tabMG[], SDL_Surface *screen, SDL_Event event, int *i)
             }
             break;
         }
-        else 
+        else
         {
             if (*i != 0)
             {
@@ -146,4 +146,28 @@ void Motion_MO(SDL_Surface *screen, Config *Confg, SDL_Event event, Image *tabMO
             SDL_Flip(screen);
         }
     }
+}
+
+int MotionSL(Image LevelBut[], int j, SDL_Event event)
+{
+    SDL_Rect tabPos[20];
+
+    int x = event.motion.x;
+    int y = event.motion.y;
+    int posX, posX1, posY, posY1;
+
+    for (int i = 0; i < 4; i++)
+    {
+        posX = LevelBut[i].pos.x;
+        posY = LevelBut[i].pos.y;
+        posX1 = posX + LevelBut[i].img->w;
+        posY1 = posY + LevelBut[i].img->h;
+
+        if (x > posX && x < posX1 && y > posY && y < posY1)
+            return i + 10;
+    }
+    if (j != -1)
+        return -1;
+    else
+        return -2;
 }

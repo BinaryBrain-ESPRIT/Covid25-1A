@@ -101,25 +101,40 @@ void ChoosePlayerName(Player *p, Config *Confg, SDL_Surface *screen)
 void SelectLevel(SDL_Surface *screen, Config *Confg)
 {
     SDL_Event event;
-    Image LevelBut[6];
+    Image LevelBut[20];
     Image Backg;
     int isRunning = 1;
     int x, y;
+    int j = -2;
     // Init
 
-    InitBackg(&Backg, "assets/SelectLevel/SelectLevel.png");
-    initImg(&LevelBut[0], 573, 765, "assets/SelectLevel/level1.png");
-    initImg(&LevelBut[1], 846, 765, "assets/SelectLevel/level2.png");
-    initImg(&LevelBut[2], 1110, 765, "assets/SelectLevel/level3.png");
-    initImg(&LevelBut[3], 573, 765, "assets/SelectLevel/level1S.png");
-    initImg(&LevelBut[4], 846, 765, "assets/SelectLevel/level2S.png");
-    initImg(&LevelBut[5], 1110, 765, "assets/SelectLevel/level3S.png");
+    InitBackg(&Backg, "assets/SelectLevel/Background.png");
+    initImg(&LevelBut[0], 574, 764, "assets/SelectLevel/level1.png");
+    initImg(&LevelBut[1], 841, 764, "assets/SelectLevel/level2.png");
+    initImg(&LevelBut[2], 1112, 764, "assets/SelectLevel/level3.png");
+    initImg(&LevelBut[3], 829, 879, "assets/SelectLevel/Cancel.png");
+    initImg(&LevelBut[4], 574, 764, "assets/SelectLevel/Solo.png");
+    initImg(&LevelBut[5], 697, 764, "assets/SelectLevel/Multi.png");
+    initImg(&LevelBut[6], 841, 764, "assets/SelectLevel/Solo.png");
+    initImg(&LevelBut[7], 964, 764, "assets/SelectLevel/Multi.png");
+    initImg(&LevelBut[8], 1112, 764, "assets/SelectLevel/Solo.png");
+    initImg(&LevelBut[9], 1235, 764, "assets/SelectLevel/Multi.png");
+    initImg(&LevelBut[10], 574, 764, "assets/SelectLevel/level1S.png");
+    initImg(&LevelBut[11], 841, 764, "assets/SelectLevel/level2S.png");
+    initImg(&LevelBut[12], 1112, 764, "assets/SelectLevel/level3S.png");
+    initImg(&LevelBut[13], 829, 879, "assets/SelectLevel/CancelS.png");
+    initImg(&LevelBut[14], 574, 764, "assets/SelectLevel/SoloS.png");
+    initImg(&LevelBut[15], 697, 764, "assets/SelectLevel/MultiS.png");
+    initImg(&LevelBut[16], 1110, 764, "assets/SelectLevel/SoloS.png");
+    initImg(&LevelBut[17], 1110, 764, "assets/SelectLevel/MultiS.png");
+    initImg(&LevelBut[18], 1110, 764, "assets/SelectLevel/SoloS.png");
+    initImg(&LevelBut[19], 1110, 764, "assets/SelectLevel/MultiS.png");
 
     // Affichage
     AfficherImg(Backg, screen);
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 4; i++)
         AfficherImg(LevelBut[i], screen);
-    SDL_Flip(screen);
+
     while (isRunning)
     {
         SDL_PollEvent(&event);
@@ -132,31 +147,26 @@ void SelectLevel(SDL_Surface *screen, Config *Confg)
         case SDL_KEYDOWN:
             if (event.key.keysym.sym == SDLK_ESCAPE)
                 isRunning = 0;
+        case SDL_MOUSEMOTION:
+            j = MotionSL(LevelBut, j, event);
+            
+            if (j != -1)
+            {
+                AfficherImg(LevelBut[j], screen);
+            }
+            else if (j == -1)
+            {
+                AfficherImg(Backg, screen);
+                for (int i = 0; i < 4; i++)
+                    AfficherImg(LevelBut[i], screen);
+            }
         case SDL_MOUSEBUTTONDOWN:
             x = event.button.x;
             y = event.button.y;
-            if (x > 571 && x < 809 && y > 765 && y < 821)
-            {
-                Confg->Level = 1;
-                 Game(screen, Confg);
-                // MultiPlayerGame(screen, Confg);
-                isRunning = 0;
-            }
-            else if (x > 846 && x < 1084 && y > 765 && y < 821)
-            {
-                Confg->Level = 2;
-                Game(screen, Confg);
-                isRunning = 0;
-            }
-            else if (x > 1110 && x < 1348 && y > 765 && y < 821)
-            {
-                Confg->Level = 3;
-                Game(screen, Confg);
-                isRunning = 0;
-            }
-
+            printf("j = %d\n", j);
             break;
         }
+        SDL_Flip(screen);
     }
 
     Liberer_Img(Backg);
