@@ -106,6 +106,8 @@ void SelectLevel(SDL_Surface *screen, Config *Confg)
     int isRunning = 1;
     int x, y;
     int j = -2;
+    int LevelSelected = 0;
+    int Mode = 0;
     // Init
 
     InitBackg(&Backg, "assets/SelectLevel/Background.png");
@@ -125,10 +127,10 @@ void SelectLevel(SDL_Surface *screen, Config *Confg)
     initImg(&LevelBut[13], 829, 879, "assets/SelectLevel/CancelS.png");
     initImg(&LevelBut[14], 574, 764, "assets/SelectLevel/SoloS.png");
     initImg(&LevelBut[15], 697, 764, "assets/SelectLevel/MultiS.png");
-    initImg(&LevelBut[16], 1110, 764, "assets/SelectLevel/SoloS.png");
-    initImg(&LevelBut[17], 1110, 764, "assets/SelectLevel/MultiS.png");
-    initImg(&LevelBut[18], 1110, 764, "assets/SelectLevel/SoloS.png");
-    initImg(&LevelBut[19], 1110, 764, "assets/SelectLevel/MultiS.png");
+    initImg(&LevelBut[16], 841, 764, "assets/SelectLevel/SoloS.png");
+    initImg(&LevelBut[17], 964, 764, "assets/SelectLevel/MultiS.png");
+    initImg(&LevelBut[18], 1112, 764, "assets/SelectLevel/SoloS.png");
+    initImg(&LevelBut[19], 1235, 764, "assets/SelectLevel/MultiS.png");
 
     // Affichage
     AfficherImg(Backg, screen);
@@ -148,22 +150,129 @@ void SelectLevel(SDL_Surface *screen, Config *Confg)
             if (event.key.keysym.sym == SDLK_ESCAPE)
                 isRunning = 0;
         case SDL_MOUSEMOTION:
-            j = MotionSL(LevelBut, j, event);
-            
-            if (j != -1)
+            j = MotionSL(LevelBut, j, event, LevelSelected);
+
+            switch (LevelSelected)
             {
-                AfficherImg(LevelBut[j], screen);
+            case 0:
+                if (j != -1)
+                {
+                    AfficherImg(LevelBut[j], screen);
+                }
+                else if (j == -1)
+                {
+                    AfficherImg(Backg, screen);
+                    for (int i = 0; i < 4; i++)
+                        AfficherImg(LevelBut[i], screen);
+                }
+                break;
+
+            case 1:
+                if (j != -1)
+                {
+                    AfficherImg(LevelBut[j], screen);
+                }
+                else if (j == -1)
+                {
+                    AfficherImg(Backg, screen);
+                    for (int i = 1; i < 6; i++)
+                        AfficherImg(LevelBut[i], screen);
+                }
+                break;
+            case 2:
+                if (j != -1)
+                {
+                    AfficherImg(LevelBut[j], screen);
+                }
+                else if (j == -1)
+                {
+                    AfficherImg(Backg, screen);
+                    for (int i = 0; i < 8; i++)
+                    {
+                        if (i != 1 && (i < 4 || i > 5))
+                            AfficherImg(LevelBut[i], screen);
+                    }
+                }
+                break;
+            case 3:
+                if (j != -1)
+                {
+                    AfficherImg(LevelBut[j], screen);
+                }
+                else if (j == -1)
+                {
+                    AfficherImg(Backg, screen);
+                    for (int i = 0; i < 10; i++)
+                    {
+                        if (i != 2 && (i < 4 || i > 7))
+                            AfficherImg(LevelBut[i], screen);
+                    }
+                }
+                break;
             }
-            else if (j == -1)
-            {
-                AfficherImg(Backg, screen);
-                for (int i = 0; i < 4; i++)
-                    AfficherImg(LevelBut[i], screen);
-            }
+            break;
         case SDL_MOUSEBUTTONDOWN:
-            x = event.button.x;
-            y = event.button.y;
-            printf("j = %d\n", j);
+            switch (j)
+            {
+            case 10:
+                AfficherImg(Backg, screen);
+                for (int i = 1; i < 6; i++)
+                    AfficherImg(LevelBut[i], screen);
+
+                LevelSelected = 1;
+                break;
+            case 11:
+                AfficherImg(Backg, screen);
+                for (int i = 0; i < 8; i++)
+                {
+                    if (i != j - 10 && i != 5 && i != 4)
+                        AfficherImg(LevelBut[i], screen);
+                }
+
+                LevelSelected = 2;
+                break;
+            case 12:
+                AfficherImg(Backg, screen);
+                for (int i = 0; i < 10; i++)
+                {
+                    if (i != j - 10 && i != 4 && i != 5 && i != 6 && i != 7)
+                        AfficherImg(LevelBut[i], screen);
+                }
+
+                LevelSelected = 3;
+                break;
+            case 14:
+                Confg->Level = 1;
+                Game(screen, Confg);
+                isRunning = 0;
+                break;
+            case 16:
+                Confg->Level = 2;
+                Game(screen, Confg);
+                isRunning = 0;
+                break;
+            case 18:
+                Confg->Level = 3;
+                Game(screen, Confg);
+                isRunning = 0;
+                break;
+            case 15:
+                Confg->Level = 1;
+                MultiPlayerGame(screen, Confg);
+                isRunning = 0;
+                break;
+            case 17:
+                Confg->Level = 2;
+                MultiPlayerGame(screen, Confg);
+                isRunning = 0;
+                break;
+            case 19:
+                Confg->Level = 3;
+                MultiPlayerGame(screen, Confg);
+                isRunning = 0;
+                break;
+            }
+
             break;
         }
         SDL_Flip(screen);
@@ -264,9 +373,7 @@ void Game(SDL_Surface *screen, Config *Confg)
 
         // Affichage Backg
         AfficherBackg(Backg, screen);
-        printf("Anim 1: %d\n", Anim);
         Anim = animer_background(&Backg, screen, Anim);
-        printf("Anim 2: %d\n", Anim);
 
         afficherminimap(map, screen);
         // Affichage GameUI
@@ -1569,14 +1676,12 @@ void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
                 if (Rep == e.NumRepC && !e.TimeOut)
                 {
                     AfficherImg(e.Backg[1], screen);
-                    printf("Winner\n");
                     SDL_Flip(screen);
                     SDL_Delay(2000);
                 }
                 else
                 {
                     AfficherImg(e.Backg[2], screen);
-                    printf("Looser\n");
                     SDL_Flip(screen);
                     SDL_Delay(2000);
                 }

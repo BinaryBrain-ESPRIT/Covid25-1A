@@ -31,13 +31,10 @@ void AfficherBackg(background Backg, SDL_Surface *screen)
 
 int animer_background(background *Backg, SDL_Surface *screen, int Anim)
 {
-    printf("%d\n", Backg->Anim);
     if (Backg->Anim > 5)
     {
-        printf("Anim 1: %d\n", Anim);
         if (Anim < 8    )
         {
-            printf("Name : %s\n", Backg->AnimBackg[Anim].NameImg);
             SDL_BlitSurface(Backg->AnimBackg[Anim].img, NULL, screen, &Backg->AnimBackg[Anim].pos);
             Anim++;
         }

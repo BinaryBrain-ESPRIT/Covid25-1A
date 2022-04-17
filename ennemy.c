@@ -248,7 +248,7 @@ int collisionEV(Ennemy e, SDL_Surface *Masque)
             return 2;
         // Bot
         color = GetPixel1(Masque, i, posY1);
-        printf("R = %d G = %d B = %d\n", color.r, color.g, color.b);
+        //printf("R = %d G = %d B = %d\n", color.r, color.g, color.b);
         if (color.r == 255 && color.g == 255 && color.b == 1)
             return -2;
     }
