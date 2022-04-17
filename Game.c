@@ -1625,6 +1625,7 @@ void AffichageCredits(SDL_Surface *screen, Config *Confg)
             break;
         }
     }
+    Liberer_Img(tab[180]);
 }
 
 void AfficherEnigmeImage(SDL_Surface *screen, Config *Confg, int GameTimeInit, SDL_Surface *Masque, Player p)
