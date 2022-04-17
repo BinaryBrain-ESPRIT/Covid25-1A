@@ -10,7 +10,7 @@ void initEnnemy(Ennemy *e, int x, int y, int vitesse, int nbreVie)
     e->pos.y = y;
 
     do
-        direction = rand() % (-1 - 2) - 1;
+        direction = rand() % (1 + 1) - 1;
     while (direction == 0);
 
     e->direction = direction;

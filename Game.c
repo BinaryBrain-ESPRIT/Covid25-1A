@@ -138,7 +138,7 @@ void SelectLevel(SDL_Surface *screen, Config *Confg)
             if (x > 571 && x < 809 && y > 765 && y < 821)
             {
                 Confg->Level = 1;
-                Game(screen, Confg);
+                 Game(screen, Confg);
                 // MultiPlayerGame(screen, Confg);
                 isRunning = 0;
             }
