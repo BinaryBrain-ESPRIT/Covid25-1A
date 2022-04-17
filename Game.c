@@ -568,7 +568,8 @@ void Game(SDL_Surface *screen, Config *Confg)
                 if (!Opened)
                 {
                     Opened = 1;
-                    MenuInGame(screen, Confg, &Opened, &isRunning);
+                    if (MenuInGame(screen, Confg, &Opened, &isRunning))
+                        MenuInGame(screen, Confg, &Opened, &isRunning);
                     SDL_WaitEvent(&event);
                 }
 
@@ -1149,7 +1150,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
         Liberer_Img(tabGameUI[i]);
 }
 
-void MenuInGame(SDL_Surface *screen, Config *Confg, int *Opened, int *isRunning)
+int MenuInGame(SDL_Surface *screen, Config *Confg, int *Opened, int *isRunning)
 {
     Image tabMG[11];
 
@@ -1202,9 +1203,7 @@ void MenuInGame(SDL_Surface *screen, Config *Confg, int *Opened, int *isRunning)
             {
             case 3:
                 MenuOpt(screen, Confg);
-                for (int j = 0; j < 6; j++)
-                    AfficherImg(tabMG[j], screen);
-                SDL_Flip(screen);
+                return 1;
                 break;
             case 4:
                 done = 1;
@@ -1222,6 +1221,7 @@ void MenuInGame(SDL_Surface *screen, Config *Confg, int *Opened, int *isRunning)
         Liberer_Img(tabMG[i]);
 
     SDL_ShowCursor(SDL_DISABLE);
+    return 0;
 }
 
 void MenuOpt(SDL_Surface *screen, Config *Confg)
