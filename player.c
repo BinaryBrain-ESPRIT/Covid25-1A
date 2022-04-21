@@ -1,24 +1,24 @@
 #include "player.h"
 #include "Background.h"
-void initPerso(Player *p, int x, int y, int NumPlayer) 
+void initPerso(Player *p, int x, int y, int NumPlayer)
 {
     int n;
     char NomImg[100];
-    //Player Position on screen
+    // Player Position on screen
     p->pos.x = x;
     p->pos.y = y;
-    //Player Position on Map
+    // Player Position on Map
     p->posABS.x = 250;
     p->posABS.y = y;
     p->nbreVie = 3;
     p->score = 0;
-    //Vitesse
+    // Vitesse
     p->v = 10;
     p->direction = 0;
-    //Index I J Matrice
+    // Index I J Matrice
     p->animI = 0;
     p->animJ = 0;
-    //Flipped Picture
+    // Flipped Picture
     p->flipped = 0;
 
     p->AnimP_Idle = 0;
@@ -29,12 +29,12 @@ void initPerso(Player *p, int x, int y, int NumPlayer)
     p->NumPlayer = NumPlayer;
     p->isJumped = 0;
 
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 10; i++)
     {
         if (i == 0 || i == 1)
-            if (NumPlayer != 3) 
+            if (NumPlayer != 3)
                 n = 7;
-            else // player 3 is malek 
+            else // player 3 is malek
                 n = 1;
         else if (i == 2 || i == 3)
             if (NumPlayer != 3)
@@ -48,14 +48,16 @@ void initPerso(Player *p, int x, int y, int NumPlayer)
                 n = 9;
             else
                 n = 6;
+        else if (i == 8 || i == 9)
+            n = 6;
 
         for (int j = 0; j < n; j++)
         {
-            sprintf(NomImg, "assets/Animation/Player%d/%d/%d.png", NumPlayer, i, j + 1); // selecting player Images
-            /**
+             /**
              * i = Animation Type
              * j = Animation Image
              **/
+            sprintf(NomImg, "assets/Animation/Player%d/%d/%d.png", NumPlayer, i, j + 1); // selecting player Images
             p->img[i][j] = IMG_Load(NomImg); // Loading Images
         }
     }
@@ -119,7 +121,7 @@ void animerPerso(Player *p)
                     p->animJ++;
                 p->AnimP_Idle = 0;
             }
-            p->AnimP_Idle ++;
+            p->AnimP_Idle++;
 
             break;
         case 1:
@@ -210,10 +212,11 @@ void LibererPlayer(Player p)
                 n = 9;
             else
                 n = 6;
+        else if (i == 8 || i == 9)
+            n = 6;
         for (int j = 0; j < n; j++)
         {
             SDL_FreeSurface(p.img[i][j]);
         }
     }
-    
 }

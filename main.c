@@ -11,20 +11,21 @@ int main()
     Config *Confg = (Config *)malloc(sizeof(Config));
 
     SDL_Surface *screen;
+    SDL_Color MoneyColor = {57, 181, 74};
     SDL_Event event;
     Mix_Chunk *sound;
     Mix_Music *music;
+
+    Image MoneyImg;
+    Image tabM[3][3];
+    Text tabMT[6];
+    Text tabMAT[6], MoneyTxt;
+
     char NomBackg[40];
     int i = 0, isRunning;
     int last_frame_time = 0;
     float delta_time;
-    Image tabM[3][3];
-    Text tabMT[6];
-    Text tabMAT[6], MoneyTxt;
-    SDL_Color MoneyColor = {57, 181, 74};
-    char Money[5];
-    Image MoneyImg;
-    // Init Image
+    
 
     // End Init
 
@@ -50,9 +51,9 @@ int main()
         else
             screen = SDL_SetVideoMode(Width, Height, Bpp, SDL_HWSURFACE | SDL_FULLSCREEN);
 
-        sprintf(Money, "%d $", Confg->Money);
-        initTxt(&MoneyTxt, 1740, 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
-        initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
+        sprintf(MoneyTxt.Texte, "%d $", Confg->Money);
+        initTxt(&MoneyTxt, 1740, 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
+        initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
         initImg(&MoneyImg, 1596, 43, "assets/MainMenu/Money.png");
         PlayMusic("assets/Sound/son.wav", music);
 
@@ -135,8 +136,8 @@ int main()
                 case 1:
                     SelectLevel(screen, Confg);
                     i = 0;
-                    sprintf(Money, "%d $", Confg->Money);
-                    initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
+                    sprintf(MoneyTxt.Texte, "%d $", Confg->Money);
+                    initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
                     AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
                     AfficherImg(MoneyImg, screen);
                     Afficher_txt(MoneyTxt, screen);
@@ -182,8 +183,8 @@ int main()
             case 1:
                 SelectLevel(screen, Confg);
                 i = 0;
-                sprintf(Money, "%d $", Confg->Money);
-                initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
+                sprintf(MoneyTxt.Texte, "%d $", Confg->Money);
+                initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
                 AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
                 AfficherImg(MoneyImg, screen);
                 Afficher_txt(MoneyTxt, screen);

@@ -2,8 +2,21 @@
 
 int Setup(Config *Confg)
 {
-    
+
     FILE *f = fopen("Data/Config.txt", "r");
+    if (f == NULL)
+    {
+        f = fopen("Data/Config.txt", "w");
+        fprintf(f, "Money : 5000\n");
+        fprintf(f, "Player : 2\n");
+        fprintf(f, "LevelReached : 3\n");
+        fprintf(f, "Language : 1\n");
+        fprintf(f, "FullScreen : -1\n");
+        fprintf(f, "Volume : 100\n");
+        fprintf(f, "PosVol : 1042\n");
+        fclose(f);
+        f = fopen("Data/Config.txt", "r");
+    }
     char Nom[50];
     int Value;
 
@@ -42,6 +55,9 @@ int Setup(Config *Confg)
         else if (strcmp(Nom, "PosVol") == 0)
             Confg->posVol = Value;
     }
+
+    Mix_VolumeMusic(Confg->Volume);
+    
     fclose(f);
     return 1;
 }
@@ -131,12 +147,12 @@ void PlayMusic(char NameMusic[], Mix_Music *music)
 void PlayChunkMusic(char NameMusic[], Mix_Chunk *sound)
 {
     sound = Mix_LoadWAV(NameMusic);
-    Mix_PlayChannel(-1, sound, 0);   
+    Mix_PlayChannel(-1, sound, 0);
 }
 
 void Liberer_MusCh(Mix_Chunk *sound)
 {
-    Mix_FreeChunk(sound); 
+    Mix_FreeChunk(sound);
 }
 
 void Liberer_Mus(Mix_Music *music)

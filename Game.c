@@ -367,7 +367,7 @@ void Game(SDL_Surface *screen, Config *Confg)
     int Opened = 0;
     int last_frame_time = 0;
     int GameTimeInit, GameTimeS, GameTimeM, GameTimeSPred;
-    int done, Rep;
+    int done, Rep, AttackedEnnemy = -1;
 
     // Init Player
     initPerso(&p, 250, 510, Confg->Player);
@@ -453,10 +453,55 @@ void Game(SDL_Surface *screen, Config *Confg)
                 if (p.animJ >= n)
                 {
                     p.score -= 50;
+                    int score = p.score;
                     sprintf(MoneyTxt.Texte, "%d $", p.score);
                     initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w / 3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
-                    isRunning = 0;
-                    SDL_Delay(2000);
+                    int randNum = rand() % 500;
+                    if (randNum % 2 == 0)
+                    {
+                        if (!AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque[0]))
+                            isRunning = 0;
+                        else
+                        {
+                            p.nbreVie = 3;
+                            while (Backg.cam.x > 0)
+                            {
+                                scrolling(&Backg, -1, 10);
+                                p.posABS.x -= 10;
+                                for (int i = 0; i < 5; i++)
+                                {
+                                    e[i].posInit += 10;
+                                    e[i].pos.x += 10;
+                                }
+                            }
+                            initPerso(&p, 250, 510, Confg->Player);
+                            p.score = score;
+                            initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
+                        }
+                    }
+                    else
+                    {
+                        if (!AfficherEnigmeImage(screen, Confg, GameTimeInit, Masque[0], p))
+                            isRunning = 0;
+                        else
+                        {
+                            p.nbreVie = 3;
+                            while (Backg.cam.x > 0)
+                            {
+                                scrolling(&Backg, -1, 10);
+                                p.posABS.x -= 10;
+                                for (int i = 0; i < 5; i++)
+                                {
+                                    e[i].posInit += 10;
+                                    e[i].pos.x += 10;
+                                }
+                            }
+                            initPerso(&p, 250, 510, Confg->Player);
+                            initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
+                        }
+                    }
+
+                    SDL_WaitEvent(&event);
                 }
                 else
                     p.animJ++;
@@ -467,6 +512,32 @@ void Game(SDL_Surface *screen, Config *Confg)
         }
         else
         {
+            if (p.attack)
+            {
+                if (p.AnimP_Attack > 0)
+                {
+
+                    if (!p.flipped)
+                        p.animI = 8;
+                    else
+                        p.animI = 9;
+
+                    if (p.animJ < 5)
+                        p.animJ++;
+                    else
+                    {
+                        p.attack = 0;
+
+                        if (AttackedEnnemy != -1)
+                        {
+                            e[AttackedEnnemy].nbreVie--;
+                        }
+                    }
+                    p.AnimP_Attack = 0;
+                }
+                else
+                    p.AnimP_Attack++;
+            }
             // Scrolling
             if (collisionPH(p, Masque[0]) != p.direction)
             {
@@ -516,17 +587,15 @@ void Game(SDL_Surface *screen, Config *Confg)
         // Ennemy
         for (int i = 0; i < 5; i++)
         {
-            if (BehindEnnemy(p, e[i]) != 2)
-            {
-                if (event.type == SDL_KEYDOWN)
-                {
-                    if (event.key.keysym.sym == SDLK_a)
-                    {
 
-                        e[i].nbreVie--;
-                    }
+            if (event.type == SDL_KEYDOWN)
+                if (event.key.keysym.sym == SDLK_a)
+                {
+                    p.attack = 1;
+                    if (BehindEnnemy(p, e[i]) != 2)
+                        AttackedEnnemy = i;
                 }
-            }
+
             if (e[i].nbreVie == 0 && !e[i].isKilled)
             {
                 p.score += 150;
@@ -605,6 +674,10 @@ void Game(SDL_Surface *screen, Config *Confg)
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym)
             {
+            case SDLK_m:
+                MiniGameCard(screen, Confg);
+                SDL_WaitEvent(&event);
+                break;
             case SDLK_t:
                 // EnigmeTexte
                 AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque[0]);
@@ -1519,62 +1592,74 @@ void MenuOpt(SDL_Surface *screen, Config *Confg)
                     if (x < 750)
                     {
                         // Mix_VolumeChunk(sound, 0);
-                        Mix_VolumeMusic(0);
+                        Confg->Volume = 0;
+                        Mix_VolumeMusic(Confg->Volume);
                     }
                     else if (x < 770)
                     {
+                        Confg->Volume = 1 * MIX_MAX_VOLUME / 11;
                         // Mix_VolumeChunk(sound, 1 * MIX_MAX_VOLUME / 11);
-                        Mix_VolumeMusic(1 * MIX_MAX_VOLUME / 11);
+                        Mix_VolumeMusic(Confg->Volume);
                     }
                     else if (x < 815)
                     {
+                        Confg->Volume = 2 * MIX_MAX_VOLUME / 11;
                         // Mix_VolumeChunk(sound, 2 * MIX_MAX_VOLUME / 11);
-                        Mix_VolumeMusic(2 * MIX_MAX_VOLUME / 11);
+                        Mix_VolumeMusic(Confg->Volume);
                     }
                     else if (x < 860)
                     {
+                        Confg->Volume = 3 * MIX_MAX_VOLUME / 11;
                         // Mix_VolumeChunk(sound, 3 * MIX_MAX_VOLUME / 11);
-                        Mix_VolumeMusic(3 * MIX_MAX_VOLUME / 11);
+                        Mix_VolumeMusic(Confg->Volume);
                     }
                     else if (x < 905)
                     {
+                        Confg->Volume = 4 * MIX_MAX_VOLUME / 11;
                         // Mix_VolumeChunk(sound, 4 * MIX_MAX_VOLUME / 11);
-                        Mix_VolumeMusic(4 * MIX_MAX_VOLUME / 11);
+                        Mix_VolumeMusic(Confg->Volume);
                     }
                     else if (x < 950)
                     {
+                        Confg->Volume = 5 * MIX_MAX_VOLUME / 11;
                         // Mix_VolumeChunk(sound, 5 * MIX_MAX_VOLUME / 11);
-                        Mix_VolumeMusic(5 * MIX_MAX_VOLUME / 11);
+                        Mix_VolumeMusic(Confg->Volume);
                     }
                     else if (x < 995)
                     {
+                        Confg->Volume = 6 * MIX_MAX_VOLUME / 11;
                         // Mix_VolumeChunk(sound, 6 * MIX_MAX_VOLUME / 11);
-                        Mix_VolumeMusic(6 * MIX_MAX_VOLUME / 11);
+                        Mix_VolumeMusic(Confg->Volume);
                     }
                     else if (x < 1040)
                     {
+                        Confg->Volume = 7 * MIX_MAX_VOLUME / 11;
                         // Mix_VolumeChunk(sound, 7 * MIX_MAX_VOLUME / 11);
-                        Mix_VolumeMusic(7 * MIX_MAX_VOLUME / 11);
+                        Mix_VolumeMusic(Confg->Volume);
                     }
                     else if (x < 1085)
                     {
+                        Confg->Volume = 8 * MIX_MAX_VOLUME / 11;
                         // Mix_VolumeChunk(sound, 8 * MIX_MAX_VOLUME / 11);
-                        Mix_VolumeMusic(8 * MIX_MAX_VOLUME / 11);
+                        Mix_VolumeMusic(Confg->Volume);
                     }
                     else if (x < 1130)
                     {
+                        Confg->Volume = 9 * MIX_MAX_VOLUME / 11;
                         // Mix_VolumeChunk(sound, 9 * MIX_MAX_VOLUME / 11);
-                        Mix_VolumeMusic(9 * MIX_MAX_VOLUME / 11);
+                        Mix_VolumeMusic(Confg->Volume);
                     }
                     else if (x < 1175)
                     {
+                        Confg->Volume = 10 * MIX_MAX_VOLUME / 11;
                         // Mix_VolumeChunk(sound, 10 * MIX_MAX_VOLUME / 11);
-                        Mix_VolumeMusic(10 * MIX_MAX_VOLUME / 11);
+                        Mix_VolumeMusic(Confg->Volume);
                     }
                     else if (x < 1180)
                     {
+                        Confg->Volume = MIX_MAX_VOLUME;
                         // Mix_VolumeChunk(sound, MIX_MAX_VOLUME);
-                        Mix_VolumeMusic(MIX_MAX_VOLUME);
+                        Mix_VolumeMusic(Confg->Volume);
                     }
                     SDL_PollEvent(&event);
                 }
@@ -1627,80 +1712,85 @@ void AffichageCredits(SDL_Surface *screen, Config *Confg)
     Liberer_Img(tab[180]);
 }
 
-void AfficherEnigmeImage(SDL_Surface *screen, Config *Confg, int GameTimeInit, SDL_Surface *Masque, Player p)
+int AfficherEnigmeImage(SDL_Surface *screen, Config *Confg, int GameTimeInit, SDL_Surface *Masque, Player p)
 {
     int done = 0, GameTimeS, Rep, GameTimeM;
     SDL_Event event;
     Enigme e;
-    if (EnigmeDetected(p, Masque))
+
+    InitEnigme(&e, "enigmeImg.txt");
+    afficherEnigme(e, screen);
+    SDL_Flip(screen);
+    done = 0;
+
+    e.TimeInit = SDL_GetTicks();
+    Rep = 0;
+    SDL_ShowCursor(SDL_ENABLE);
+    while (!done)
     {
-        InitEnigme(&e, "enigmeImg.txt");
-        afficherEnigme(e, screen);
-        SDL_Flip(screen);
-        done = 0;
+        GameTimeS = ((SDL_GetTicks() - GameTimeInit) / 1000) % 60;
+        GameTimeM = ((SDL_GetTicks() - GameTimeInit) / 1000) / 60;
 
-        e.TimeInit = SDL_GetTicks();
-        Rep = 0;
-        SDL_ShowCursor(SDL_ENABLE);
-        while (!done)
+        animer(&e, screen);
+
+        SDL_PollEvent(&event);
+        switch (event.type)
         {
-            GameTimeS = ((SDL_GetTicks() - GameTimeInit) / 1000) % 60;
-            GameTimeM = ((SDL_GetTicks() - GameTimeInit) / 1000) / 60;
-
-            animer(&e, screen);
-
-            SDL_PollEvent(&event);
-            switch (event.type)
+        case SDL_QUIT:
+            done = 1;
+            Confg->isRunning = 0;
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+            if (e.NumE >= 2 && e.NumE <= 4)
             {
-            case SDL_QUIT:
-                done = 1;
-                Confg->isRunning = 0;
-                break;
-            case SDL_MOUSEBUTTONDOWN:
-                if (e.NumE >= 2 && e.NumE <= 4)
-                {
-                    if (event.button.x > 18 && event.button.x < 576 && event.button.y > 687 && event.button.y < 1056)
-                        Rep = 1;
-                    else if (event.button.x > 682 && event.button.x < 1245 && event.button.y > 556 && event.button.y < 924)
-                        Rep = 2;
-                    else if (event.button.x > 1334 && event.button.x < 1903 && event.button.y > 687 && event.button.y < 1057)
-                        Rep = 3;
-                }
-                else
-                {
-                    if (event.button.x > 1070 && event.button.x < 1232 && event.button.y > 105 && event.button.y < 270)
-                        Rep = 1;
-                    else if (event.button.x > 1356 && event.button.x < 1518 && event.button.y > 105 && event.button.y < 270)
-                        Rep = 2;
-                    else if (event.button.x > 1212 && event.button.x < 1374 && event.button.y > 363 && event.button.y < 527)
-                        Rep = 3;
-                }
-                break;
+                if (event.button.x > 18 && event.button.x < 576 && event.button.y > 687 && event.button.y < 1056)
+                    Rep = 1;
+                else if (event.button.x > 682 && event.button.x < 1245 && event.button.y > 556 && event.button.y < 924)
+                    Rep = 2;
+                else if (event.button.x > 1334 && event.button.x < 1903 && event.button.y > 687 && event.button.y < 1057)
+                    Rep = 3;
             }
-
-            if ((Rep > 0 && Rep < 4) || e.TimeOut)
+            else
             {
-                if (Rep == e.NumRC && !e.TimeOut)
-                {
-                    AfficherImg(e.Backg[1], screen);
-                    SDL_Flip(screen);
-                    SDL_Delay(2000);
-                }
-                else
-                {
-                    AfficherImg(e.Backg[2], screen);
-                    SDL_Flip(screen);
-                    SDL_Delay(2000);
-                }
-                done = 1;
+                if (event.button.x > 1070 && event.button.x < 1232 && event.button.y > 105 && event.button.y < 270)
+                    Rep = 1;
+                else if (event.button.x > 1356 && event.button.x < 1518 && event.button.y > 105 && event.button.y < 270)
+                    Rep = 2;
+                else if (event.button.x > 1212 && event.button.x < 1374 && event.button.y > 363 && event.button.y < 527)
+                    Rep = 3;
             }
+            break;
         }
-        Free_Enigme(&e);
+
+        if ((Rep > 0 && Rep < 4) || e.TimeOut)
+        {
+            if (Rep == e.NumRC && !e.TimeOut)
+            {
+                AfficherImg(e.Backg[1], screen);
+                SDL_Flip(screen);
+                SDL_Delay(2000);
+                Free_Enigme(&e);
+                SDL_ShowCursor(SDL_DISABLE);
+                return 1;
+            }
+            else
+            {
+                AfficherImg(e.Backg[2], screen);
+                SDL_Flip(screen);
+                SDL_Delay(2000);
+                Free_Enigme(&e);
+                SDL_ShowCursor(SDL_DISABLE);
+                return 0;
+            }
+            done = 1;
+        }
     }
+    Free_Enigme(&e);
+
     SDL_ShowCursor(SDL_DISABLE);
 }
 
-void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, SDL_Surface *Masque)
+int AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, SDL_Surface *Masque)
 {
     enigme e;
     int done = 0, GameTimeS, Rep = 0, GameTimeM;
@@ -1760,19 +1850,25 @@ void AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, S
                     AfficherImg(e.Backg[1], screen);
                     SDL_Flip(screen);
                     SDL_Delay(2000);
+                    SDL_ShowCursor(SDL_DISABLE);
+                    Free_Enigme1(&e);
+                    return 1;
                 }
                 else
                 {
                     AfficherImg(e.Backg[2], screen);
                     SDL_Flip(screen);
                     SDL_Delay(2000);
+                    SDL_ShowCursor(SDL_DISABLE);
+                    Free_Enigme1(&e);
+                    return 0;
                 }
                 done = 1;
             }
         }
-        SDL_ShowCursor(SDL_DISABLE);
-        Free_Enigme1(&e);
     }
     else
         printf("Out Of Choice\n");
+    SDL_ShowCursor(SDL_DISABLE);
+    Free_Enigme1(&e);
 }
