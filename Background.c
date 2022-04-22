@@ -1,53 +1,47 @@
 #include "Background.h"
 #include "Main_Fn.h"
 
-void InitGameBackg(background *Backg, int x, int y, int W, int H, char NameImg[])
+void InitGameBackg(background *Backg, int x, int y, int W, int H)
 {
 
-    Backg->img = IMG_Load(NameImg);
-    Backg->pos.x = x;
-    Backg->pos.y = y;
-    Backg->pos.w = W;
-    Backg->pos.h = H;
+    for (int i = 0; i < 5; i++)
+    {
+        sprintf(Backg->BackgImage[i].NameImg, "assets/Levels/Level1[%d].jpg", i);
+        printf("%s\n", Backg->BackgImage[i].NameImg);
+        Backg->BackgImage[i].img = IMG_Load(Backg->BackgImage[i].NameImg);
+    }
+
+    Backg->BackgImage->pos.x = x;
+    Backg->BackgImage->pos.y = y;
+    Backg->BackgImage->pos.w = W;
+    Backg->BackgImage->pos.h = H;
 
     Backg->cam.x = 0;
     Backg->cam.y = 0;
     Backg->cam.w = W;
     Backg->cam.h = H;
     Backg->Anim = 0;
-    for (int i = 0; i < 9; i++)
-    {
-        sprintf(Backg->AnimBackg[i].NameImg, "assets/Animation/Backg/%d.png", i + 1);
-        Backg->AnimBackg[i].img = IMG_Load(Backg->AnimBackg[i].NameImg);
-        Backg->AnimBackg[i].pos.x = 2640;
-        Backg->AnimBackg[i].pos.y = 627;
-    }
+    Backg->AnimI = 0;
 }
 
 void AfficherBackg(background Backg, SDL_Surface *screen)
 {
-    SDL_BlitSurface(Backg.img, &Backg.cam, screen, &Backg.pos);
+    printf("%d\n", Backg.AnimI);
+    SDL_BlitSurface(Backg.BackgImage[Backg.AnimI].img, &Backg.cam, screen, &Backg.BackgImage[Backg.AnimI].pos);
 }
 
-int animer_background(background *Backg, SDL_Surface *screen, int Anim)
+void animer_background(background *Backg, SDL_Surface *screen)
 {
     if (Backg->Anim > 5)
     {
-        if (Anim < 8    )
-        {
-            SDL_BlitSurface(Backg->AnimBackg[Anim].img, NULL, screen, &Backg->AnimBackg[Anim].pos);
-            Anim++;
-        }
+        if (Backg->AnimI > 3)
+            Backg->AnimI = 0;
         else
-            Anim = 0;
+            Backg->AnimI++;
         Backg->Anim = 0;
     }
     else
-    {
-        SDL_BlitSurface(Backg->AnimBackg[Anim].img, NULL, screen, &Backg->AnimBackg[Anim].pos);
         Backg->Anim++;
-    }
-    return Anim;
 }
 
 SDL_Color GetPixel(SDL_Surface *pSurface, int x, int y)
@@ -82,7 +76,7 @@ int collisionPH(Player p, SDL_Surface *Masque)
         // Right
         color = GetPixel(Masque, posX1, i);
         if (color.r == 255 && color.g == 255 && color.b == 1)
-            return 1;  
+            return 1;
 
         // Left
         color = GetPixel(Masque, posX, i);
@@ -229,5 +223,6 @@ void scrolling(background *Backg, int direction, int pas_Avancement)
 
 void LibererBackg(background backg)
 {
-    SDL_FreeSurface(backg.img);
+    for (int i = 0; i < 5; i++)
+        SDL_FreeSurface(backg.BackgImage[i].img);
 }

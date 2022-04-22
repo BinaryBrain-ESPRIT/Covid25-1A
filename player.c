@@ -142,7 +142,7 @@ void animerPerso(Player *p)
             p->AnimP_Run++;
             break;
         case -1:
-            if (p->AnimP_Run > 2)
+            if (p->AnimP_Run > 0)
             {
                 p->animI = 3;
 

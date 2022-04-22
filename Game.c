@@ -305,17 +305,17 @@ void SelectLevel(SDL_Surface *screen, Config *Confg)
                 break;
             case 15:
                 Confg->Level = 1;
-                MultiPlayerGame(screen, Confg);
+                ////MultiPlayerGame(screen, Confg);
                 isRunning = 0;
                 break;
             case 17:
                 Confg->Level = 2;
-                MultiPlayerGame(screen, Confg);
+                // MultiPlayerGame(screen, Confg);
                 isRunning = 0;
                 break;
             case 19:
                 Confg->Level = 3;
-                MultiPlayerGame(screen, Confg);
+                // MultiPlayerGame(screen, Confg);
                 isRunning = 0;
                 break;
             }
@@ -336,7 +336,6 @@ void Game(SDL_Surface *screen, Config *Confg)
     const Uint8 *state = SDL_GetKeyState(NULL);
     char NameAnimImg[50];
     SDL_Event event;
-    int Anim = 0;
     SDL_Color MoneyColor = {57, 181, 74};
     SDL_Color TimeColor = {193, 39, 45};
     SDL_Color Black = {0, 0, 0};
@@ -352,8 +351,6 @@ void Game(SDL_Surface *screen, Config *Confg)
     background Backg;
     SDL_Surface *Masque[3];
     Masque[0] = IMG_Load("assets/Levels/Masque.jpg");
-
-    Image1 AnimBackg[10];
 
     Image tabGameUI[5];
     Text MoneyTxt, GameTimeTxt;
@@ -374,8 +371,7 @@ void Game(SDL_Surface *screen, Config *Confg)
     ChoosePlayerName(&p, Confg, screen);
 
     // Init LevelBackg
-    InitGameBackg(&Backg, 0, 0, Width, Height, "assets/Levels/Level1.png");
-
+    InitGameBackg(&Backg,0,0,Width,Height);
     // Init GameUI
     initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
     initImg(&tabGameUI[1], 1654, 81, "assets/GameUi/MoneyTime.png");
@@ -420,7 +416,7 @@ void Game(SDL_Surface *screen, Config *Confg)
 
         // Affichage Backg
         AfficherBackg(Backg, screen);
-        Anim = animer_background(&Backg, screen, Anim);
+        animer_background(&Backg, screen);
 
         afficherminimap(map, screen);
         // Affichage GameUI
@@ -733,7 +729,7 @@ void Game(SDL_Surface *screen, Config *Confg)
                     screen = SDL_SetVideoMode(Width, Height, Bpp, SDL_HWSURFACE);
                 Confg->Fullscr *= -1;
                 AfficherBackg(Backg, screen);
-                Anim = animer_background(&Backg, screen, Anim);
+                animer_background(&Backg, screen);
 
                 AfficherImg(tabGameUI[0], screen);
                 SDL_Flip(screen);
@@ -779,13 +775,10 @@ void Game(SDL_Surface *screen, Config *Confg)
     for (int i = 0; i < 2; i++)
         Liberer_Img(tabGameUI[i]);
 
-    for (int i = 0; i < 10; i++)
-        SDL_FreeSurface(AnimBackg[i].img);
-
     Liberer_txt(MoneyTxt);
     Liberer_txt(GameTimeTxt);
 }
-
+/*
 void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
 {
     srand(time(NULL));
@@ -831,8 +824,8 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
     ChoosePlayerName(&p1, Confg, screen);
 
     // Init LevelBackg
-    InitGameBackg(&Backg, 0, 0, Width / 2, Height, "assets/Levels/Level1.png");
-    InitGameBackg(&Backg1, Width / 2, 0, Width / 2, Height, "assets/Levels/Level1.png");
+    InitGameBackg(&Backg, 0, 0, Width / 2, Height);
+    InitGameBackg(&Backg1, Width / 2, 0, Width / 2, Height);
 
     // Init GameUI
     initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
@@ -1303,7 +1296,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
     for (int i = 0; i < 2; i++)
         Liberer_Img(tabGameUI[i]);
 }
-
+*/
 int MenuInGame(SDL_Surface *screen, Config *Confg, int *Opened, int *isRunning)
 {
     Image tabMG[11];
