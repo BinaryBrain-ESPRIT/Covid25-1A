@@ -33,6 +33,6 @@ void Liberer(minimap *m);
 void SaveScore(char PlayerName[], int Score, char Time[]);
 void LeaderBoard(SDL_Surface *screen, Config *Confg);
 void MAJTime(Text *GameTimeTxt, int GameTimeInit);
-void MiniGameCard(SDL_Surface *screen, Config *Confg);
+int MiniGameCard(SDL_Surface *screen, Config *Confg);
 
 #endif

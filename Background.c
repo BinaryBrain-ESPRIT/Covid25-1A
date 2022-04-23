@@ -7,7 +7,6 @@ void InitGameBackg(background *Backg, int x, int y, int W, int H)
     for (int i = 0; i < 5; i++)
     {
         sprintf(Backg->BackgImage[i].NameImg, "assets/Levels/Level1[%d].jpg", i);
-        printf("%s\n", Backg->BackgImage[i].NameImg);
         Backg->BackgImage[i].img = IMG_Load(Backg->BackgImage[i].NameImg);
     }
 
@@ -26,7 +25,6 @@ void InitGameBackg(background *Backg, int x, int y, int W, int H)
 
 void AfficherBackg(background Backg, SDL_Surface *screen)
 {
-    printf("%d\n", Backg.AnimI);
     SDL_BlitSurface(Backg.BackgImage[Backg.AnimI].img, &Backg.cam, screen, &Backg.BackgImage[Backg.AnimI].pos);
 }
 

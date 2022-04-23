@@ -21,5 +21,7 @@ int MenuInGame(SDL_Surface *screen, Config *Confg, int *Opened, int *isRunning);
 void MenuOpt(SDL_Surface *screen, Config *Confg);
 int AfficherEnigmeImage(SDL_Surface *screen, Config *Confg, int GameTimeInit, SDL_Surface *Masque, Player p);
 int AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, SDL_Surface *Masque);
-
+int WinGame(Config *Confg, SDL_Surface *screen);
+int LooseGame(Config *Confg, SDL_Surface *screen);
+int SaveGame(Config *Confg, SDL_Surface *screen);
 #endif
