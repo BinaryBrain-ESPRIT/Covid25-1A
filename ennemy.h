@@ -7,18 +7,23 @@
 #include "player.h"
 #include "Main_Fn.h"
 
-typedef struct
+/**
+ * @struct Ennemy
+ * @brief Struct For Ennemy
+ */
+typedef struct Ennemy
 {
-    SDL_Rect pos, posABS;
-    SDL_Surface *img[6][20];
-    int Flipped;
-    double v; // Vitesse
-    int direction;
-    int nbreVie, isKilled;
-    int anim_i, anim_j;
-    int posInit;
-    int attack;
-    int AnimE_Attack, AnimE_Run, AnimeE_Idle;
+    SDL_Rect pos, posABS; /*!<Rectangle For Ennemy Position*/
+    SDL_Surface *img[6][20]; /*!<Surface For Ennmy*/
+    int Flipped; /*!<Int to check if his flipped or not*/
+    double v; /*!<Ennemy Speed*/
+    int direction; /*!<Ennemy Direction*/
+    int nbreVie; /*!<Ennemy Life*/
+    int isKilled; /*!<check if Ennely IsKilled or not*/
+    int anim_i, anim_j; /*!<Index For the Matrix*/
+    int posInit; /*!<Initial x position For the Ennemy*/
+    int attack; /*!<Check If the ennemy attacking or not*/
+    int AnimE_Attack, AnimE_Run, AnimeE_Idle; /*!<Variables For the Animation Speed*/
 } Ennemy;
 
 void initEnnemy(Ennemy *e, int x, int y, int vitesse, int nbreVie);

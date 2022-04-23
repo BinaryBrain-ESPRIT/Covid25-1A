@@ -1,5 +1,4 @@
 #include "enigme_image.h"
-#include "Main_Fn.h"
 void InitEnigme(Enigme *e, char *nomfichier)
 {
     SDL_Color White = {255, 255, 255};
@@ -11,7 +10,7 @@ void InitEnigme(Enigme *e, char *nomfichier)
     int RandNum = rand() % (5 - 1) + 1;
     f = fopen(nomfichier, "r");
 
-    //Fichier (NumeroEnigme Background NumeroReponseCorrecte)
+    // Fichier (NumeroEnigme Background NumeroReponseCorrecte)
     do
         fscanf(f, "%d %s %d", &e->NumE, e->Backg[0].NameImg, &e->NumRC);
     while (e->NumE != RandNum);
@@ -19,7 +18,7 @@ void InitEnigme(Enigme *e, char *nomfichier)
     strcpy(e->Backg[1].NameImg, "assets/enigmeImage/Win.png");
     strcpy(e->Backg[2].NameImg, "assets/enigmeImage/Loose.png");
 
-    //Init Enigme 2.3.4
+    // Init Enigme 2.3.4
     if (e->NumE >= 2 && e->NumE <= 4)
     {
         e->txt.color = White;
@@ -42,14 +41,14 @@ void InitEnigme(Enigme *e, char *nomfichier)
         e->txt.pos.y = 182;
     }
 
-    //InitBackg
+    // InitBackg
     for (int i = 0; i < 3; i++)
         InitBackg(&e->Backg[i], e->Backg[i].NameImg);
 
     e->TimeOut = 0;
     e->Duration = 10;
 
-    //Init Time
+    // Init Time
     for (int i = 0; i <= e->Duration; i++)
     {
         sprintf(e->Time[i].Texte, "00:%02d", i);
@@ -72,17 +71,17 @@ void animer(Enigme *e, SDL_Surface *screen)
 {
     int EnigmeTimeS, EnigmeTimeSPred = -1;
 
-    //TimeSeconds
+    // TimeSeconds
     EnigmeTimeS = (SDL_GetTicks() - e->TimeInit) / 1000;
 
-    //Check if Not TimeOut
+    // Check if Not TimeOut
     if (e->Duration - EnigmeTimeS < 0)
     {
         e->TimeOut = 1;
         return;
     }
 
-    //Check That a Sec Passed
+    // Check That a Sec Passed
     if (EnigmeTimeSPred != EnigmeTimeS)
     {
         afficherEnigme(*e, screen);
@@ -97,4 +96,20 @@ void Free_Enigme(Enigme *e)
         SDL_FreeSurface(e->Backg[i].img);
     for (int i = 0; i <= e->Duration; i++)
         SDL_FreeSurface(e->Time[i].surfaceText);
+}
+
+void SwitchPlayer(Config * Confg)
+{
+    if (Confg->LevelR == 2)
+        if (Confg->Player == 3)
+            Confg->Player = 2;
+        else
+            Confg->Player = 3;
+    else if (Confg->LevelR == 3)
+        if (Confg->Player == 3)
+            Confg->Player = 1;
+        else if (Confg->Player == 2)
+            Confg->Player = 3;
+        else
+            Confg->Player = 2;
 }

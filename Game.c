@@ -371,7 +371,7 @@ void Game(SDL_Surface *screen, Config *Confg)
     ChoosePlayerName(&p, Confg, screen);
 
     // Init LevelBackg
-    InitGameBackg(&Backg,0,0,Width,Height);
+    InitGameBackg(&Backg, 0, 0, Width, Height);
     // Init GameUI
     initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
     initImg(&tabGameUI[1], 1654, 81, "assets/GameUi/MoneyTime.png");
@@ -408,8 +408,8 @@ void Game(SDL_Surface *screen, Config *Confg)
         }
 
         GameTimeSPred = GameTimeS;
-        // last_frame_time = SDL_GetTicks();
-        //  while (!(SDL_GetTicks() > last_frame_time + FRAME_TARGET_TIME));
+        last_frame_time = SDL_GetTicks();
+        while (!(SDL_GetTicks() > last_frame_time + FRAME_TARGET_TIME));
 
         if (Confg->isRunning == 0)
             isRunning = 0;

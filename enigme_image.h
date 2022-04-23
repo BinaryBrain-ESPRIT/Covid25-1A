@@ -3,6 +3,8 @@
 
 #include <SDL/SDL.h>
 #include "Text_Image.h"
+#include "Main_Fn.h"
+
 
 typedef struct
 {
@@ -17,6 +19,7 @@ typedef struct
 void InitEnigme(Enigme *e, char *nomfichier);
 void afficherEnigme(Enigme e, SDL_Surface *screen);
 void animer(Enigme *e, SDL_Surface *screen);
-void Free_Enigme(Enigme *e);
 
+void Free_Enigme(Enigme *e);
+void SwitchPlayer(Config * Confg);
 #endif

@@ -4,6 +4,7 @@
 #include "Mouse.h"
 #include "ennemy.h"
 #include "minimap.h"
+#include "enigme_image.h"
 
 int main()
 {
@@ -22,10 +23,10 @@ int main()
     Text tabMAT[6], MoneyTxt;
 
     char NomBackg[40];
-    int i = 0, isRunning;
+    int i = 0, isRunning, iPred = 0;
+    ;
     int last_frame_time = 0;
     float delta_time;
-    
 
     // End Init
 
@@ -78,11 +79,15 @@ int main()
             break;
 
         case SDL_MOUSEMOTION:
+            iPred = i;
             Motion_MM(tabMT, tabMAT, tabM, event, screen, &i, Confg);
-            AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
-            AfficherImg(MoneyImg, screen);
-            Afficher_txt(MoneyTxt, screen);
-            SDL_Flip(screen);
+            if (i != iPred)
+            {
+                AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+                AfficherImg(MoneyImg, screen);
+                Afficher_txt(MoneyTxt, screen);
+                SDL_Flip(screen);
+            }
             break;
 
         case SDL_KEYDOWN:
@@ -225,18 +230,8 @@ int main()
                 Confg->isRunning = 0;
                 break;
             case 7:
-                if (Confg->LevelR == 2)
-                    if (Confg->Player == 3)
-                        Confg->Player = 2;
-                    else
-                        Confg->Player = 3;
-                else if (Confg->LevelR == 3)
-                    if (Confg->Player == 3)
-                        Confg->Player = 1;
-                    else if (Confg->Player == 2)
-                        Confg->Player = 3;
-                    else
-                        Confg->Player = 2;
+                SwitchPlayer(Confg);
+
                 AffichageMainMenu(screen, tabMT, tabMAT, tabM, 0, Confg->LevelR, Confg->Player);
                 AfficherImg(MoneyImg, screen);
                 Afficher_txt(MoneyTxt, screen);
