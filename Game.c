@@ -627,6 +627,7 @@ int SaveGame(Config *Confg, SDL_Surface *screen)
             break;
         }
     }
+    return 0;
 }
 
 void Game(SDL_Surface *screen, Config *Confg)
@@ -816,11 +817,12 @@ void Game(SDL_Surface *screen, Config *Confg)
         }
         else
         {
+            printf("attack: %d\n", p.attack);
+            printf("j : %d\n", p.animJ);
             if (p.attack)
             {
                 if (p.AnimP_Attack > 0)
                 {
-
                     if (!p.flipped)
                         p.animI = 8;
                     else
@@ -830,61 +832,63 @@ void Game(SDL_Surface *screen, Config *Confg)
                         p.animJ++;
                     else
                     {
+                        p.animJ = 0;
                         p.attack = 0;
 
                         if (AttackedEnnemy != -1)
-                        {
                             e[AttackedEnnemy].nbreVie--;
-                        }
                     }
                     p.AnimP_Attack = 0;
                 }
                 else
                     p.AnimP_Attack++;
             }
-            // Scrolling
-            if (collisionPH(p, Masque[0]) != p.direction)
+            else
             {
-                if (p.pos.x >= screen->w / 2 && p.direction == 1)
+                // Scrolling
+                if (collisionPH(p, Masque[0]) != p.direction)
                 {
-                    scrolling(&Backg, p.direction, 10);
-                    p.posABS.x += 10;
-                    for (int i = 0; i < 5; i++)
+                    if (p.pos.x >= screen->w / 2 && p.direction == 1)
                     {
-                        e[i].posInit -= 10;
-                        e[i].pos.x -= 10;
+                        scrolling(&Backg, p.direction, 10);
+                        p.posABS.x += 10;
+                        for (int i = 0; i < 5; i++)
+                        {
+                            e[i].posInit -= 10;
+                            e[i].pos.x -= 10;
+                        }
                     }
-                }
-                else if (p.direction == -1 && p.pos.x <= 500 && p.posABS.x > 500)
-                {
-                    scrolling(&Backg, p.direction, 10);
-                    p.posABS.x -= 10;
-                    for (int i = 0; i < 5; i++)
+                    else if (p.direction == -1 && p.pos.x <= 500 && p.posABS.x > 500)
                     {
-                        e[i].posInit += 10;
-                        e[i].pos.x += 10;
+                        scrolling(&Backg, p.direction, 10);
+                        p.posABS.x -= 10;
+                        for (int i = 0; i < 5; i++)
+                        {
+                            e[i].posInit += 10;
+                            e[i].pos.x += 10;
+                        }
                     }
-                }
-                else if (p.direction == -2)
-                {
-                    scrolling(&Backg, p.direction, 10);
-                    p.posABS.y += 10;
-                    for (int i = 0; i < 5; i++)
+                    else if (p.direction == -2)
                     {
-                        e[i].pos.y -= 10;
+                        scrolling(&Backg, p.direction, 10);
+                        p.posABS.y += 10;
+                        for (int i = 0; i < 5; i++)
+                        {
+                            e[i].pos.y -= 10;
+                        }
                     }
-                }
-                else if (p.direction == 2)
-                {
-                    scrolling(&Backg, p.direction, 10);
-                    p.posABS.y -= 10;
-                    for (int i = 0; i < 5; i++)
+                    else if (p.direction == 2)
                     {
-                        e[i].pos.y += 10;
+                        scrolling(&Backg, p.direction, 10);
+                        p.posABS.y -= 10;
+                        for (int i = 0; i < 5; i++)
+                        {
+                            e[i].pos.y += 10;
+                        }
                     }
+                    else
+                        deplacerPerso(&p, Confg->deltaTime);
                 }
-                else
-                    deplacerPerso(&p, Confg->deltaTime);
             }
         }
 
@@ -895,7 +899,11 @@ void Game(SDL_Surface *screen, Config *Confg)
             if (event.type == SDL_KEYDOWN)
                 if (event.key.keysym.sym == SDLK_a)
                 {
-                    p.attack = 1;
+                    if (!p.attack)
+                    {
+                        p.animJ = 0;
+                        p.attack = 1;
+                    }
                     if (BehindEnnemy(p, e[i]) != 2)
                         AttackedEnnemy = i;
                 }
@@ -1650,7 +1658,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 deplacerIA(&e1[i], p1);
                 deplacerEnnemy(&e1[i], Confg);
                 if (e1[i].pos.x > Width / 2)
-                        afficherEnnemy(e1[i], screen);
+                    afficherEnnemy(e1[i], screen);
             }
         }
 
