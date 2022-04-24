@@ -2506,7 +2506,7 @@ void Shop(SDL_Surface *screen, Config *Confg)
 
     int isRunning = 1, x, y, posI = 0;
     Image Backg[3];
-    int ReqMoney[3] = {1000, 2000, 5000}, isBought[3] = {1, 0, 0};
+    int ReqMoney[3] = {1000, 2000, 5000};
     for (int i = 0; i < 3; i++)
     {
         sprintf(Backg[i].NameImg, "assets/Shop/Shop%d.jpg", i + 1);
@@ -2551,13 +2551,15 @@ void Shop(SDL_Surface *screen, Config *Confg)
             else if (x > 1144 && x < 1525 && y > 788 && y < 883)
             {
 
-                if (!isBought[posI])
+                if (Confg->LevelR == posI)
                 {
-                    if (Confg->Money > ReqMoney[posI])
+                    printf("Enter\n");
+                    if (Confg->Money >= ReqMoney[posI])
                     {
                         Confg->Money -= ReqMoney[posI];
-                        isBought[posI] = 1;
+                        Confg->LevelR = posI + 1;
                     }
+                    printf("Bought\n");
                 }
             }
             break;
