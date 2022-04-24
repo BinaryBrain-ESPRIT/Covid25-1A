@@ -216,6 +216,13 @@ int main()
                 Afficher_txt(MoneyTxt, screen);
                 SDL_Flip(screen);
                 break;
+            case 4:
+                Shop(screen, Confg);
+                AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+                AfficherImg(MoneyImg, screen);
+                Afficher_txt(MoneyTxt, screen);
+                SDL_Flip(screen);
+                break;
             case 5:
                 AffichageCredits(screen, Confg);
                 i = 0;

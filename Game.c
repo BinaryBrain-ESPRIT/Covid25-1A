@@ -2499,3 +2499,92 @@ int AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, SD
     SDL_ShowCursor(SDL_DISABLE);
     Free_Enigme1(&e);
 }
+
+void Shop(SDL_Surface *screen, Config *Confg)
+{
+    SDL_Event event;
+
+    int isRunning = 1, x, y, posI = 0;
+    Image Backg[3];
+    int ReqMoney[3] = {1000, 2000, 5000}, isBought[3] = {1, 0, 0};
+    for (int i = 0; i < 3; i++)
+    {
+        sprintf(Backg[i].NameImg, "assets/Shop/Shop%d.jpg", i + 1);
+        printf("%s\n", Backg[i].NameImg);
+        InitBackg(&Backg[i], Backg[i].NameImg);
+    }
+    AfficherImg(Backg[0], screen);
+    SDL_Flip(screen);
+
+    while (isRunning)
+    {
+        SDL_WaitEvent(&event);
+        switch (event.type)
+        {
+        case SDL_QUIT:
+            isRunning = 0;
+            Confg->isRunning = 0;
+            break;
+
+        case SDL_MOUSEBUTTONDOWN:
+            x = event.button.x;
+            y = event.button.y;
+            printf("x = %d y = %d\n", x, y);
+            if (x > 221 && x < 303 && y > 541 && y < 604)
+            {
+                if (posI > 0)
+                    posI--;
+                else
+                    posI = 2;
+                AfficherImg(Backg[posI], screen);
+                SDL_Flip(screen);
+            }
+            else if (x > 1652 && x < 1738 && y > 492 && y < 603)
+            {
+                if (posI < 2)
+                    posI++;
+                else
+                    posI = 0;
+                AfficherImg(Backg[posI], screen);
+                SDL_Flip(screen);
+            }
+            else if (x > 1144 && x < 1525 && y > 788 && y < 883)
+            {
+
+                if (!isBought[posI])
+                {
+                    if (Confg->Money > ReqMoney[posI])
+                    {
+                        Confg->Money -= ReqMoney[posI];
+                        isBought[posI] = 1;
+                    }
+                }
+            }
+            break;
+        case SDL_KEYDOWN:
+            switch (event.key.keysym.sym)
+            {
+            case SDLK_ESCAPE:
+                isRunning = 0;
+                break;
+            case SDLK_RIGHT:
+                if (posI < 2)
+                    posI++;
+                else
+                    posI = 0;
+                AfficherImg(Backg[posI], screen);
+                SDL_Flip(screen);
+                break;
+            case SDLK_LEFT:
+                if (posI > 0)
+                    posI--;
+                else
+                    posI = 2;
+                AfficherImg(Backg[posI], screen);
+                SDL_Flip(screen);
+                break;
+            }
+            break;
+        }
+    }
+}
