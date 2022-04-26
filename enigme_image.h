@@ -6,14 +6,18 @@
 #include "Main_Fn.h"
 
 
-typedef struct
+/**
+ * @struct Enigme
+ * @brief Struct for Enigme
+ */
+typedef struct Enigme
 {
-    Image Backg[3];
-    Text Time[20];
-    int NumRC;
-    int NumE;
-    int Duration,TimeInit,TimeOut;
-    Text txt;
+    Image Backg[3]; /*!<background array  */
+    Text Time[20];/*!<time array*/
+    int NumRC;/*!<Correct answer's number*/
+    int NumE;/*!<riddle's number*/
+    int Duration,TimeInit,TimeOut;/*!<time variables*/
+    Text txt;/*!<text*/
 } Enigme;
 
 void InitEnigme(Enigme *e, char *nomfichier);
