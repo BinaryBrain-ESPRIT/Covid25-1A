@@ -22,9 +22,9 @@
  */
 typedef struct
 {
-    SDL_Surface *image, *image1, *playerTag, *zombieTag[5];
-    SDL_Rect pos, pos1, playerTagPos, zombieTagPos[5];
-    int EnnemyDie[5];
+    SDL_Surface *image, *image1, *playerTag, *zombieTag[5];/*!<Image Surface  */
+    SDL_Rect pos, pos1, playerTagPos, zombieTagPos[5];/*!<Pos Rect  */
+    int EnnemyDie[5]; /*!<ennemyDie Verification  */
 } minimap;
 /**
  * @struct struct score
@@ -34,7 +34,7 @@ typedef struct
 typedef struct Score
 {
     Text PlayerName, Time, ScoreTxt;
-    int Score;
+    int Score;/*!<Score*/
 } Score;
 /**
  * @struct struct card
@@ -43,11 +43,11 @@ typedef struct Score
  */
 typedef struct card
 {
-    Image Image;
-    Image RImage;
-    int Turned;
-    int Done;
-    int CardNumber;
+    Image Image;/*!<Image  */
+    Image RImage;/*!<Reversed Image  */
+    int Turned;/*!<is Turned or not  */
+    int Done;/*!<Done or not  */
+    int CardNumber;/*!<CardNumber  */
 } card;
 
 void initminimap(minimap *m, char nameimg[], Player p, Ennemy e[]);
