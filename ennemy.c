@@ -1,3 +1,5 @@
+
+
 #include "ennemy.h"
 
 void initEnnemy(Ennemy *e, int x, int y, int vitesse, int nbreVie)
