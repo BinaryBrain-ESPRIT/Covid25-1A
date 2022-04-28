@@ -221,6 +221,7 @@ void Liberer(minimap *m)
 // **********************************MiniGame*******************************************************//
 
 // CardGame
+<<<<<<< HEAD
 /**
  * @brief minigame play
  * 
@@ -228,6 +229,9 @@ void Liberer(minimap *m)
  * @param Confg lunch or stop the minigame
  */
 void MiniGameCard(SDL_Surface *screen, Config *Confg)
+=======
+int MiniGameCard(SDL_Surface *screen, Config *Confg)
+>>>>>>> 80146f506474fe62e80982a1c4709c8a44132c0a
 {
     SDL_ShowCursor(SDL_ENABLE);
 
@@ -340,7 +344,7 @@ void MiniGameCard(SDL_Surface *screen, Config *Confg)
         {
             if (strcmp(TurnedCard[0].Image.NameImg, TurnedCard[1].Image.NameImg) == 0)
             {
-                Score+= 50;
+                Score += 50;
                 sprintf(ScoreT.Texte, "Score: %d", Score);
                 initTxt(&ScoreT, 150, 520, White, 50, "assets/Font/AznKnucklesTrial-z85pa.otf", ScoreT.Texte);
                 AfficherImg(Backg, screen);
@@ -431,6 +435,9 @@ void MiniGameCard(SDL_Surface *screen, Config *Confg)
         }
         SDL_Flip(screen);
     }
-
+    if (Chance == 0)
+        return 0;
+    else
+        return 1;
     SDL_ShowCursor(SDL_DISABLE);
 }

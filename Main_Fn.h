@@ -24,6 +24,7 @@ typedef struct {
     int Player;
     int Money;
     double deltaTime;
+    int GameWin;
 }Config;
 
 
