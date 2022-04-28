@@ -221,7 +221,6 @@ void Liberer(minimap *m)
 // **********************************MiniGame*******************************************************//
 
 // CardGame
-<<<<<<< HEAD
 /**
  * @brief minigame play
  * 
@@ -229,9 +228,6 @@ void Liberer(minimap *m)
  * @param Confg lunch or stop the minigame
  */
 void MiniGameCard(SDL_Surface *screen, Config *Confg)
-=======
-int MiniGameCard(SDL_Surface *screen, Config *Confg)
->>>>>>> 80146f506474fe62e80982a1c4709c8a44132c0a
 {
     SDL_ShowCursor(SDL_ENABLE);
 
