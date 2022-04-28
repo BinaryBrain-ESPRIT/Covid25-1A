@@ -4,24 +4,23 @@
 #include <SDL/SDL.h>
 #include "player.h"
 
-typedef struct
+typedef struct Image1
 {
     SDL_Rect pos;
     SDL_Surface *img;
-    char NameImg[100];
-} Image1;
+    char NameImg[50];
+}Image1;
+
 typedef struct
 {
-    SDL_Rect pos;
-    SDL_Surface *img;
+    Image1 BackgImage[5];
     SDL_Rect cam;
-    Image1 AnimBackg[10];
-    int Anim;
+    int Anim,AnimI;
 } background;
 
-void InitGameBackg(background *Backg, int x, int y, int W, int H, char NameImg[]);
+void InitGameBackg(background *Backg, int x, int y, int W, int H);
 void AfficherBackg(background Backg, SDL_Surface *screen);
-int animer_background(background *Backg, SDL_Surface *screen, int Anim);
+void animer_background(background *Backg, SDL_Surface *screen);
 int collisionPH(Player p, SDL_Surface *Masque);
 int isTrapped(Player p, SDL_Surface *Masque);
 int isGround(Player p, SDL_Surface *Masque);

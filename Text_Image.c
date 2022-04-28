@@ -54,6 +54,8 @@ void Afficher_txt(Text text, SDL_Surface *screen)
 void Liberer_txt(Text text)
 {
     SDL_FreeSurface(text.surfaceText);
+    TTF_CloseFont(text.font);
+    
 }
 
 // IMG FN

@@ -4,6 +4,7 @@
 #include "Mouse.h"
 #include "ennemy.h"
 #include "minimap.h"
+#include "enigme_image.h"
 
 int main()
 {
@@ -11,20 +12,21 @@ int main()
     Config *Confg = (Config *)malloc(sizeof(Config));
 
     SDL_Surface *screen;
+    SDL_Color MoneyColor = {57, 181, 74};
     SDL_Event event;
     Mix_Chunk *sound;
     Mix_Music *music;
-    char NomBackg[40];
-    int i = 0, isRunning;
-    int last_frame_time = 0;
-    float delta_time;
+
+    Image MoneyImg;
     Image tabM[3][3];
     Text tabMT[6];
     Text tabMAT[6], MoneyTxt;
-    SDL_Color MoneyColor = {57, 181, 74};
-    char Money[5];
-    Image MoneyImg;
-    // Init Image
+
+    char NomBackg[40];
+    int i = 0, isRunning, iPred = 0;
+    ;
+    int last_frame_time = 0;
+    float delta_time;
 
     // End Init
 
@@ -50,9 +52,9 @@ int main()
         else
             screen = SDL_SetVideoMode(Width, Height, Bpp, SDL_HWSURFACE | SDL_FULLSCREEN);
 
-        sprintf(Money, "%d $", Confg->Money);
-        initTxt(&MoneyTxt, 1740, 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
-        initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
+        sprintf(MoneyTxt.Texte, "%d $", Confg->Money);
+        initTxt(&MoneyTxt, 1740, 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
+        initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
         initImg(&MoneyImg, 1596, 43, "assets/MainMenu/Money.png");
         PlayMusic("assets/Sound/son.wav", music);
 
@@ -77,11 +79,15 @@ int main()
             break;
 
         case SDL_MOUSEMOTION:
+            iPred = i;
             Motion_MM(tabMT, tabMAT, tabM, event, screen, &i, Confg);
-            AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
-            AfficherImg(MoneyImg, screen);
-            Afficher_txt(MoneyTxt, screen);
-            SDL_Flip(screen);
+            if (i != iPred)
+            {
+                AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+                AfficherImg(MoneyImg, screen);
+                Afficher_txt(MoneyTxt, screen);
+                SDL_Flip(screen);
+            }
             break;
 
         case SDL_KEYDOWN:
@@ -135,8 +141,8 @@ int main()
                 case 1:
                     SelectLevel(screen, Confg);
                     i = 0;
-                    sprintf(Money, "%d $", Confg->Money);
-                    initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
+                    sprintf(MoneyTxt.Texte, "%d $", Confg->Money);
+                    initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
                     AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
                     AfficherImg(MoneyImg, screen);
                     Afficher_txt(MoneyTxt, screen);
@@ -182,8 +188,8 @@ int main()
             case 1:
                 SelectLevel(screen, Confg);
                 i = 0;
-                sprintf(Money, "%d $", Confg->Money);
-                initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", Money);
+                sprintf(MoneyTxt.Texte, "%d $", Confg->Money);
+                initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
                 AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
                 AfficherImg(MoneyImg, screen);
                 Afficher_txt(MoneyTxt, screen);
@@ -224,18 +230,8 @@ int main()
                 Confg->isRunning = 0;
                 break;
             case 7:
-                if (Confg->LevelR == 2)
-                    if (Confg->Player == 3)
-                        Confg->Player = 2;
-                    else
-                        Confg->Player = 3;
-                else if (Confg->LevelR == 3)
-                    if (Confg->Player == 3)
-                        Confg->Player = 1;
-                    else if (Confg->Player == 2)
-                        Confg->Player = 3;
-                    else
-                        Confg->Player = 2;
+                SwitchPlayer(Confg);
+
                 AffichageMainMenu(screen, tabMT, tabMAT, tabM, 0, Confg->LevelR, Confg->Player);
                 AfficherImg(MoneyImg, screen);
                 Afficher_txt(MoneyTxt, screen);

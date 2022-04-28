@@ -65,25 +65,22 @@ void Motion_MG(Image tabMG[], SDL_Surface *screen, SDL_Event event, int *i)
 
         if (x > posX && x < posX1 && y > posY && y < posY1)
         {
-            if (*i != (j + 1))
+            if (*i != j)
             {
                 PlayChunkMusic("assets/Sound/chunk.wav", sound);
-                *i = j + 1;
-                AfficherImg(tabMG[*i + 4], screen);
+                *i = j;
+                AfficherImg(tabMG[*i + 5], screen);
                 SDL_Flip(screen);
             }
-            break;
+            return;
         }
-        else 
-        {
-            if (*i != 0)
-            {
-                *i = 0;
-                for (int j = 1; j < 6; j++)
-                    AfficherImg(tabMG[j], screen);
-                SDL_Flip(screen);
-            }
-        }
+    }
+    if (*i != 0)
+    {
+        *i = 0;
+        for (int j = 1; j < 6; j++)
+            AfficherImg(tabMG[j], screen);
+        SDL_Flip(screen);
     }
 }
 void Motion_MO(SDL_Surface *screen, Config *Confg, SDL_Event event, Image *tabMO, Image *tabMAO, int *i)
@@ -100,7 +97,6 @@ void Motion_MO(SDL_Surface *screen, Config *Confg, SDL_Event event, Image *tabMO
             PlayChunkMusic("assets/Sound/chunk.wav", sound);
             *i = 1;
             AffichageMenuOpt(screen, tabMO, tabMAO, *i);
-
             SDL_Flip(screen);
         }
     }
@@ -142,8 +138,82 @@ void Motion_MO(SDL_Surface *screen, Config *Confg, SDL_Event event, Image *tabMO
         {
             *i = 0;
             AffichageMenuOpt(screen, tabMO, tabMAO, *i);
-
             SDL_Flip(screen);
         }
     }
+}
+
+int MotionSL(Image LevelBut[], int j, SDL_Event event, int LevelSelected)
+{
+    SDL_Rect tabPos[20];
+
+    int x = event.motion.x;
+    int y = event.motion.y;
+    int posX, posX1, posY, posY1;
+    switch (LevelSelected)
+    {
+    case 0:
+        for (int i = 0; i < 4; i++)
+        {
+            posX = LevelBut[i].pos.x;
+            posY = LevelBut[i].pos.y;
+            posX1 = posX + LevelBut[i].img->w;
+            posY1 = posY + LevelBut[i].img->h;
+
+            if (x > posX && x < posX1 && y > posY && y < posY1)
+                return i + 10;
+        }
+        break;
+
+    case 1:
+        for (int i = 0; i < 6; i++)
+        {
+            if (i != 0)
+            {
+                posX = LevelBut[i].pos.x;
+                posY = LevelBut[i].pos.y;
+                posX1 = posX + LevelBut[i].img->w;
+                posY1 = posY + LevelBut[i].img->h;
+
+                if (x > posX && x < posX1 && y > posY && y < posY1)
+                    return i + 10;
+            }
+        }
+        break;
+    case 2:
+        for (int i = 0; i < 8; i++)
+        {
+            if (i != 1)
+            {
+                posX = LevelBut[i].pos.x;
+                posY = LevelBut[i].pos.y;
+                posX1 = posX + LevelBut[i].img->w;
+                posY1 = posY + LevelBut[i].img->h;
+
+                if (x > posX && x < posX1 && y > posY && y < posY1)
+                    return i + 10;
+            }
+        }
+        break;
+    case 3:
+        for (int i = 0; i < 10; i++)
+        {
+            if (i != 2)
+            {
+                posX = LevelBut[i].pos.x;
+                posY = LevelBut[i].pos.y;
+                posX1 = posX + LevelBut[i].img->w;
+                posY1 = posY + LevelBut[i].img->h;
+
+                if (x > posX && x < posX1 && y > posY && y < posY1)
+                    return i + 10;
+            }
+        }
+        break;
+    }
+
+    if (j != -1)
+        return -1;
+    else
+        return -2;
 }

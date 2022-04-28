@@ -1,5 +1,27 @@
+/**
+ * 
+ * @file ennemy.c
+ * @author Mohamed Habib Allah Bibani (mohamedhabiballah.bibani@esprit.tn)
+ * @brief Source File For Ennemy
+ * @version 1.0
+ * @date 2022-04-22
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
 #include "ennemy.h"
 
+/**
+ * @brief Initialize Ennemy
+ * 
+ * @param e Ennemy
+ * @param x PosX
+ * @param y PosY
+ * @param vitesse Vitesse
+ * @param nbreVie Nombre de Vie
+ * 
+ */
 void initEnnemy(Ennemy *e, int x, int y, int vitesse, int nbreVie)
 {
 
@@ -10,7 +32,7 @@ void initEnnemy(Ennemy *e, int x, int y, int vitesse, int nbreVie)
     e->pos.y = y;
 
     do
-        direction = rand() % (-1 - 2) - 1;
+        direction = rand() % (1 + 1) - 1;
     while (direction == 0);
 
     e->direction = direction;
@@ -42,12 +64,27 @@ void initEnnemy(Ennemy *e, int x, int y, int vitesse, int nbreVie)
         }
     }
 }
+
+/**
+ * 
+ * @brief Display Ennemy
+ * 
+ * @param e Ennemy
+ * @param screen ScreenDisplay
+ * 
+*/
 void afficherEnnemy(Ennemy e, SDL_Surface *screen)
 {
     if (!e.isKilled)
         SDL_BlitSurface(e.img[e.anim_i][e.anim_j], NULL, screen, &e.pos);
 }
 
+/**
+ * @brief Animation For The Ennemy
+ * 
+ * @param e Ennemy
+ * @param Confg Configuration
+ */
 void animerEnnemy(Ennemy *e, Config *Confg)
 {
     if (!e->isKilled)
@@ -116,6 +153,13 @@ void animerEnnemy(Ennemy *e, Config *Confg)
         }
     }
 }
+
+/**
+ * @brief MoveEnnemy
+ * 
+ * @param e Ennemy
+ * @param Confg Configuration
+ */
 void deplacerEnnemy(Ennemy *e, Config *Confg)
 {
     if (!e->isKilled)
@@ -135,6 +179,13 @@ void deplacerEnnemy(Ennemy *e, Config *Confg)
         }
     }
 }
+/**
+ * @brief MoveAI
+ * 
+ * @param e Ennemy
+ * @param p Player
+ * 
+ */
 void deplacerIA(Ennemy *e, Player p)
 {
     int ReachPosX = rand()%(500-200)+200;
@@ -151,6 +202,14 @@ void deplacerIA(Ennemy *e, Player p)
         }
     }
 }
+
+/**
+ * @brief Ennemy Collsion With Player
+ * 
+ * @param e Ennemy
+ * @param p Player
+ * @return int (1 if YES / 0 if NO)
+ */
 int collisionBB(Ennemy e, Player p)
 {
     if (!e.isKilled)
@@ -171,6 +230,13 @@ int collisionBB(Ennemy e, Player p)
     }
 }
 
+/**
+ * @brief Detect Player 
+ * 
+ * @param p Player
+ * @param e Ennemy
+ * @return int (1 Right / -1 Left / 2 NoOne Behind / 0 Close To ennemy To attack)
+ */
 int BehindEnnemy(Player p, Ennemy e)
 {
     int posEX = e.pos.x;
@@ -206,6 +272,15 @@ int BehindEnnemy(Player p, Ennemy e)
     
     return 2;
 }
+
+/**
+ * @brief Horizontal Collision
+ * 
+ * @param e Ennemy
+ * @param Masque Mask
+ * @return int Posiion Of the Collsion
+ */
+
 int collisionEH(Ennemy e, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -231,6 +306,14 @@ int collisionEH(Ennemy e, SDL_Surface *Masque)
 
     return 0;
 }
+
+/**
+ * @brief Vertical Collision
+ * 
+ * @param e Ennemy
+ * @param Masque Mask Surface
+ * @return int Posiion Of the Collsion
+ */
 int collisionEV(Ennemy e, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -248,12 +331,17 @@ int collisionEV(Ennemy e, SDL_Surface *Masque)
             return 2;
         // Bot
         color = GetPixel1(Masque, i, posY1);
-        printf("R = %d G = %d B = %d\n", color.r, color.g, color.b);
+        //printf("R = %d G = %d B = %d\n", color.r, color.g, color.b);
         if (color.r == 255 && color.g == 255 && color.b == 1)
             return -2;
     }
 }
 
+/**
+ * @brief Free Ennemy
+ * 
+ * @param e Ennemy
+ */
 void LibererEnnemy(Ennemy e)
 {
     int n;
@@ -273,6 +361,14 @@ void LibererEnnemy(Ennemy e)
     }
 }
 
+/**
+ * @brief Get the Pixel 1 object
+ * 
+ * @param pSurface Mask Surface
+ * @param x Position X
+ * @param y Position Y
+ * @return SDL_Color return the color on specified position
+ */
 SDL_Color GetPixel1(SDL_Surface *pSurface, int x, int y)
 {
     SDL_Color color;
