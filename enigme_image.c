@@ -1,4 +1,22 @@
+/**
+ * @file enigme_image.c
+ * @author Benzarti Wiem (wiem.benzarti@esprit.tn)
+ * @brief Image Riddle File 
+ * @version 0.1
+ * @date 2022-04-26
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
 #include "enigme_image.h"
+
+/**
+ * @brief initialisation riddle
+ * 
+ * @param e Enigme
+ * @param nomfichier file name
+ */
 void InitEnigme(Enigme *e, char *nomfichier)
 {
     SDL_Color White = {255, 255, 255};
@@ -60,6 +78,13 @@ void InitEnigme(Enigme *e, char *nomfichier)
 
     fclose(f);
 }
+
+/**
+ * @brief Display riddle 
+ * 
+ * @param e Enigme
+ * @param screen screen display 
+ */
 void afficherEnigme(Enigme e, SDL_Surface *screen)
 {
     AfficherImg(e.Backg[0], screen);
@@ -90,6 +115,12 @@ void animer(Enigme *e, SDL_Surface *screen)
     }
     EnigmeTimeSPred = EnigmeTimeS;
 }
+
+/**
+ * @brief free riddle
+ * 
+ * @param e Enigme
+ */
 void Free_Enigme(Enigme *e)
 {
     for (int i = 0; i < 3; i++)
@@ -98,6 +129,12 @@ void Free_Enigme(Enigme *e)
         SDL_FreeSurface(e->Time[i].surfaceText);
 }
 
+
+/**
+ * @brief switch player
+ * 
+ * @param Confg Configuration
+ */
 void SwitchPlayer(Config * Confg)
 {
     if (Confg->LevelR == 2)

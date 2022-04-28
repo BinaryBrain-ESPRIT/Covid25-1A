@@ -627,6 +627,7 @@ int SaveGame(Config *Confg, SDL_Surface *screen)
             break;
         }
     }
+    return 0;
 }
 
 void Game(SDL_Surface *screen, Config *Confg)
@@ -816,11 +817,12 @@ void Game(SDL_Surface *screen, Config *Confg)
         }
         else
         {
+            printf("attack: %d\n", p.attack);
+            printf("j : %d\n", p.animJ);
             if (p.attack)
             {
                 if (p.AnimP_Attack > 0)
                 {
-
                     if (!p.flipped)
                         p.animI = 8;
                     else
@@ -830,61 +832,63 @@ void Game(SDL_Surface *screen, Config *Confg)
                         p.animJ++;
                     else
                     {
+                        p.animJ = 0;
                         p.attack = 0;
 
                         if (AttackedEnnemy != -1)
-                        {
                             e[AttackedEnnemy].nbreVie--;
-                        }
                     }
                     p.AnimP_Attack = 0;
                 }
                 else
                     p.AnimP_Attack++;
             }
-            // Scrolling
-            if (collisionPH(p, Masque[0]) != p.direction)
+            else
             {
-                if (p.pos.x >= screen->w / 2 && p.direction == 1)
+                // Scrolling
+                if (collisionPH(p, Masque[0]) != p.direction)
                 {
-                    scrolling(&Backg, p.direction, 10);
-                    p.posABS.x += 10;
-                    for (int i = 0; i < 5; i++)
+                    if (p.pos.x >= screen->w / 2 && p.direction == 1)
                     {
-                        e[i].posInit -= 10;
-                        e[i].pos.x -= 10;
+                        scrolling(&Backg, p.direction, 10);
+                        p.posABS.x += 10;
+                        for (int i = 0; i < 5; i++)
+                        {
+                            e[i].posInit -= 10;
+                            e[i].pos.x -= 10;
+                        }
                     }
-                }
-                else if (p.direction == -1 && p.pos.x <= 500 && p.posABS.x > 500)
-                {
-                    scrolling(&Backg, p.direction, 10);
-                    p.posABS.x -= 10;
-                    for (int i = 0; i < 5; i++)
+                    else if (p.direction == -1 && p.pos.x <= 500 && p.posABS.x > 500)
                     {
-                        e[i].posInit += 10;
-                        e[i].pos.x += 10;
+                        scrolling(&Backg, p.direction, 10);
+                        p.posABS.x -= 10;
+                        for (int i = 0; i < 5; i++)
+                        {
+                            e[i].posInit += 10;
+                            e[i].pos.x += 10;
+                        }
                     }
-                }
-                else if (p.direction == -2)
-                {
-                    scrolling(&Backg, p.direction, 10);
-                    p.posABS.y += 10;
-                    for (int i = 0; i < 5; i++)
+                    else if (p.direction == -2)
                     {
-                        e[i].pos.y -= 10;
+                        scrolling(&Backg, p.direction, 10);
+                        p.posABS.y += 10;
+                        for (int i = 0; i < 5; i++)
+                        {
+                            e[i].pos.y -= 10;
+                        }
                     }
-                }
-                else if (p.direction == 2)
-                {
-                    scrolling(&Backg, p.direction, 10);
-                    p.posABS.y -= 10;
-                    for (int i = 0; i < 5; i++)
+                    else if (p.direction == 2)
                     {
-                        e[i].pos.y += 10;
+                        scrolling(&Backg, p.direction, 10);
+                        p.posABS.y -= 10;
+                        for (int i = 0; i < 5; i++)
+                        {
+                            e[i].pos.y += 10;
+                        }
                     }
+                    else
+                        deplacerPerso(&p, Confg->deltaTime);
                 }
-                else
-                    deplacerPerso(&p, Confg->deltaTime);
             }
         }
 
@@ -895,7 +899,11 @@ void Game(SDL_Surface *screen, Config *Confg)
             if (event.type == SDL_KEYDOWN)
                 if (event.key.keysym.sym == SDLK_a)
                 {
-                    p.attack = 1;
+                    if (!p.attack)
+                    {
+                        p.animJ = 0;
+                        p.attack = 1;
+                    }
                     if (BehindEnnemy(p, e[i]) != 2)
                         AttackedEnnemy = i;
                 }
@@ -1650,7 +1658,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 deplacerIA(&e1[i], p1);
                 deplacerEnnemy(&e1[i], Confg);
                 if (e1[i].pos.x > Width / 2)
-                        afficherEnnemy(e1[i], screen);
+                    afficherEnnemy(e1[i], screen);
             }
         }
 
@@ -2490,4 +2498,95 @@ int AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, SD
         printf("Out Of Choice\n");
     SDL_ShowCursor(SDL_DISABLE);
     Free_Enigme1(&e);
+}
+
+void Shop(SDL_Surface *screen, Config *Confg)
+{
+    SDL_Event event;
+
+    int isRunning = 1, x, y, posI = 0;
+    Image Backg[3];
+    int ReqMoney[3] = {1000, 2000, 5000};
+    for (int i = 0; i < 3; i++)
+    {
+        sprintf(Backg[i].NameImg, "assets/Shop/Shop%d.jpg", i + 1);
+        printf("%s\n", Backg[i].NameImg);
+        InitBackg(&Backg[i], Backg[i].NameImg);
+    }
+    AfficherImg(Backg[0], screen);
+    SDL_Flip(screen);
+
+    while (isRunning)
+    {
+        SDL_WaitEvent(&event);
+        switch (event.type)
+        {
+        case SDL_QUIT:
+            isRunning = 0;
+            Confg->isRunning = 0;
+            break;
+
+        case SDL_MOUSEBUTTONDOWN:
+            x = event.button.x;
+            y = event.button.y;
+            printf("x = %d y = %d\n", x, y);
+            if (x > 221 && x < 303 && y > 541 && y < 604)
+            {
+                if (posI > 0)
+                    posI--;
+                else
+                    posI = 2;
+                AfficherImg(Backg[posI], screen);
+                SDL_Flip(screen);
+            }
+            else if (x > 1652 && x < 1738 && y > 492 && y < 603)
+            {
+                if (posI < 2)
+                    posI++;
+                else
+                    posI = 0;
+                AfficherImg(Backg[posI], screen);
+                SDL_Flip(screen);
+            }
+            else if (x > 1144 && x < 1525 && y > 788 && y < 883)
+            {
+
+                if (Confg->LevelR == posI)
+                {
+                    printf("Enter\n");
+                    if (Confg->Money >= ReqMoney[posI])
+                    {
+                        Confg->Money -= ReqMoney[posI];
+                        Confg->LevelR = posI + 1;
+                    }
+                    printf("Bought\n");
+                }
+            }
+            break;
+        case SDL_KEYDOWN:
+            switch (event.key.keysym.sym)
+            {
+            case SDLK_ESCAPE:
+                isRunning = 0;
+                break;
+            case SDLK_RIGHT:
+                if (posI < 2)
+                    posI++;
+                else
+                    posI = 0;
+                AfficherImg(Backg[posI], screen);
+                SDL_Flip(screen);
+                break;
+            case SDLK_LEFT:
+                if (posI > 0)
+                    posI--;
+                else
+                    posI = 2;
+                AfficherImg(Backg[posI], screen);
+                SDL_Flip(screen);
+                break;
+            }
+            break;
+        }
+    }
 }

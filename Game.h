@@ -24,4 +24,5 @@ int AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, SD
 int WinGame(Config *Confg, SDL_Surface *screen);
 int LooseGame(Config *Confg, SDL_Surface *screen);
 int SaveGame(Config *Confg, SDL_Surface *screen);
+void Shop(SDL_Surface *screen, Config *Confg);
 #endif

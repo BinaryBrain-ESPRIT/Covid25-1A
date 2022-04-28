@@ -22,7 +22,6 @@ int main()
     Text tabMT[6];
     Text tabMAT[6], MoneyTxt;
 
-    char NomBackg[40];
     int i = 0, isRunning, iPred = 0;
     ;
     int last_frame_time = 0;
@@ -43,8 +42,9 @@ int main()
         {
             for (int j = 0; j < i + 1; j++)
             {
-                sprintf(NomBackg, "assets/MainMenu/Level-%d-Perso-%d.png", i + 1, j + 1);
-                InitBackg(&tabM[i][j], NomBackg);
+                sprintf(tabM[i][j].NameImg, "assets/MainMenu/Level-%d-Perso-%d.png", i + 1, j + 1);
+                printf("tabM :%s\n", tabM[i][j].NameImg);
+                InitBackg(&tabM[i][j], tabM[i][j].NameImg);
             }
         }
         if (Confg->Fullscr > 0)
@@ -211,6 +211,15 @@ int main()
                 break;
             case 3:
                 LeaderBoard(screen, Confg);
+                AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+                AfficherImg(MoneyImg, screen);
+                Afficher_txt(MoneyTxt, screen);
+                SDL_Flip(screen);
+                break;
+            case 4:
+                Shop(screen, Confg);
+                sprintf(MoneyTxt.Texte, "%d $", Confg->Money);
+                initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
                 AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
                 AfficherImg(MoneyImg, screen);
                 Afficher_txt(MoneyTxt, screen);

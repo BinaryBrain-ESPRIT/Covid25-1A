@@ -25,7 +25,7 @@ void initPerso(Player *p, int x, int y, int NumPlayer)
     p->AnimP_Attack = 0;
     p->AnimP_Run = 0;
     p->AnimP_Die = 0;
-
+    p->attack = 0;
     p->NumPlayer = NumPlayer;
     p->isJumped = 0;
 
@@ -53,12 +53,12 @@ void initPerso(Player *p, int x, int y, int NumPlayer)
 
         for (int j = 0; j < n; j++)
         {
-             /**
+            /**
              * i = Animation Type
              * j = Animation Image
              **/
             sprintf(NomImg, "assets/Animation/Player%d/%d/%d.png", NumPlayer, i, j + 1); // selecting player Images
-            p->img[i][j] = IMG_Load(NomImg); // Loading Images
+            p->img[i][j] = IMG_Load(NomImg);                                             // Loading Images
         }
     }
 }
@@ -98,34 +98,18 @@ void deplacerPerso(Player *p, int dt)
 void animerPerso(Player *p)
 {
     int n = 0;
-    if (p->nbreVie > 0)
+    if (p->nbreVie > 0 && !p->attack)
     {
         switch (p->direction)
         {
         case 0:
-            if (p->AnimP_Idle > 10)
-            {
-                if (!p->flipped)
-                    p->animI = 0;
-                else
-                    p->animI = 1;
-
-                if (p->NumPlayer != 3)
-                    n = 5;
-                else
-                    n = 0;
-                // n: NbreImage
-                if (p->animJ >= n)
-                    p->animJ = 0;
-                else
-                    p->animJ++;
-                p->AnimP_Idle = 0;
-            }
-            p->AnimP_Idle++;
-
+            if (!p->flipped)
+                p->animI = 0;
+            else
+                p->animI = 1;
             break;
         case 1:
-            if (p->AnimP_Run > 1)
+            if (p->AnimP_Run > 2)
             {
                 p->animI = 2;
                 if (p->NumPlayer != 3)
@@ -142,7 +126,7 @@ void animerPerso(Player *p)
             p->AnimP_Run++;
             break;
         case -1:
-            if (p->AnimP_Run > 1)
+            if (p->AnimP_Run > 2)
             {
                 p->animI = 3;
 
