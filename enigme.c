@@ -1,4 +1,23 @@
+/**
+ * @file enigme.c
+ * @author Maher Grati (mohammedmaher.grati@esprit.tn)
+ * @brief (enigme text) file
+ * @version 0.1
+ * @date 2022-04-28
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
 #include "enigme.h"
+
+/**
+ * @brief init enigme
+ * 
+ * @param e enigme
+ * @param nomfichier fileName
+ * @return int return 1 if initialized else if not 
+ */
 int InitEnigme1(enigme *e, char *nomfichier)
 {
   // Declaration
@@ -149,6 +168,13 @@ int InitEnigme1(enigme *e, char *nomfichier)
   return 1;
 }
 
+
+/**
+ * @brief afficher Enigme
+ * 
+ * @param e enigme
+ * @param screen screen display
+ */
 void afficherEnigme1(enigme e, SDL_Surface *screen)
 {
   AfficherImg(e.Backg[0], screen);
@@ -157,7 +183,12 @@ void afficherEnigme1(enigme e, SDL_Surface *screen)
   for (int i = 0; i < 3; i++)
     Afficher_txt(e.Rep[i], screen);
 }
-
+/**
+ * @brief animer
+ * 
+ * @param e enigme
+ * @param screen screen display
+ */
 void animer1(enigme *e, SDL_Surface *screen)
 {
   int EnigmeTimeS, EnigmeTimeSPred = -1;
@@ -167,6 +198,8 @@ void animer1(enigme *e, SDL_Surface *screen)
   if (e->Duration - EnigmeTimeS < 0)
   {
     e->TimeOut = 1;
+
+
     return;
   }
 
@@ -178,7 +211,11 @@ void animer1(enigme *e, SDL_Surface *screen)
   }
   EnigmeTimeSPred = EnigmeTimeS;
 }
-
+/**
+ * @brief Free_Enigme
+ * 
+ * @param e enigme
+ */
 void Free_Enigme1(enigme *e)
 {
   for (int i = 0; i < 3; i++)
