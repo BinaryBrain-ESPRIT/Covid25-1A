@@ -1,19 +1,3 @@
-<<<<<<< HEAD
-
-=======
-/**
- * 
- * @file ennemy.c
- * @author Mohamed Habib Allah Bibani (mohamedhabiballah.bibani@esprit.tn)
- * @brief Source File For Ennemy
- * @version 1.0
- * @date 2022-04-22
- * 
- * @copyright Copyright (c) 2022
- * 
- */
->>>>>>> 80146f506474fe62e80982a1c4709c8a44132c0a
-
 #include "ennemy.h"
 
 /**
