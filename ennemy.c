@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-
-=======
 /**
  * 
  * @file ennemy.c
@@ -12,7 +9,6 @@
  * @copyright Copyright (c) 2022
  * 
  */
->>>>>>> 80146f506474fe62e80982a1c4709c8a44132c0a
 
 #include "ennemy.h"
 
