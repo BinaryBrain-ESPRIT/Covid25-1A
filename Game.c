@@ -817,8 +817,7 @@ void Game(SDL_Surface *screen, Config *Confg)
         }
         else
         {
-            printf("attack: %d\n", p.attack);
-            printf("j : %d\n", p.animJ);
+
             if (p.attack)
             {
                 if (p.AnimP_Attack > 0)
@@ -1077,7 +1076,7 @@ void Game(SDL_Surface *screen, Config *Confg)
         }
         Confg->deltaTime = (SDL_GetTicks() - last_frame_time);
     }
-    int etat;
+    int etat, etat1;
     SDL_ShowCursor(SDL_ENABLE);
 
     // Initialise SelectedEnigme
@@ -1107,21 +1106,23 @@ void Game(SDL_Surface *screen, Config *Confg)
     if (Confg->GameWin)
         etat = WinGame(Confg, screen);
     else
-        etat = LooseGame(Confg, screen);
+        etat1 = LooseGame(Confg, screen);
 
-    if (!etat)
-        isRunning = 0;
-    else
+    if (etat)
     {
-        if (SaveGame(Confg, screen))
-        {
-            // SaveScore
-            SaveScore(p.PlayerName, p.score, GameTimeTxt.Texte);
-            Confg->Money += p.score;
-        }
+        if (Confg->Level < 3)
+            Confg->Level++;
         Game(screen, Confg);
         return;
     }
+
+    if (etat1)
+    {
+        Game(screen, Confg);
+        return;
+    }
+    else
+        return;
 
     if (SaveGame(Confg, screen))
     {
@@ -1378,7 +1379,6 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
             // Scrolling
             if (collisionPH(p, Masque[0]) != p.direction)
             {
-                printf("1 Moving\n");
                 if (p.pos.x >= (screen->w / 2) / 2 && p.direction == 1)
                 {
                     scrolling(&Backg, p.direction, 10);
@@ -2494,8 +2494,6 @@ int AfficherEnigmeTexte(SDL_Surface *screen, Config *Confg, int GameTimeInit, SD
             }
         }
     }
-    else
-        printf("Out Of Choice\n");
     SDL_ShowCursor(SDL_DISABLE);
     Free_Enigme1(&e);
 }
@@ -2509,9 +2507,16 @@ void Shop(SDL_Surface *screen, Config *Confg)
     int ReqMoney[3] = {1000, 2000, 5000};
     for (int i = 0; i < 3; i++)
     {
-        sprintf(Backg[i].NameImg, "assets/Shop/Shop%d.jpg", i + 1);
-        printf("%s\n", Backg[i].NameImg);
-        InitBackg(&Backg[i], Backg[i].NameImg);
+        if (i < Confg->LevelR)
+        {
+            sprintf(Backg[i].NameImg, "assets/Shop/Shop%dB.jpg", i + 1);
+            InitBackg(&Backg[i], Backg[i].NameImg);
+        }
+        else
+        {
+            sprintf(Backg[i].NameImg, "assets/Shop/Shop%d.jpg", i + 1);
+            InitBackg(&Backg[i], Backg[i].NameImg);
+        }
     }
     AfficherImg(Backg[0], screen);
     SDL_Flip(screen);
@@ -2529,7 +2534,7 @@ void Shop(SDL_Surface *screen, Config *Confg)
         case SDL_MOUSEBUTTONDOWN:
             x = event.button.x;
             y = event.button.y;
-            printf("x = %d y = %d\n", x, y);
+            
             if (x > 221 && x < 303 && y > 541 && y < 604)
             {
                 if (posI > 0)
@@ -2553,13 +2558,15 @@ void Shop(SDL_Surface *screen, Config *Confg)
 
                 if (Confg->LevelR == posI)
                 {
-                    printf("Enter\n");
                     if (Confg->Money >= ReqMoney[posI])
                     {
                         Confg->Money -= ReqMoney[posI];
                         Confg->LevelR = posI + 1;
+                        sprintf(Backg[posI].NameImg, "assets/Shop/Shop%d.jpg", posI + 1);
+                        InitBackg(&Backg[posI], Backg[posI].NameImg);
+                        AfficherImg(Backg[posI], screen);
+                        SDL_Flip(screen);
                     }
-                    printf("Bought\n");
                 }
             }
             break;
@@ -2584,6 +2591,20 @@ void Shop(SDL_Surface *screen, Config *Confg)
                     posI = 2;
                 AfficherImg(Backg[posI], screen);
                 SDL_Flip(screen);
+                break;
+            case SDLK_RETURN:
+                if (Confg->LevelR == posI)
+                {
+                    if (Confg->Money >= ReqMoney[posI])
+                    {
+                        Confg->Money -= ReqMoney[posI];
+                        Confg->LevelR = posI + 1;
+                        sprintf(Backg[posI].NameImg, "assets/Shop/Shop%dB.jpg", posI + 1);
+                        InitBackg(&Backg[posI], Backg[posI].NameImg);
+                        AfficherImg(Backg[posI], screen);
+                        SDL_Flip(screen);
+                    }
+                }
                 break;
             }
             break;

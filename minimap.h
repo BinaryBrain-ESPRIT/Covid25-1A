@@ -1,3 +1,13 @@
+/**
+ * @file minimap.h
+ * @author oussamaawledsalem
+ * @brief 
+ * @version 0.1
+ * @date 2022-04-22
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #ifndef minimap_H
 #define minimap_H
 #include <SDL/SDL.h>
@@ -5,25 +15,39 @@
 #include "player.h"
 #include "ennemy.h"
 
+/**
+ * @struct struct minimap
+ * @brief struct for minimap
+ * 
+ */
 typedef struct
 {
-    SDL_Surface *image, *image1, *playerTag, *zombieTag[5];
-    SDL_Rect pos, pos1, playerTagPos, zombieTagPos[5];
-    int EnnemyDie[5];
+    SDL_Surface *image, *image1, *playerTag, *zombieTag[5];/*!<Image Surface  */
+    SDL_Rect pos, pos1, playerTagPos, zombieTagPos[5];/*!<Pos Rect  */
+    int EnnemyDie[5]; /*!<ennemyDie Verification  */
 } minimap;
+/**
+ * @struct struct score
+ * @brief struct for score
+ * 
+ */
 typedef struct Score
 {
     Text PlayerName, Time, ScoreTxt;
-    int Score;
+    int Score;/*!<Score*/
 } Score;
-
+/**
+ * @struct struct card
+ * @brief struct for card
+ * 
+ */
 typedef struct card
 {
-    Image Image;
-    Image RImage;
-    int Turned;
-    int Done;
-    int CardNumber;
+    Image Image;/*!<Image  */
+    Image RImage;/*!<Reversed Image  */
+    int Turned;/*!<is Turned or not  */
+    int Done;/*!<Done or not  */
+    int CardNumber;/*!<CardNumber  */
 } card;
 
 void initminimap(minimap *m, char nameimg[], Player p, Ennemy e[]);

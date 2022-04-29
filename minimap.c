@@ -1,8 +1,25 @@
+/**
+ * @file minimap.c
+ * @author oussamaawledsalem
+ * @brief 
+ * @version 0.1
+ * @date 2022-04-22
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #include "minimap.h"
 #include "Main_Fn.h"
 #include <time.h>
 #include <stdlib.h>
-
+/**
+ * @brief to initialize minilap
+ * 
+ * @param m the map
+ * @param nameimg name of the minimap to use
+ * @param p player 
+ * @param e ennemy
+ */
 void initminimap(minimap *m, char nameimg[], Player p, Ennemy e[])
 {
     m->image = IMG_Load(nameimg);
@@ -21,6 +38,12 @@ void initminimap(minimap *m, char nameimg[], Player p, Ennemy e[])
         m->zombieTagPos[i].y = ((e[i].pos.y * Redim) / 100) + m->pos.y;
     }
 }
+/**
+ * @brief to display the minimap
+ * 
+ * @param m minimap
+ * @param screen screen display
+ */
 void afficherminimap(minimap m, SDL_Surface *screen)
 {
     SDL_BlitSurface(m.image1, NULL, screen, &m.pos1);
@@ -33,6 +56,14 @@ void afficherminimap(minimap m, SDL_Surface *screen)
             SDL_BlitSurface(m.zombieTag[i], NULL, screen, &m.zombieTagPos[i]);
     }
 }
+/**
+ * @brief minimap update
+ * 
+ * @param PosJoueur player position
+ * @param e ennemy
+ * @param m minimap
+ * @param redimensionnement recizing percentage
+ */
 void MAJMinimap(SDL_Rect PosJoueur, Ennemy e[], minimap *m, int redimensionnement)
 {
     m->playerTagPos.x = m->pos.x + ((PosJoueur.x * redimensionnement) / 100);
@@ -45,7 +76,12 @@ void MAJMinimap(SDL_Rect PosJoueur, Ennemy e[], minimap *m, int redimensionnemen
         m->zombieTagPos[i].y = m->pos.y + ((e[i].posABS.y * redimensionnement) / 100);
     }
 }
-
+/**
+ * @brief time management
+ * 
+ * @param GameTimeTxt to display the time
+ * @param GameTimeInit time inisialisation
+ */
 void MAJTime(Text *GameTimeTxt, int GameTimeInit)
 {
     SDL_Color Red = {193, 39, 45};
@@ -62,7 +98,13 @@ void MAJTime(Text *GameTimeTxt, int GameTimeInit)
 
     GameTimeSPred = GameTimeS;
 }
-
+/**
+ * @brief score saving
+ * 
+ * @param PlayerName name of the player
+ * @param Score score
+ * @param Time time
+ */
 void SaveScore(char PlayerName[], int Score, char Time[])
 {
     FILE *f = fopen("Data/Score.txt", "a");
@@ -70,7 +112,12 @@ void SaveScore(char PlayerName[], int Score, char Time[])
     fprintf(f, "%s %s %d\n", PlayerName, Time, Score);
     fclose(f);
 }
-
+/**
+ * @brief best score display
+ * 
+ * @param screen screen display
+ * @param Confg 
+ */
 void LeaderBoard(SDL_Surface *screen, Config *Confg)
 {
     Image Backg;
@@ -160,7 +207,11 @@ void LeaderBoard(SDL_Surface *screen, Config *Confg)
 
     fclose(f);
 }
-
+/**
+ * @brief free memory space
+ * 
+ * @param m minimap
+ */
 void Liberer(minimap *m)
 {
     SDL_FreeSurface(m->image);
@@ -170,6 +221,14 @@ void Liberer(minimap *m)
 // **********************************MiniGame*******************************************************//
 
 // CardGame
+/**
+ * @brief MiniGame
+ * 
+ * @param screen screen display
+ * @param Confg Configuration Variable
+ * @return int Win Or Loose
+ */
+
 int MiniGameCard(SDL_Surface *screen, Config *Confg)
 {
     SDL_ShowCursor(SDL_ENABLE);
