@@ -1,6 +1,15 @@
 # Covid 25
+
 SDL Project (ESPRIT)
 To Run Your Game Type
-    ./Run.sh
+
+```
+./Run.sh
+```
+
 To Debug Your Game Type
-    ./debug.sh
+
+```
+./debug.sh
+
+```
