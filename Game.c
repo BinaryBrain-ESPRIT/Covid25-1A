@@ -528,6 +528,7 @@ int LooseGame(Config *Confg, SDL_Surface *screen)
 
 int SaveGame(Config *Confg, SDL_Surface *screen)
 {
+    printf("test\n");
     int isRunning = 1, j = 0;
     int posNX, posNX1, posNY, posNY1, x, y;
     int posYX, posYX1, posYY, posYY1;
@@ -1107,7 +1108,14 @@ void Game(SDL_Surface *screen, Config *Confg)
         etat = WinGame(Confg, screen);
     else
         etat1 = LooseGame(Confg, screen);
-
+    
+    if (SaveGame(Confg, screen))
+    {
+        // SaveScore
+        SaveScore(p.PlayerName, p.score, GameTimeTxt.Texte);
+        Confg->Money += p.score;
+    }
+    
     if (etat)
     {
         if (Confg->Level < 3)
@@ -1124,12 +1132,7 @@ void Game(SDL_Surface *screen, Config *Confg)
     else
         return;
 
-    if (SaveGame(Confg, screen))
-    {
-        // SaveScore
-        SaveScore(p.PlayerName, p.score, GameTimeTxt.Texte);
-        Confg->Money += p.score;
-    }
+    
 }
 
 void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
