@@ -5,7 +5,6 @@
 #include "ennemy.h"
 #include "minimap.h"
 #include "enigme_image.h"
-#include <Arduino.h>
 
 int main()
 {
