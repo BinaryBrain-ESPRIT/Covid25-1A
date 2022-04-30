@@ -8,15 +8,15 @@ void InitGameBackg(background *Backg, int x, int y, int W, int H)
     {
         sprintf(Backg->BackgImage[i].NameImg, "assets/Levels/Level1[%d].jpg", i);
         Backg->BackgImage[i].img = IMG_Load(Backg->BackgImage[i].NameImg);
+        
+        Backg->BackgImage[i].pos.x = x;
+        Backg->BackgImage[i].pos.y = y;
+        Backg->BackgImage[i].pos.w = W;
+        Backg->BackgImage[i].pos.h = H;
     }
 
-    Backg->BackgImage->pos.x = x;
-    Backg->BackgImage->pos.y = y;
-    Backg->BackgImage->pos.w = W;
-    Backg->BackgImage->pos.h = H;
-
-    Backg->cam.x = 0;
-    Backg->cam.y = 0;
+    Backg->cam.x = W;
+    Backg->cam.y = H;
     Backg->cam.w = W;
     Backg->cam.h = H;
     Backg->Anim = 0;
@@ -30,7 +30,7 @@ void AfficherBackg(background Backg, SDL_Surface *screen)
 
 void animer_background(background *Backg, SDL_Surface *screen)
 {
-    if (Backg->Anim > 5)
+    if (Backg->Anim > 2)
     {
         if (Backg->AnimI > 3)
             Backg->AnimI = 0;

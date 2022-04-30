@@ -30,7 +30,7 @@ typedef struct Ennemy
     double v; /*!<Ennemy Speed*/
     int direction; /*!<Ennemy Direction*/
     int nbreVie; /*!<Ennemy Life*/
-    int isKilled; /*!<check if Ennely IsKilled or not*/
+    int isKilled; /*!<check if Ennemy IsKilled or not*/
     int anim_i, anim_j; /*!<Index For the Matrix*/
     int posInit; /*!<Initial x position For the Ennemy*/
     int attack; /*!<Check If the ennemy attacking or not*/

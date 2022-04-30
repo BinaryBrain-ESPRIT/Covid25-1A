@@ -413,6 +413,17 @@ int WinGame(Config *Confg, SDL_Surface *screen)
             }
 
             break;
+        case SDL_MOUSEBUTTONDOWN:
+            switch (j)
+            {
+            case 1:
+                return 1;
+                break;
+            case 2:
+                return 0;
+            }
+
+            break;
         }
     }
 
@@ -641,6 +652,7 @@ void Game(SDL_Surface *screen, Config *Confg)
     SDL_Color TimeColor = {193, 39, 45};
     SDL_Color Black = {0, 0, 0};
     SDL_Color Red = {193, 39, 45};
+    SDL_Rect camPos;
 
     // Declar Player
     Player p;
@@ -673,7 +685,24 @@ void Game(SDL_Surface *screen, Config *Confg)
     ChoosePlayerName(&p, Confg, screen);
 
     // Init LevelBackg
-    InitGameBackg(&Backg, 0, 0, Width, Height);
+    // InitGameBackg(&Backg, 0, 0, Width, Height);
+
+    for (int i = 0; i < 5; i++)
+    {
+        sprintf(Backg.BackgImage[i].NameImg, "assets/Levels/Level1[%d].jpg", i);
+        Backg.BackgImage[i].img = IMG_Load(Backg.BackgImage[i].NameImg);
+
+        Backg.BackgImage[i].pos.x = 0;
+        Backg.BackgImage[i].pos.y = 0;
+        Backg.BackgImage[i].pos.w = 0;
+        Backg.BackgImage[i].pos.h = 0;
+    }
+
+    Backg.cam.w = Width;
+    Backg.cam.h = Height;
+    Backg.Anim = 0;
+    Backg.AnimI = 0;
+
     // Init GameUI
     initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
     initImg(&tabGameUI[1], 1654, 81, "assets/GameUi/MoneyTime.png");
@@ -695,6 +724,9 @@ void Game(SDL_Surface *screen, Config *Confg)
     SDL_ShowCursor(SDL_DISABLE);
 
     GameTimeInit = SDL_GetTicks();
+    ////
+    LoadGame(Confg, &p.pos, &p.posABS, e, &map.playerTagPos, map.zombieTagPos, map.EnnemyDie, &camPos);
+    Backg.cam.x = camPos.x;
 
     // GameLoop
     while (isRunning)
@@ -834,7 +866,7 @@ void Game(SDL_Surface *screen, Config *Confg)
                         p.animJ = 0;
                         p.attack = 0;
 
-                        if (AttackedEnnemy != -1)
+                        if (AttackedEnnemy != -1 && e[AttackedEnnemy].nbreVie > 0)
                             e[AttackedEnnemy].nbreVie--;
                     }
                     p.AnimP_Attack = 0;
@@ -1113,8 +1145,19 @@ void Game(SDL_Surface *screen, Config *Confg)
     if (SaveGame(Confg, screen))
     {
         // SaveScore
-        FILE *f = fopen("./Data/Save.txt", "a");
-        fprintf(f, "Level : %d\nPlayer : %d\nPlayerPos : %d %d\nPlayerTagPos : %d %d\nEnnemyTag : %d %d %d %d %d %d %d %d %d %d\nCameraPos : %d %d\n----------------------\n", Confg->Level, Confg->Player, p.posABS.x, p.posABS.y, map.playerTagPos.x, map.playerTagPos.y, map.zombieTagPos[0].x, map.zombieTagPos[0].y, map.zombieTagPos[1].x, map.zombieTagPos[1].y, map.zombieTagPos[2].x, map.zombieTagPos[2].y, map.zombieTagPos[3].x, map.zombieTagPos[3].y, map.zombieTagPos[4].x, map.zombieTagPos[4].y, Backg.cam.x, Backg.cam.y);
+        FILE *f = fopen("./Data/Save.txt", "w");
+        fprintf(f, "Level : %d\n", Confg->Level);
+        fprintf(f, "Player : %d\n", Confg->Player);
+        fprintf(f, "PlayerPos : %d %d %d %d\n", p.pos.x, p.pos.y, p.posABS.x, p.posABS.y);
+        fprintf(f, "PlayerTagPos : %d %d\n", map.playerTagPos.x, map.playerTagPos.y);
+        fprintf(f, "EnnemyPos : %d %d - %d %d - %d %d - %d %d - %d %d\n", e[0].pos.x, e[0].pos.y, e[1].pos.x, e[1].pos.y, e[2].pos.x, e[2].pos.y, e[3].pos.x, e[3].pos.y, e[4].pos.x, e[4].pos.y);
+        fprintf(f, "EnnemyPosABS : %d %d - %d %d - %d %d - %d %d - %d %d\n", e[0].posABS.x, e[0].posABS.y, e[1].posABS.x, e[1].posABS.y, e[2].posABS.x, e[2].posABS.y, e[3].posABS.x, e[3].posABS.y, e[4].posABS.x, e[4].posABS.y);
+        fprintf(f, "EnnemyPosInit : %d %d %d %d %d\n", e[0].posInit, e[1].posInit, e[2].posInit, e[3].posInit, e[4].posInit);
+        fprintf(f, "EnnemyLife : %d %d %d %d %d\n", e[0].nbreVie, e[1].nbreVie, e[2].nbreVie, e[3].nbreVie, e[4].nbreVie);
+        fprintf(f, "Ennemy Die : %d %d %d %d %d\n", map.EnnemyDie[0], map.EnnemyDie[1], map.EnnemyDie[2], map.EnnemyDie[3], map.EnnemyDie[4]);
+        fprintf(f, "EnnemyTag : %d %d %d %d %d %d %d %d %d %d\n", map.zombieTagPos[0].x, map.zombieTagPos[0].y, map.zombieTagPos[1].x, map.zombieTagPos[1].y, map.zombieTagPos[2].x, map.zombieTagPos[2].y, map.zombieTagPos[3].x, map.zombieTagPos[3].y, map.zombieTagPos[4].x, map.zombieTagPos[4].y);
+        fprintf(f, "CameraPos : %d %d\n", Backg.cam.x, Backg.cam.y);
+        fprintf(f, "----------------------\n");
         fclose(f);
         SaveScore(p.PlayerName, p.score, GameTimeTxt.Texte);
         Confg->Money += p.score;
