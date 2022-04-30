@@ -11,5 +11,4 @@ To Debug Your Game Type
 
 ```
 ./debug.sh
-
 ```
