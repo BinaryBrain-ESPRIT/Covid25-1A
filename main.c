@@ -44,7 +44,6 @@ int main()
             for (int j = 0; j < i + 1; j++)
             {
                 sprintf(tabM[i][j].NameImg, "assets/MainMenu/Level-%d-Perso-%d.png", i + 1, j + 1);
-                printf("tabM :%s\n", tabM[i][j].NameImg);
                 InitBackg(&tabM[i][j], tabM[i][j].NameImg);
             }
         }
@@ -285,5 +284,4 @@ int main()
     TTF_Quit();
     // SDL_Quit();
 
-    printf("\nGame ShutDown !\n");
 }

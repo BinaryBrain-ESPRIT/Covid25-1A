@@ -1,0 +1,7 @@
+Level : 1
+Player : 2
+PlayerPos : 2690 510
+PlayerTagPos : 704 106
+EnnemyTag : 665 114 901 114 1066 114 1361 114 1457 114
+CameraPos : 1940 0
+----------------------

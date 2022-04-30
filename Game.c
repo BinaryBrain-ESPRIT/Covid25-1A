@@ -528,7 +528,6 @@ int LooseGame(Config *Confg, SDL_Surface *screen)
 
 int SaveGame(Config *Confg, SDL_Surface *screen)
 {
-    printf("test\n");
     int isRunning = 1, j = 0;
     int posNX, posNX1, posNY, posNY1, x, y;
     int posYX, posYX1, posYY, posYY1;
@@ -1103,19 +1102,24 @@ void Game(SDL_Surface *screen, Config *Confg)
     Liberer_txt(MoneyTxt);
     Liberer_txt(GameTimeTxt);
 
+    etat = 0;
+    etat1 = 0;
     // Win Game
     if (Confg->GameWin)
         etat = WinGame(Confg, screen);
     else
         etat1 = LooseGame(Confg, screen);
-    
+
     if (SaveGame(Confg, screen))
     {
         // SaveScore
+        FILE *f = fopen("./Data/Save.txt", "a");
+        fprintf(f, "Level : %d\nPlayer : %d\nPlayerPos : %d %d\nPlayerTagPos : %d %d\nEnnemyTag : %d %d %d %d %d %d %d %d %d %d\nCameraPos : %d %d\n----------------------\n", Confg->Level, Confg->Player, p.posABS.x, p.posABS.y, map.playerTagPos.x, map.playerTagPos.y, map.zombieTagPos[0].x, map.zombieTagPos[0].y, map.zombieTagPos[1].x, map.zombieTagPos[1].y, map.zombieTagPos[2].x, map.zombieTagPos[2].y, map.zombieTagPos[3].x, map.zombieTagPos[3].y, map.zombieTagPos[4].x, map.zombieTagPos[4].y, Backg.cam.x, Backg.cam.y);
+        fclose(f);
         SaveScore(p.PlayerName, p.score, GameTimeTxt.Texte);
         Confg->Money += p.score;
     }
-    
+
     if (etat)
     {
         if (Confg->Level < 3)
@@ -1123,16 +1127,11 @@ void Game(SDL_Surface *screen, Config *Confg)
         Game(screen, Confg);
         return;
     }
-
     if (etat1)
     {
         Game(screen, Confg);
         return;
     }
-    else
-        return;
-
-    
 }
 
 void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
@@ -2537,7 +2536,7 @@ void Shop(SDL_Surface *screen, Config *Confg)
         case SDL_MOUSEBUTTONDOWN:
             x = event.button.x;
             y = event.button.y;
-            
+
             if (x > 221 && x < 303 && y > 541 && y < 604)
             {
                 if (posI > 0)
