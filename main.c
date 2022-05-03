@@ -8,7 +8,7 @@
 
 int main()
 {
-    
+
     // Declaration & Init
     Config *Confg = (Config *)malloc(sizeof(Config));
 
@@ -239,22 +239,10 @@ int main()
                 Confg->isRunning = 0;
                 break;
             case 7:
-                SwitchPlayer(Confg);
-
-                AffichageMainMenu(screen, tabMT, tabMAT, tabM, 0, Confg->LevelR, Confg->Player);
-                AfficherImg(MoneyImg, screen);
-                Afficher_txt(MoneyTxt, screen);
-                SDL_Flip(screen);
-
-                break;
+        
             case 8:
-                if (Confg->LevelR == 3)
-                    if (Confg->Player == 3)
-                        Confg->Player = 2;
-                    else if (Confg->Player == 2)
-                        Confg->Player = 1;
-                    else
-                        Confg->Player = 3;
+                SwitchPlayer(Confg, i);
+                
                 AffichageMainMenu(screen, tabMT, tabMAT, tabM, 0, Confg->LevelR, Confg->Player);
                 AfficherImg(MoneyImg, screen);
                 Afficher_txt(MoneyTxt, screen);
@@ -283,5 +271,4 @@ int main()
     free(Confg);
     TTF_Quit();
     // SDL_Quit();
-
 }

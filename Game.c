@@ -685,23 +685,7 @@ void Game(SDL_Surface *screen, Config *Confg)
     ChoosePlayerName(&p, Confg, screen);
 
     // Init LevelBackg
-    // InitGameBackg(&Backg, 0, 0, Width, Height);
-
-    for (int i = 0; i < 5; i++)
-    {
-        sprintf(Backg.BackgImage[i].NameImg, "assets/Levels/Level1[%d].jpg", i);
-        Backg.BackgImage[i].img = IMG_Load(Backg.BackgImage[i].NameImg);
-
-        Backg.BackgImage[i].pos.x = 0;
-        Backg.BackgImage[i].pos.y = 0;
-        Backg.BackgImage[i].pos.w = 0;
-        Backg.BackgImage[i].pos.h = 0;
-    }
-
-    Backg.cam.w = Width;
-    Backg.cam.h = Height;
-    Backg.Anim = 0;
-    Backg.AnimI = 0;
+    InitGameBackg(&Backg, 0, 0, Width, Height);
 
     // Init GameUI
     initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
@@ -712,11 +696,11 @@ void Game(SDL_Surface *screen, Config *Confg)
     initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w / 3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
     initTxt(&GameTimeTxt, 1745, 154, TimeColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", "00:00");
     // Init Ennemi
-    initEnnemy(&e[0], 2500, 575, 5, 2);
-    initEnnemy(&e[1], 4270, 575, 5, 2);
-    initEnnemy(&e[2], 5640, 575, 5, 2);
-    initEnnemy(&e[3], 8120, 575, 5, 2);
-    initEnnemy(&e[4], 8800, 575, 5, 2);
+    initEnnemy(&e[0], 2500, 575, 2500, 575, 5, 2);
+    initEnnemy(&e[1], 4270, 575, 4270, 575, 5, 2);
+    initEnnemy(&e[2], 5640, 575, 5640, 575, 5, 2);
+    initEnnemy(&e[3], 8120, 575, 8120, 575, 5, 2);
+    initEnnemy(&e[4], 8800, 575, 8800, 575, 5, 2);
 
     // Init MiniMap
     initminimap(&map, "assets/MiniMap/Level1Mini.jpg", p, e);
@@ -874,52 +858,50 @@ void Game(SDL_Surface *screen, Config *Confg)
                 else
                     p.AnimP_Attack++;
             }
-            else
+
+            // Scrolling
+            if (collisionPH(p, Masque[0]) != p.direction)
             {
-                // Scrolling
-                if (collisionPH(p, Masque[0]) != p.direction)
+                if (p.pos.x >= screen->w / 2 && p.direction == 1)
                 {
-                    if (p.pos.x >= screen->w / 2 && p.direction == 1)
+                    scrolling(&Backg, p.direction, 10);
+                    p.posABS.x += 10;
+                    for (int i = 0; i < 5; i++)
                     {
-                        scrolling(&Backg, p.direction, 10);
-                        p.posABS.x += 10;
-                        for (int i = 0; i < 5; i++)
-                        {
-                            e[i].posInit -= 10;
-                            e[i].pos.x -= 10;
-                        }
+                        e[i].posInit -= 10;
+                        e[i].pos.x -= 10;
                     }
-                    else if (p.direction == -1 && p.pos.x <= 500 && p.posABS.x > 500)
-                    {
-                        scrolling(&Backg, p.direction, 10);
-                        p.posABS.x -= 10;
-                        for (int i = 0; i < 5; i++)
-                        {
-                            e[i].posInit += 10;
-                            e[i].pos.x += 10;
-                        }
-                    }
-                    else if (p.direction == -2)
-                    {
-                        scrolling(&Backg, p.direction, 10);
-                        p.posABS.y += 10;
-                        for (int i = 0; i < 5; i++)
-                        {
-                            e[i].pos.y -= 10;
-                        }
-                    }
-                    else if (p.direction == 2)
-                    {
-                        scrolling(&Backg, p.direction, 10);
-                        p.posABS.y -= 10;
-                        for (int i = 0; i < 5; i++)
-                        {
-                            e[i].pos.y += 10;
-                        }
-                    }
-                    else
-                        deplacerPerso(&p, Confg->deltaTime);
                 }
+                else if (p.direction == -1 && p.pos.x <= 500 && p.posABS.x > 500)
+                {
+                    scrolling(&Backg, p.direction, 10);
+                    p.posABS.x -= 10;
+                    for (int i = 0; i < 5; i++)
+                    {
+                        e[i].posInit += 10;
+                        e[i].pos.x += 10;
+                    }
+                }
+                else if (p.direction == -2)
+                {
+                    scrolling(&Backg, p.direction, 10);
+                    p.posABS.y += 10;
+                    for (int i = 0; i < 5; i++)
+                    {
+                        e[i].pos.y -= 10;
+                    }
+                }
+                else if (p.direction == 2)
+                {
+                    scrolling(&Backg, p.direction, 10);
+                    p.posABS.y -= 10;
+                    for (int i = 0; i < 5; i++)
+                    {
+                        e[i].pos.y += 10;
+                    }
+                }
+                else
+                    deplacerPerso(&p, Confg->deltaTime);
             }
         }
 
@@ -1206,7 +1188,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
     Masque[0] = IMG_Load("assets/Levels/Masque.jpg");
 
     Image tabGameUI[5];
-    Text MoneyTxt, GameTimeTxt;
+    Text MoneyTxt, GameTimeTxt, MoneyTxt1, GameTimeTxt1;
 
     // Enigme
     int EnigmeTimeInit = 0;
@@ -1230,25 +1212,32 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
     InitGameBackg(&Backg, 0, 0, Width / 2, Height);
     InitGameBackg(&Backg1, Width / 2, 0, Width / 2, Height);
     // Init GameUI
-    initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
-    initImg(&tabGameUI[1], 1654, 81, "assets/GameUi/MoneyTime.png");
+    initImg(&tabGameUI[0], 15, 994, "assets/GameUi/Health3.png");
+    initImg(&tabGameUI[1], 20, 56, "assets/GameUi/MoneyTime.png");
+    initImg(&tabGameUI[2], 1648, 994, "assets/GameUi/Health3.png");
+    initImg(&tabGameUI[3], 1654, 56, "assets/GameUi/MoneyTime.png");
 
     sprintf(MoneyTxt.Texte, "%d $", p.score);
-    initTxt(&MoneyTxt, 1775, 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
-    initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w / 3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
-    initTxt(&GameTimeTxt, 1745, 154, TimeColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", "00:00");
-    // Init Ennemi
-    initEnnemy(&e[0], 2500, 575, 5, 2);
-    initEnnemy(&e[1], 4270, 575, 5, 2);
-    initEnnemy(&e[2], 5640, 575, 5, 2);
-    initEnnemy(&e[3], 8120, 575, 5, 2);
-    initEnnemy(&e[4], 8800, 575, 5, 2);
+    initTxt(&MoneyTxt, 141, 64, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
+    initTxt(&MoneyTxt, 141 - (MoneyTxt.surfaceText->w / 3), 64, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
+    initTxt(&GameTimeTxt, 105, 127, TimeColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", "00:00");
 
-    initEnnemy(&e1[0], 2500, 575, 5, 2);
-    initEnnemy(&e1[1], 4270, 575, 5, 2);
-    initEnnemy(&e1[2], 5640, 575, 5, 2);
-    initEnnemy(&e1[3], 8120, 575, 5, 2);
-    initEnnemy(&e1[4], 8800, 575, 5, 2);
+    sprintf(MoneyTxt1.Texte, "%d $", p1.score);
+    initTxt(&MoneyTxt1, 1774, 64, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt1.Texte);
+    initTxt(&MoneyTxt1, 1774 - (MoneyTxt1.surfaceText->w / 3), 64, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt1.Texte);
+    initTxt(&GameTimeTxt1, 1738, 127, TimeColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", "00:00");
+    // Init Ennemi
+    initEnnemy(&e[0], 2500, 575, 2500, 575, 5, 2);
+    initEnnemy(&e[1], 4270, 575, 4270, 575, 5, 2);
+    initEnnemy(&e[2], 5640, 575, 5640, 575, 5, 2);
+    initEnnemy(&e[3], 8120, 575, 8120, 575, 5, 2);
+    initEnnemy(&e[4], 8800, 575, 8800, 575, 5, 2);
+
+    initEnnemy(&e1[0], 2500 + (Width / 2), 575, 2500, 575, 5, 2);
+    initEnnemy(&e1[1], 4270 + (Width / 2), 575, 4270, 575, 5, 2);
+    initEnnemy(&e1[2], 5640 + (Width / 2), 575, 5640, 575, 5, 2);
+    initEnnemy(&e1[3], 8120 + (Width / 2), 575, 8120, 575, 5, 2);
+    initEnnemy(&e1[4], 8800 + (Width / 2), 575, 8800, 575, 5, 2);
 
     // Init MiniMap
     initminimap(&map, "assets/MiniMap/Level1Mini.jpg", p, e);
@@ -1260,6 +1249,18 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
     // GameLoop
     while (isRunning)
     {
+        printf("------Player 1------\n");
+        printf("%d\n", p1.posABS.x);
+        printf("------Ennemy 1------\n");
+        for (int i = 0; i < 5; i++)
+        {
+            printf("%d  %d\n", e[i].pos.x, e[i].posABS.x);
+        }
+        printf("------Ennemy 2------\n");
+        for (int i = 0; i < 5; i++)
+        {
+            printf("%d  %d\n", e1[i].pos.x, e1[i].posABS.x);
+        }
         // MAJTime(&GameTimeTxt,GameTimeInit);
         GameTimeS = ((SDL_GetTicks() - GameTimeInit) / 1000) % 60;
         GameTimeM = ((SDL_GetTicks() - GameTimeInit) / 1000) / 60;
@@ -1267,7 +1268,8 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
         if (GameTimeSPred != GameTimeS)
         {
             sprintf(GameTimeTxt.Texte, "%02d:%02d", GameTimeM, GameTimeS);
-            initTxt(&GameTimeTxt, 1745, 154, Red, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", GameTimeTxt.Texte);
+            initTxt(&GameTimeTxt, 105, 127, Red, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", GameTimeTxt.Texte);
+            initTxt(&GameTimeTxt1, 1738, 127, Red, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", GameTimeTxt.Texte);
         }
 
         GameTimeSPred = GameTimeS;
@@ -1285,7 +1287,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
 
         afficherminimap(map, screen);
         // Affichage GameUI
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 4; i++)
             AfficherImg(tabGameUI[i], screen);
 
         MAJMinimap(p.posABS, e, &map, Redim);
@@ -1320,7 +1322,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                     p.score -= 50;
                     int score = p.score;
                     sprintf(MoneyTxt.Texte, "%d $", p.score);
-                    initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w / 3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
+                    initTxt(&MoneyTxt, 141 - (MoneyTxt.surfaceText->w / 3), 64, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
                     int randNum = rand() % 500;
                     if (randNum % 2 == 0)
                     {
@@ -1344,7 +1346,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                             }
                             initPerso(&p, 250, 510, Confg->Player);
                             p.score = score;
-                            initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
+                            initImg(&tabGameUI[0], 15, 994, "assets/GameUi/Health3.png");
                         }
                     }
                     else
@@ -1380,7 +1382,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                             }
                             initPerso(&p, 250, 510, Confg->Player);
                             initPerso(&p1, Width / 2 + 250, 510, Confg->Player);
-                            initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
+                            initImg(&tabGameUI[0], 15, 994, "assets/GameUi/Health3.png");
                         }
                     }
 
@@ -1409,9 +1411,10 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                         p.animJ++;
                     else
                     {
+                        p.animJ = 0;
                         p.attack = 0;
 
-                        if (AttackedEnnemy != -1)
+                        if (AttackedEnnemy != -1 && e[AttackedEnnemy].nbreVie > 0)
                         {
                             e[AttackedEnnemy].nbreVie--;
                         }
@@ -1488,8 +1491,8 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 {
                     p1.score -= 50;
                     int score = p1.score;
-                    sprintf(MoneyTxt.Texte, "%d $", p1.score);
-                    initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w / 3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
+                    sprintf(MoneyTxt1.Texte, "%d $", p1.score);
+                    initTxt(&MoneyTxt1, 1774 - (MoneyTxt1.surfaceText->w / 3), 64, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt1.Texte);
                     int randNum = rand() % 500;
                     if (randNum % 2 == 0)
                     {
@@ -1511,9 +1514,9 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                                     e1[i].pos.x += 10;
                                 }
                             }
-                            initPerso(&p1, 250, 510, Confg->Player);
+                            initPerso(&p1, Width / 2 + 250, 510, Confg->Player);
                             p1.score = score;
-                            initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
+                            initImg(&tabGameUI[3], 1654, 56, "assets/GameUi/Health3.png");
                         }
                     }
                     else
@@ -1537,7 +1540,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                                 }
                             }
                             initPerso(&p1, 250, 510, Confg->Player);
-                            initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
+                            initImg(&tabGameUI[2], 1648, 994, "assets/GameUi/Health3.png");
                         }
                     }
 
@@ -1566,9 +1569,10 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                         p1.animJ++;
                     else
                     {
+                        p1.animJ = 0;
                         p1.attack = 0;
 
-                        if (AttackedEnnemy1 != -1)
+                        if (AttackedEnnemy1 != -1 && e1[AttackedEnnemy1].nbreVie > 0)
                         {
                             e1[AttackedEnnemy1].nbreVie--;
                         }
@@ -1632,33 +1636,34 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
         {
 
             if (event.type == SDL_KEYDOWN)
-                if (event.key.keysym.sym == SDLK_a)
+            {
+                if (event.key.keysym.sym == SDLK_LCTRL)
                 {
                     p.attack = 1;
                     if (BehindEnnemy(p, e[i]) != 2)
                         AttackedEnnemy = i;
                 }
-            if (event.type == SDL_KEYDOWN)
-                if (event.key.keysym.sym == SDLK_a)
+                if (event.key.keysym.sym == SDLK_RCTRL)
                 {
                     p1.attack = 1;
                     if (BehindEnnemy(p1, e1[i]) != 2)
                         AttackedEnnemy1 = i;
                 }
+            }
 
             if (e[i].nbreVie == 0 && !e[i].isKilled)
             {
                 p.score += 150;
                 sprintf(MoneyTxt.Texte, "%d $", p.score);
-                initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w / 3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
+                initTxt(&MoneyTxt, 141 - (MoneyTxt.surfaceText->w / 3), 64, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
                 e[i].isKilled = 1;
             }
 
             if (e1[i].nbreVie == 0 && !e1[i].isKilled)
             {
                 p1.score += 150;
-                sprintf(MoneyTxt.Texte, "%d $", p1.score);
-                initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w / 3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
+                sprintf(MoneyTxt1.Texte, "%d $", p1.score);
+                initTxt(&MoneyTxt1, 1774 - (MoneyTxt1.surfaceText->w / 3), 64, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt1.Texte);
                 e1[i].isKilled = 1;
             }
 
@@ -1672,7 +1677,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 if (e[i].pos.x < (1000 - e[i].img[e->anim_i][e->anim_j]->w))
                     afficherEnnemy(e[i], screen);
                 sprintf(tabGameUI[0].NameImg, "assets/GameUi/Health%d.png", p.nbreVie);
-                initImg(&tabGameUI[0], 31, 53, tabGameUI[0].NameImg);
+                initImg(&tabGameUI[0], 15, 994, tabGameUI[0].NameImg);
             }
             else
             {
@@ -1693,8 +1698,8 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 animerEnnemy(&e1[i], Confg);
                 if (e1[i].pos.x > Width / 2)
                     afficherEnnemy(e1[i], screen);
-                sprintf(tabGameUI[0].NameImg, "assets/GameUi/Health%d.png", p1.nbreVie);
-                initImg(&tabGameUI[0], 31, 53, tabGameUI[0].NameImg);
+                sprintf(tabGameUI[2].NameImg, "assets/GameUi/Health%d.png", p1.nbreVie);
+                initImg(&tabGameUI[2], 1648, 994, tabGameUI[0].NameImg);
             }
             else
             {
@@ -1711,33 +1716,27 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
 
         Afficher_txt(MoneyTxt, screen);
         Afficher_txt(GameTimeTxt, screen);
+        Afficher_txt(MoneyTxt1, screen);
+        Afficher_txt(GameTimeTxt1, screen);
         SDL_Flip(screen);
 
         // PlayerMovement
         if (state[SDLK_UP])
-        {
-            if (Interaction(p, Masque[0]) > 2)
-                p.direction = 2;
-            else
-                p.direction = 0;
-        }
-        if (state[SDLK_z])
         {
             if (Interaction(p1, Masque[0]) > 2)
                 p1.direction = 2;
             else
                 p1.direction = 0;
         }
-
-        if (state[SDLK_DOWN])
+        if (state[SDLK_z])
         {
-            if (Interaction(p, Masque[0]) && !isGround(p, Masque[0]))
-                p.direction = -2;
+            if (Interaction(p1, Masque[0]) > 2)
+                p.direction = 2;
             else
                 p.direction = 0;
         }
 
-        if (state[SDLK_s])
+        if (state[SDLK_DOWN])
         {
             if (Interaction(p1, Masque[0]) && !isGround(p1, Masque[0]))
                 p1.direction = -2;
@@ -1745,41 +1744,49 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 p1.direction = 0;
         }
 
-        if (state[SDLK_RIGHT])
+        if (state[SDLK_s])
         {
-            p.direction = 1;
+            if (Interaction(p, Masque[0]) && !isGround(p, Masque[0]))
+                p.direction = -2;
+            else
+                p.direction = 0;
         }
 
-        if (state[SDLK_d])
+        if (state[SDLK_RIGHT])
         {
             p1.direction = 1;
         }
 
-        if (state[SDLK_LEFT])
+        if (state[SDLK_d])
         {
-            p.direction = -1;
+            p.direction = 1;
         }
 
-        if (state[SDLK_q])
+        if (state[SDLK_LEFT])
         {
             p1.direction = -1;
         }
 
-        if (state[SDLK_SPACE])
+        if (state[SDLK_q])
         {
-            if (isGround(p, Masque[0]) && !Interaction(p, Masque[0]))
-            {
-                p.posInit = p.pos.y;
-                p.isJumped = 1;
-            }
+            p.direction = -1;
         }
 
-        if (state[SDLK_LSHIFT])
+        if (state[SDLK_RSHIFT])
         {
             if (isGround(p1, Masque[0]) && !Interaction(p1, Masque[0]))
             {
                 p1.posInit = p1.pos.y;
                 p1.isJumped = 1;
+            }
+        }
+
+        if (state[SDLK_LSHIFT])
+        {
+            if (isGround(p, Masque[0]) && !Interaction(p, Masque[0]))
+            {
+                p.posInit = p.pos.y;
+                p.isJumped = 1;
             }
         }
         saut(&p, Masque[0]);
@@ -1837,7 +1844,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                             afficherEnnemy(e1[i], screen);
                         }
                         afficherminimap(map, screen);
-                        for (int i = 0; i < 2; i++)
+                        for (int i = 0; i < 4; i++)
                             AfficherImg(tabGameUI[i], screen);
                         MenuInGame(screen, Confg, &Opened, &isRunning);
                     }

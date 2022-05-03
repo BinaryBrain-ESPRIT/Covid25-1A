@@ -37,7 +37,7 @@ typedef struct Ennemy
     int AnimE_Attack, AnimE_Run, AnimeE_Idle; /*!<Variables For the Animation Speed*/
 } Ennemy;
 
-void initEnnemy(Ennemy *e, int x, int y, int vitesse, int nbreVie);
+void initEnnemy(Ennemy *e, int x, int y, int x1, int y1, int vitesse, int nbreVie);
 void afficherEnnemy(Ennemy e, SDL_Surface *screen);
 void animerEnnemy(Ennemy *e, Config *Confg);
 void deplacerEnnemy(Ennemy *e, Config *Confg);

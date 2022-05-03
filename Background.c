@@ -15,8 +15,8 @@ void InitGameBackg(background *Backg, int x, int y, int W, int H)
         Backg->BackgImage[i].pos.h = H;
     }
 
-    Backg->cam.x = W;
-    Backg->cam.y = H;
+    Backg->cam.x = 0;
+    Backg->cam.y = 0;
     Backg->cam.w = W;
     Backg->cam.h = H;
     Backg->Anim = 0;

@@ -229,7 +229,7 @@ void Free_Enigme1(enigme *e)
 
 void LoadGame(Config *Confg, SDL_Rect *PlayerPos, SDL_Rect *PlayerPosABS, Ennemy e[], SDL_Rect *PlayerTagPos, SDL_Rect EnnemyTagPos[], int EnnemyDie[], SDL_Rect *cam)
 {
-  FILE *f = fopen("Data/Save.txt", "w+");
+  FILE *f = fopen("Data/Save.txt", "r");
  
   char temp[20];
 
