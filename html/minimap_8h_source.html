@@ -67,53 +67,67 @@ $(function() {
 <div class="title">minimap.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef minimap_H</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define minimap_H</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;SDL/SDL.h&gt;</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;SDL/SDL_image.h&gt;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;player.h&quot;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;ennemy.h&quot;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="structminimap.html">    8</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;{</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    SDL_Surface *image, *image1, *playerTag, *zombieTag[5];</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    SDL_Rect pos, pos1, playerTagPos, zombieTagPos[5];</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keywordtype">int</span> EnnemyDie[5];</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;} <a class="code" href="structminimap.html">minimap</a>;</div>
-<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="structScore.html">   14</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structScore.html">Score</a></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;{</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <a class="code" href="structText.html">Text</a> PlayerName, Time, ScoreTxt;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structScore.html">Score</a>;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;} <a class="code" href="structScore.html">Score</a>;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="structcard.html">   20</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structcard.html">card</a></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;{</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <a class="code" href="structImage.html">Image</a> <a class="code" href="structImage.html">Image</a>;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <a class="code" href="structImage.html">Image</a> RImage;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keywordtype">int</span> Turned;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keywordtype">int</span> Done;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keywordtype">int</span> CardNumber;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;} <a class="code" href="structcard.html">card</a>;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keywordtype">void</span> initminimap(<a class="code" href="structminimap.html">minimap</a> *m, <span class="keywordtype">char</span> nameimg[], <a class="code" href="structPlayer.html">Player</a> p, <a class="code" href="structEnnemy.html">Ennemy</a> e[]);</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keywordtype">void</span> MAJMinimap(SDL_Rect PosJoueur, <a class="code" href="structEnnemy.html">Ennemy</a> e[], <a class="code" href="structminimap.html">minimap</a> *m, <span class="keywordtype">int</span> redimensionnement);</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keywordtype">void</span> afficherminimap(<a class="code" href="structminimap.html">minimap</a> m, SDL_Surface *screen);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keywordtype">void</span> Liberer(<a class="code" href="structminimap.html">minimap</a> *m);</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keywordtype">void</span> SaveScore(<span class="keywordtype">char</span> PlayerName[], <span class="keywordtype">int</span> <a class="code" href="structScore.html">Score</a>, <span class="keywordtype">char</span> Time[]);</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keywordtype">void</span> LeaderBoard(SDL_Surface *screen, <a class="code" href="structConfig.html">Config</a> *Confg);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keywordtype">void</span> MAJTime(<a class="code" href="structText.html">Text</a> *GameTimeTxt, <span class="keywordtype">int</span> GameTimeInit);</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keywordtype">int</span> MiniGameCard(SDL_Surface *screen, <a class="code" href="structConfig.html">Config</a> *Confg);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#endif</span></div>
+<a href="minimap_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#ifndef minimap_H</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#define minimap_H</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;SDL/SDL.h&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;SDL/SDL_image.h&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;player.h&quot;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;ennemy.h&quot;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="structminimap.html">   23</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;{</div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="structminimap.html#ae0fd726c5bd6982e3c9f46a09957453e">   25</a></span>&#160;    SDL_Surface *image, *image1, *playerTag, *zombieTag[5];</div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="structminimap.html#ae5471b567c48d456fdf3417525914e20">   26</a></span>&#160;    SDL_Rect pos, pos1, playerTagPos, zombieTagPos[5];</div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="structminimap.html#ad87f299ce27b418cec06e6b55d3c42e0">   27</a></span>&#160;    <span class="keywordtype">int</span> EnnemyDie[5]; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;} <a class="code" href="structminimap.html">minimap</a>;</div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="structScore.html">   34</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structScore.html">Score</a></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <a class="code" href="structText.html">Text</a> PlayerName, Time, ScoreTxt;</div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="structScore.html#a21202eef57cbcf361a2f6d359367fe7c">   37</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structScore.html#a21202eef57cbcf361a2f6d359367fe7c">Score</a>;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;} <a class="code" href="structScore.html">Score</a>;</div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="structcard.html">   44</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structcard.html">card</a></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;{</div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="structcard.html#a92b8f5fb54222ca3807d10853a3e40ef">   46</a></span>&#160;    <a class="code" href="structImage.html">Image</a> <a class="code" href="structcard.html#a92b8f5fb54222ca3807d10853a3e40ef">Image</a>;</div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="structcard.html#a2bc97606f60a19c4026632c8c88a6c86">   47</a></span>&#160;    <a class="code" href="structImage.html">Image</a> <a class="code" href="structcard.html#a2bc97606f60a19c4026632c8c88a6c86">RImage</a>;</div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="structcard.html#ab8ed6271f449d4deb210942c4d0e220e">   48</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structcard.html#ab8ed6271f449d4deb210942c4d0e220e">Turned</a>;</div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="structcard.html#a868f35948260046c20d08f978bddb627">   49</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structcard.html#a868f35948260046c20d08f978bddb627">Done</a>;</div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="structcard.html#a597b1e43b52ba818528dde17a29ac36a">   50</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structcard.html#a597b1e43b52ba818528dde17a29ac36a">CardNumber</a>;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;} <a class="code" href="structcard.html">card</a>;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keywordtype">void</span> <a class="code" href="minimap_8h.html#a083d38ed15478cd2a0fd13d34ac2af03">initminimap</a>(<a class="code" href="structminimap.html">minimap</a> *m, <span class="keywordtype">char</span> nameimg[], <a class="code" href="structPlayer.html">Player</a> p, <a class="code" href="structEnnemy.html">Ennemy</a> e[]);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="keywordtype">void</span> <a class="code" href="minimap_8h.html#a1b118284ea355d1c049d98e74fe3dea2">MAJMinimap</a>(SDL_Rect PosJoueur, <a class="code" href="structEnnemy.html">Ennemy</a> e[], <a class="code" href="structminimap.html">minimap</a> *m, <span class="keywordtype">int</span> redimensionnement);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keywordtype">void</span> <a class="code" href="minimap_8h.html#ac75923f5bb04a245e166a6d5a9abd710">afficherminimap</a>(<a class="code" href="structminimap.html">minimap</a> m, SDL_Surface *screen);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keywordtype">void</span> <a class="code" href="minimap_8h.html#a1ebba30f85166270f80b1f29456addc1">Liberer</a>(<a class="code" href="structminimap.html">minimap</a> *m);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="keywordtype">void</span> <a class="code" href="minimap_8h.html#a33b3eca3a599bee47209e71e7abfdedd">SaveScore</a>(<span class="keywordtype">char</span> PlayerName[], <span class="keywordtype">int</span> <a class="code" href="structScore.html">Score</a>, <span class="keywordtype">char</span> Time[]);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="keywordtype">void</span> <a class="code" href="minimap_8h.html#a951294e0e6adf428bc30103323f693cf">LeaderBoard</a>(SDL_Surface *screen, <a class="code" href="structConfig.html">Config</a> *Confg);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="keywordtype">void</span> <a class="code" href="minimap_8h.html#a0b3939d8a1b0659e839f49c81a961158">MAJTime</a>(<a class="code" href="structText.html">Text</a> *GameTimeTxt, <span class="keywordtype">int</span> GameTimeInit);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="keywordtype">int</span> <a class="code" href="minimap_8h.html#af83411ea1586454c425e117c7dd88bd7">MiniGameCard</a>(SDL_Surface *screen, <a class="code" href="structConfig.html">Config</a> *Confg);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aminimap_8h_html_a0b3939d8a1b0659e839f49c81a961158"><div class="ttname"><a href="minimap_8h.html#a0b3939d8a1b0659e839f49c81a961158">MAJTime</a></div><div class="ttdeci">void MAJTime(Text *GameTimeTxt, int GameTimeInit)</div><div class="ttdoc">time management</div><div class="ttdef"><b>Definition:</b> minimap.c:85</div></div>
+<div class="ttc" id="aminimap_8h_html_a1b118284ea355d1c049d98e74fe3dea2"><div class="ttname"><a href="minimap_8h.html#a1b118284ea355d1c049d98e74fe3dea2">MAJMinimap</a></div><div class="ttdeci">void MAJMinimap(SDL_Rect PosJoueur, Ennemy e[], minimap *m, int redimensionnement)</div><div class="ttdoc">minimap update</div><div class="ttdef"><b>Definition:</b> minimap.c:67</div></div>
+<div class="ttc" id="astructcard_html_ab8ed6271f449d4deb210942c4d0e220e"><div class="ttname"><a href="structcard.html#ab8ed6271f449d4deb210942c4d0e220e">card::Turned</a></div><div class="ttdeci">int Turned</div><div class="ttdef"><b>Definition:</b> minimap.h:48</div></div>
 <div class="ttc" id="astructImage_html"><div class="ttname"><a href="structImage.html">Image</a></div><div class="ttdef"><b>Definition:</b> Text_Image.h:18</div></div>
-<div class="ttc" id="astructcard_html"><div class="ttname"><a href="structcard.html">card</a></div><div class="ttdef"><b>Definition:</b> minimap.h:20</div></div>
-<div class="ttc" id="astructminimap_html"><div class="ttname"><a href="structminimap.html">minimap</a></div><div class="ttdef"><b>Definition:</b> minimap.h:8</div></div>
-<div class="ttc" id="astructScore_html"><div class="ttname"><a href="structScore.html">Score</a></div><div class="ttdef"><b>Definition:</b> minimap.h:14</div></div>
+<div class="ttc" id="astructcard_html_a868f35948260046c20d08f978bddb627"><div class="ttname"><a href="structcard.html#a868f35948260046c20d08f978bddb627">card::Done</a></div><div class="ttdeci">int Done</div><div class="ttdef"><b>Definition:</b> minimap.h:49</div></div>
+<div class="ttc" id="astructcard_html"><div class="ttname"><a href="structcard.html">card</a></div><div class="ttdef"><b>Definition:</b> minimap.h:44</div></div>
+<div class="ttc" id="astructcard_html_a2bc97606f60a19c4026632c8c88a6c86"><div class="ttname"><a href="structcard.html#a2bc97606f60a19c4026632c8c88a6c86">card::RImage</a></div><div class="ttdeci">Image RImage</div><div class="ttdef"><b>Definition:</b> minimap.h:47</div></div>
+<div class="ttc" id="astructminimap_html"><div class="ttname"><a href="structminimap.html">minimap</a></div><div class="ttdef"><b>Definition:</b> minimap.h:23</div></div>
+<div class="ttc" id="astructcard_html_a92b8f5fb54222ca3807d10853a3e40ef"><div class="ttname"><a href="structcard.html#a92b8f5fb54222ca3807d10853a3e40ef">card::Image</a></div><div class="ttdeci">Image Image</div><div class="ttdef"><b>Definition:</b> minimap.h:46</div></div>
+<div class="ttc" id="astructScore_html_a21202eef57cbcf361a2f6d359367fe7c"><div class="ttname"><a href="structScore.html#a21202eef57cbcf361a2f6d359367fe7c">Score::Score</a></div><div class="ttdeci">int Score</div><div class="ttdef"><b>Definition:</b> minimap.h:37</div></div>
+<div class="ttc" id="astructScore_html"><div class="ttname"><a href="structScore.html">Score</a></div><div class="ttdef"><b>Definition:</b> minimap.h:34</div></div>
+<div class="ttc" id="aminimap_8h_html_a083d38ed15478cd2a0fd13d34ac2af03"><div class="ttname"><a href="minimap_8h.html#a083d38ed15478cd2a0fd13d34ac2af03">initminimap</a></div><div class="ttdeci">void initminimap(minimap *m, char nameimg[], Player p, Ennemy e[])</div><div class="ttdoc">to initialize minilap</div><div class="ttdef"><b>Definition:</b> minimap.c:23</div></div>
 <div class="ttc" id="astructConfig_html"><div class="ttname"><a href="structConfig.html">Config</a></div><div class="ttdef"><b>Definition:</b> Main_Fn.h:18</div></div>
 <div class="ttc" id="astructText_html"><div class="ttname"><a href="structText.html">Text</a></div><div class="ttdef"><b>Definition:</b> Text_Image.h:9</div></div>
+<div class="ttc" id="aminimap_8h_html_ac75923f5bb04a245e166a6d5a9abd710"><div class="ttname"><a href="minimap_8h.html#ac75923f5bb04a245e166a6d5a9abd710">afficherminimap</a></div><div class="ttdeci">void afficherminimap(minimap m, SDL_Surface *screen)</div><div class="ttdoc">to display the minimap</div><div class="ttdef"><b>Definition:</b> minimap.c:47</div></div>
+<div class="ttc" id="aminimap_8h_html_a951294e0e6adf428bc30103323f693cf"><div class="ttname"><a href="minimap_8h.html#a951294e0e6adf428bc30103323f693cf">LeaderBoard</a></div><div class="ttdeci">void LeaderBoard(SDL_Surface *screen, Config *Confg)</div><div class="ttdoc">best score display</div><div class="ttdef"><b>Definition:</b> minimap.c:121</div></div>
 <div class="ttc" id="astructPlayer_html"><div class="ttname"><a href="structPlayer.html">Player</a></div><div class="ttdef"><b>Definition:</b> player.h:7</div></div>
+<div class="ttc" id="aminimap_8h_html_a33b3eca3a599bee47209e71e7abfdedd"><div class="ttname"><a href="minimap_8h.html#a33b3eca3a599bee47209e71e7abfdedd">SaveScore</a></div><div class="ttdeci">void SaveScore(char PlayerName[], int Score, char Time[])</div><div class="ttdoc">score saving</div><div class="ttdef"><b>Definition:</b> minimap.c:108</div></div>
+<div class="ttc" id="aminimap_8h_html_a1ebba30f85166270f80b1f29456addc1"><div class="ttname"><a href="minimap_8h.html#a1ebba30f85166270f80b1f29456addc1">Liberer</a></div><div class="ttdeci">void Liberer(minimap *m)</div><div class="ttdoc">free memory space</div><div class="ttdef"><b>Definition:</b> minimap.c:215</div></div>
 <div class="ttc" id="astructEnnemy_html"><div class="ttname"><a href="structEnnemy.html">Ennemy</a></div><div class="ttdoc">Struct For Ennemy.</div><div class="ttdef"><b>Definition:</b> ennemy.h:14</div></div>
+<div class="ttc" id="aminimap_8h_html_af83411ea1586454c425e117c7dd88bd7"><div class="ttname"><a href="minimap_8h.html#af83411ea1586454c425e117c7dd88bd7">MiniGameCard</a></div><div class="ttdeci">int MiniGameCard(SDL_Surface *screen, Config *Confg)</div><div class="ttdoc">MiniGame.</div><div class="ttdef"><b>Definition:</b> minimap.c:232</div></div>
+<div class="ttc" id="astructcard_html_a597b1e43b52ba818528dde17a29ac36a"><div class="ttname"><a href="structcard.html#a597b1e43b52ba818528dde17a29ac36a">card::CardNumber</a></div><div class="ttdeci">int CardNumber</div><div class="ttdef"><b>Definition:</b> minimap.h:50</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

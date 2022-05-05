@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['img_95',['img',['../structEnnemy.html#a8e1ae0984504b0622a2208384302d76b',1,'Ennemy']]],
-  ['iskilled_96',['isKilled',['../structEnnemy.html#a2fa6f119248e65877f2d59578bc9bb5c',1,'Ennemy']]]
+  ['ennemydie_124',['EnnemyDie',['../structminimap.html#ad87f299ce27b418cec06e6b55d3c42e0',1,'minimap']]]
 ];

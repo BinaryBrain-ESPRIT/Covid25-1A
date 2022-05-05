@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['rep_104',['Rep',['../structenigme.html#a8ca4a5fbf3a920adb5ba26623dfa771e',1,'enigme']]]
+  ['posabs_134',['posABS',['../structEnnemy.html#a865677d812c5a34835541261f7557621',1,'Ennemy']]],
+  ['posinit_135',['posInit',['../structEnnemy.html#ab95f4fb4f0ed79aa275c4dff774321e7',1,'Ennemy']]]
 ];

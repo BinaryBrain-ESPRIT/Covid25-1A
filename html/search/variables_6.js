@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['posabs_101',['posABS',['../structEnnemy.html#a865677d812c5a34835541261f7557621',1,'Ennemy']]],
-  ['posinit_102',['posInit',['../structEnnemy.html#ab95f4fb4f0ed79aa275c4dff774321e7',1,'Ennemy']]]
+  ['image_127',['Image',['../structcard.html#a92b8f5fb54222ca3807d10853a3e40ef',1,'card']]],
+  ['img_128',['img',['../structEnnemy.html#a8e1ae0984504b0622a2208384302d76b',1,'Ennemy']]],
+  ['iskilled_129',['isKilled',['../structEnnemy.html#a2fa6f119248e65877f2d59578bc9bb5c',1,'Ennemy']]]
 ];

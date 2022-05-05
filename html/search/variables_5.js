@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['nbrevie_97',['nbreVie',['../structEnnemy.html#ad76e3d0e79a4f42dda8846d57258688d',1,'Ennemy']]],
-  ['nume_98',['NumE',['../structenigme.html#a547dbc39afb2ac3dafbd86249db8aaa7',1,'enigme::NumE()'],['../structEnigme.html#a6f341c80e47c08937066ea1a8f6e060a',1,'Enigme::NumE()']]],
-  ['numrc_99',['NumRC',['../structEnigme.html#a98139ffc4c30c6f3cc296a474e22fbf6',1,'Enigme']]],
-  ['numrepc_100',['NumRepC',['../structenigme.html#a23e4c0d34fa3a810a91b510245f842cd',1,'enigme']]]
+  ['f_125',['f',['../structenigme.html#a9ce33d500de045fd29a8aa61c2fc0e1f',1,'enigme']]],
+  ['flipped_126',['Flipped',['../structEnnemy.html#a490303f01ec8f8ad2e75d763f55808f9',1,'Ennemy']]]
 ];
