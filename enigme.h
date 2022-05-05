@@ -12,7 +12,7 @@
 #define enigme_H
 
 #include "Text_Image.h"
-
+#include "minimap.h"
 /**
  * 
  * @struct enigme
@@ -37,4 +37,5 @@ void animer1(enigme *e, SDL_Surface *screen);
 void sauvegarder1(Player p, Image b, char *nomfichier);
 int charger(Player p, background *b, char *nomfichier);
 void Free_Enigme1(enigme *e);
+void LoadGame(Config *Confg, SDL_Rect *PlayerPos, SDL_Rect *PlayerPosABS,Ennemy * e, SDL_Rect *PlayerTagPos, SDL_Rect EnnemyTagPos[],int EnnemyDie[], SDL_Rect *cam);
 #endif

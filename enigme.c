@@ -4,19 +4,19 @@
  * @brief (enigme text) file
  * @version 0.1
  * @date 2022-04-28
- * 
+ *
  * @copyright Copyright (c) 2022
- * 
+ *
  */
 
 #include "enigme.h"
 
 /**
  * @brief init enigme
- * 
+ *
  * @param e enigme
  * @param nomfichier fileName
- * @return int return 1 if initialized else if not 
+ * @return int return 1 if initialized else if not
  */
 int InitEnigme1(enigme *e, char *nomfichier)
 {
@@ -168,10 +168,9 @@ int InitEnigme1(enigme *e, char *nomfichier)
   return 1;
 }
 
-
 /**
  * @brief afficher Enigme
- * 
+ *
  * @param e enigme
  * @param screen screen display
  */
@@ -185,7 +184,7 @@ void afficherEnigme1(enigme e, SDL_Surface *screen)
 }
 /**
  * @brief animer
- * 
+ *
  * @param e enigme
  * @param screen screen display
  */
@@ -198,7 +197,6 @@ void animer1(enigme *e, SDL_Surface *screen)
   if (e->Duration - EnigmeTimeS < 0)
   {
     e->TimeOut = 1;
-
 
     return;
   }
@@ -213,7 +211,7 @@ void animer1(enigme *e, SDL_Surface *screen)
 }
 /**
  * @brief Free_Enigme
- * 
+ *
  * @param e enigme
  */
 void Free_Enigme1(enigme *e)
@@ -227,5 +225,29 @@ void Free_Enigme1(enigme *e)
   Liberer_txt(e->Quest1);
   for (int i = 0; i < 3; i++)
     Liberer_txt(e->Rep[i]);
-  
+}
+
+void LoadGame(Config *Confg, SDL_Rect *PlayerPos, SDL_Rect *PlayerPosABS, Ennemy e[], SDL_Rect *PlayerTagPos, SDL_Rect EnnemyTagPos[], int EnnemyDie[], SDL_Rect *cam)
+{
+  FILE *f = fopen("Data/Save.txt", "r");
+ 
+  char temp[20];
+
+  fscanf(f, "Level : %d\n", &Confg->Level);
+  fscanf(f, "Player : %d\n", &Confg->Player);
+  fscanf(f, "PlayerPos : %d %d %d %d\n", &PlayerPos->x, &PlayerPos->y, &PlayerPosABS->x, &PlayerPosABS->y);
+  fscanf(f, "PlayerTagPos : %d %d\n", &PlayerTagPos->x, &PlayerTagPos->y);
+  fscanf(f, "EnnemyPos : %d %d - %d %d - %d %d - %d %d - %d %d\n", &e[0].pos.x, &e[0].pos.y, &e[1].pos.x, &e[1].pos.y, &e[2].pos.x, &e[2].pos.y, &e[3].pos.x, &e[3].pos.y, &e[4].pos.x, &e[4].pos.y);
+  fscanf(f, "EnnemyPosABS : %d %d - %d %d - %d %d - %d %d - %d %d\n", &e[0].posABS.x, &e[0].posABS.y, &e[1].posABS.x, &e[1].posABS.y, &e[2].posABS.x, &e[2].posABS.y, &e[3].posABS.x, &e[3].posABS.y, &e[4].posABS.x, &e[4].posABS.y);
+  fscanf(f, "EnnemyPosInit : %d %d %d %d %d\n", &e[0].posInit, &e[1].posInit, &e[2].posInit, &e[3].posInit, &e[4].posInit);
+  fscanf(f, "EnnemyLife : %d %d %d %d %d\n", &e[0].nbreVie, &e[1].nbreVie, &e[2].nbreVie, &e[3].nbreVie, &e[4].nbreVie);
+  fscanf(f, "Ennemy Die : %d %d %d %d %d\n", &EnnemyDie[0], &EnnemyDie[1], &EnnemyDie[2], &EnnemyDie[3], &EnnemyDie[4]);
+  fscanf(f, "EnnemyTag : %d %d %d %d %d %d %d %d %d %d\n", &EnnemyTagPos[0].x, &EnnemyTagPos[0].y, &EnnemyTagPos[1].x, &EnnemyTagPos[1].y, &EnnemyTagPos[2].x, &EnnemyTagPos[2].y, &EnnemyTagPos[3].x, &EnnemyTagPos[3].y, &EnnemyTagPos[4].x, &EnnemyTagPos[4].y);
+  fscanf(f, "CameraPos : %d %d\n", &cam->x, &cam->y);
+  fscanf(f, "----------------------", temp);
+
+  fclose(f);
+
+  for (int i = 0; i < 5; i++)
+    e[i].isKilled = EnnemyDie[i];
 }

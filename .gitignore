@@ -55,3 +55,7 @@ dkms.conf
 
 Data/Config.txt
 Data/Score.txt
+Data/Save.txt
+
+html
+Doxyfile

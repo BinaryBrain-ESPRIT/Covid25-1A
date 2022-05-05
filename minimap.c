@@ -395,7 +395,6 @@ int MiniGameCard(SDL_Surface *screen, Config *Confg)
                 SDL_Delay(50);
             }
         }
-        printf("Score : %d\n", Score);
         SDL_PollEvent(&event);
         switch (event.type)
         {
