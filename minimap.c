@@ -1,8 +1,25 @@
+/**
+ * @file minimap.c
+ * @author oussamaawledsalem
+ * @brief
+ * @version 0.1
+ * @date 2022-04-22
+ *
+ * @copyright Copyright (c) 2022
+ *
+ */
 #include "minimap.h"
 #include "Main_Fn.h"
 #include <time.h>
 #include <stdlib.h>
-
+/**
+ * @brief to initialize minilap
+ *
+ * @param m the map
+ * @param nameimg name of the minimap to use
+ * @param p player
+ * @param e ennemy
+ */
 void initminimap(minimap *m, char nameimg[], Player p, Ennemy e[])
 {
     m->image = IMG_Load(nameimg);
@@ -21,6 +38,12 @@ void initminimap(minimap *m, char nameimg[], Player p, Ennemy e[])
         m->zombieTagPos[i].y = ((e[i].pos.y * Redim) / 100) + m->pos.y;
     }
 }
+/**
+ * @brief to display the minimap
+ *
+ * @param m minimap
+ * @param screen screen display
+ */
 void afficherminimap(minimap m, SDL_Surface *screen)
 {
     SDL_BlitSurface(m.image1, NULL, screen, &m.pos1);
@@ -33,6 +56,14 @@ void afficherminimap(minimap m, SDL_Surface *screen)
             SDL_BlitSurface(m.zombieTag[i], NULL, screen, &m.zombieTagPos[i]);
     }
 }
+/**
+ * @brief minimap update
+ *
+ * @param PosJoueur player position
+ * @param e ennemy
+ * @param m minimap
+ * @param redimensionnement recizing percentage
+ */
 void MAJMinimap(SDL_Rect PosJoueur, Ennemy e[], minimap *m, int redimensionnement)
 {
     m->playerTagPos.x = m->pos.x + ((PosJoueur.x * redimensionnement) / 100);
@@ -45,7 +76,12 @@ void MAJMinimap(SDL_Rect PosJoueur, Ennemy e[], minimap *m, int redimensionnemen
         m->zombieTagPos[i].y = m->pos.y + ((e[i].posABS.y * redimensionnement) / 100);
     }
 }
-
+/**
+ * @brief time management
+ *
+ * @param GameTimeTxt to display the time
+ * @param GameTimeInit time inisialisation
+ */
 void MAJTime(Text *GameTimeTxt, int GameTimeInit)
 {
     SDL_Color Red = {193, 39, 45};
@@ -62,7 +98,13 @@ void MAJTime(Text *GameTimeTxt, int GameTimeInit)
 
     GameTimeSPred = GameTimeS;
 }
-
+/**
+ * @brief score saving
+ *
+ * @param PlayerName name of the player
+ * @param Score score
+ * @param Time time
+ */
 void SaveScore(char PlayerName[], int Score, char Time[])
 {
     FILE *f = fopen("Data/Score.txt", "a");
@@ -70,7 +112,12 @@ void SaveScore(char PlayerName[], int Score, char Time[])
     fprintf(f, "%s %s %d\n", PlayerName, Time, Score);
     fclose(f);
 }
-
+/**
+ * @brief best score display
+ *
+ * @param screen screen display
+ * @param Confg
+ */
 void LeaderBoard(SDL_Surface *screen, Config *Confg)
 {
     Image Backg;
@@ -160,7 +207,11 @@ void LeaderBoard(SDL_Surface *screen, Config *Confg)
 
     fclose(f);
 }
-
+/**
+ * @brief free memory space
+ *
+ * @param m minimap
+ */
 void Liberer(minimap *m)
 {
     SDL_FreeSurface(m->image);
@@ -170,6 +221,14 @@ void Liberer(minimap *m)
 // **********************************MiniGame*******************************************************//
 
 // CardGame
+/**
+ * @brief MiniGame
+ *
+ * @param screen screen display
+ * @param Confg Configuration Variable
+ * @return int Win Or Loose
+ */
+
 int MiniGameCard(SDL_Surface *screen, Config *Confg)
 {
     SDL_ShowCursor(SDL_ENABLE);
@@ -336,7 +395,6 @@ int MiniGameCard(SDL_Surface *screen, Config *Confg)
                 SDL_Delay(50);
             }
         }
-        printf("Score : %d\n", Score);
         SDL_PollEvent(&event);
         switch (event.type)
         {
@@ -379,4 +437,178 @@ int MiniGameCard(SDL_Surface *screen, Config *Confg)
     else
         return 1;
     SDL_ShowCursor(SDL_DISABLE);
+}
+
+void TicTacToe(SDL_Surface *screen, Config *Confg, char PlayerN[])
+{
+    SDL_Event event;
+    Image Backg;
+    Image X[9], O[9], Win, Loose;
+    SDL_Rect pos[9];
+    Text PlayerName;
+    SDL_Color White = {255, 255, 255};
+    int i, isMarked[9] = {0}, Winner = 0;
+
+    SDL_ShowCursor(SDL_ENABLE);
+
+    initTxt(&PlayerName, 387, 667, White, 69, "assets/Font/agency-fb.ttf", PlayerN);
+
+    InitBackg(&Backg, "assets/MiniGame/TicTacToe/Background.jpg");
+    InitBackg(&Win, "assets/MiniGame/Win.png");
+    InitBackg(&Loose, "assets/MiniGame/Loose.png");
+
+    pos[0].x = 712;
+    pos[0].y = 294;
+
+    pos[1].x = 896;
+    pos[1].y = 294;
+
+    pos[2].x = 1075;
+    pos[2].y = 294;
+
+    pos[3].x = 712;
+    pos[3].y = 468;
+
+    pos[4].x = 896;
+    pos[4].y = 468;
+
+    pos[5].x = 1075;
+    pos[5].y = 468;
+
+    pos[6].x = 712;
+    pos[6].y = 659;
+
+    pos[7].x = 896;
+    pos[7].y = 659;
+
+    pos[8].x = 1075;
+    pos[8].y = 659;
+
+    for (int i = 0; i < 9; i++)
+        initImg(&X[i], pos[i].x, pos[i].y, "assets/MiniGame/TicTacToe/x.png");
+    for (int i = 0; i < 9; i++)
+        initImg(&O[i], pos[i].x, pos[i].y, "assets/MiniGame/TicTacToe/o.png");
+
+    AfficherImg(Backg, screen);
+    Afficher_txt(PlayerName, screen);
+
+    SDL_Flip(screen);
+    int isRunning = 1;
+    while (isRunning)
+    {
+        SDL_WaitEvent(&event);
+        switch (event.type)
+        {
+        case SDL_QUIT:
+            isRunning = 0;
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+            int x = event.button.x;
+            int y = event.button.y;
+            for (i = 0; i < 9; i++)
+                if (x > pos[i].x && x < pos[i].x + 130 && y > pos[i].y && y < pos[i].y + 140)
+                    break;
+            if (i < 9 && !isMarked[i])
+            {
+
+                isMarked[i] = 1;
+                AfficherImg(X[i], screen);
+                SDL_Flip(screen);
+
+                if (!Winner)
+                {
+                    for (i = 0; i < 9; i++)
+                    {
+                        if (isMarked[i] == 2)
+                        {
+                            printf("i = %d\n", i);
+                            if (!isMarked[i + 1] && i != 2 && i != 5 && i != 8)
+                            {
+                                isMarked[i + 1] = 2;
+                                AfficherImg(O[i + 1], screen);
+                                SDL_Flip(screen);
+                                break;
+                            }
+                            else if (!isMarked[i - 1] && i != 0 && i != 3 && i != 6)
+                            {
+                                isMarked[i - 1] = 2;
+                                AfficherImg(O[i - 1], screen);
+                                SDL_Flip(screen);
+                                break;
+                            }
+                            else if (!isMarked[i + 3] && i >= 0 && i < 6)
+                            {
+                                isMarked[i + 3] = 2;
+                                AfficherImg(O[i + 3], screen);
+                                SDL_Flip(screen);
+                                break;
+                            }
+                            else if (!isMarked[i - 3] && i >= 3 && i < 9)
+                            {
+                                isMarked[i - 3] = 2;
+                                AfficherImg(O[i - 3], screen);
+                                SDL_Flip(screen);
+                                break;
+                            }
+                            else if (!isMarked[i + 4] && (i == 0 || i == 4))
+                            {
+                                isMarked[i + 4] = 2;
+                                AfficherImg(O[i + 4], screen);
+                                SDL_Flip(screen);
+                                break;
+                            }
+                            else if (!isMarked[i - 4] && (i == 8 || i == 4))
+                            {
+                                isMarked[i - 4] = 2;
+                                AfficherImg(O[i - 4], screen);
+                                SDL_Flip(screen);
+                                break;
+                            }
+                        }
+                    }
+                    if (i >= 9)
+                    {
+                        int Rand = rand() % 9;
+                        while (isMarked[Rand])
+                            Rand = rand() % 9;
+                        isMarked[Rand] = 2;
+                        AfficherImg(O[Rand], screen);
+                        SDL_Flip(screen);
+                    }
+                }
+                for (int j = 0; j < 9; j += 3)
+                    if (isMarked[j] && isMarked[j] == isMarked[j + 1] && isMarked[j] == isMarked[j + 2])
+                        Winner = isMarked[j];
+
+                for (int j = 0; j < 3; j++)
+                    if (isMarked[j] && isMarked[j] == isMarked[j + 3] && isMarked[j] == isMarked[j + 6])
+                        Winner = isMarked[j];
+
+                if (isMarked[0] && isMarked[0] == isMarked[4] && isMarked[0] == isMarked[8])
+                    Winner = isMarked[0];
+                if (Winner)
+                {
+                    printf("Winner :%d\n", Winner);
+                    if (Winner == 1)
+                        AfficherImg(Win, screen);
+                    else
+                        AfficherImg(Loose, screen);
+                    SDL_Flip(screen);
+                    SDL_Delay(1500);
+                    isRunning = 0;
+                }
+
+                printf("------------\n");
+                for (int j = 0; j < 9; j += 3)
+                    printf("%d %d %d\n", isMarked[j], isMarked[j + 1], isMarked[j + 2]);
+                printf("------------\n");
+            }
+
+            break;
+        case SDL_KEYDOWN:
+            if (event.key.keysym.sym == SDLK_ESCAPE)
+                isRunning = 0;
+            break;
+        }
+    }
 }

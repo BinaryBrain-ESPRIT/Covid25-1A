@@ -1,19 +1,19 @@
 /**
  * @file enigme_image.c
  * @author Benzarti Wiem (wiem.benzarti@esprit.tn)
- * @brief Image Riddle File 
+ * @brief Image Riddle File
  * @version 0.1
  * @date 2022-04-26
- * 
+ *
  * @copyright Copyright (c) 2022
- * 
+ *
  */
 
 #include "enigme_image.h"
 
 /**
- * @brief initialization riddle
- * 
+ * @brief initialisation riddle
+ *
  * @param e Enigme
  * @param nomfichier file name
  */
@@ -80,10 +80,10 @@ void InitEnigme(Enigme *e, char *nomfichier)
 }
 
 /**
- * @brief Display riddle 
- * 
+ * @brief Display riddle
+ *
  * @param e Enigme
- * @param screen screen display 
+ * @param screen screen display
  */
 void afficherEnigme(Enigme e, SDL_Surface *screen)
 {
@@ -118,7 +118,7 @@ void animer(Enigme *e, SDL_Surface *screen)
 
 /**
  * @brief free riddle
- * 
+ *
  * @param e Enigme
  */
 void Free_Enigme(Enigme *e)
@@ -129,24 +129,36 @@ void Free_Enigme(Enigme *e)
         SDL_FreeSurface(e->Time[i].surfaceText);
 }
 
-
 /**
  * @brief switch player
- * 
+ *
  * @param Confg Configuration
  */
-void SwitchPlayer(Config * Confg)
+void SwitchPlayer(Config *Confg, int j)
 {
-    if (Confg->LevelR == 2)
-        if (Confg->Player == 3)
-            Confg->Player = 2;
-        else
-            Confg->Player = 3;
-    else if (Confg->LevelR == 3)
-        if (Confg->Player == 3)
-            Confg->Player = 1;
-        else if (Confg->Player == 2)
-            Confg->Player = 3;
-        else
-            Confg->Player = 2;
+    if (j == 7)
+    {
+        if (Confg->LevelR == 2)
+            if (Confg->Player == 1)
+                Confg->Player = 2;
+            else
+                Confg->Player = 1;
+        else if (Confg->LevelR == 3)
+            if (Confg->Player == 1)
+                Confg->Player = 3;
+            else if (Confg->Player == 2)
+                Confg->Player = 1;
+            else
+                Confg->Player = 2;
+    }
+    else if (j == 8)
+    {
+        if (Confg->LevelR == 3)
+            if (Confg->Player == 3)
+                Confg->Player = 1;
+            else if (Confg->Player == 2)
+                Confg->Player = 3;
+            else
+                Confg->Player = 2;
+    }
 }

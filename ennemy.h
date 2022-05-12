@@ -1,3 +1,14 @@
+/**
+ * @file ennemy.h
+ * @author Mohamed Habib Allah Bibani (mohamedhabiballah.bibani@esprit.tn)
+ * @brief Header File for Ennemy
+ * @version 1.0
+ * @date 2022-04-29
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
 #ifndef ennemy_H
 #define ennemy_H
 
@@ -19,14 +30,14 @@ typedef struct Ennemy
     double v; /*!<Ennemy Speed*/
     int direction; /*!<Ennemy Direction*/
     int nbreVie; /*!<Ennemy Life*/
-    int isKilled; /*!<check if Ennely IsKilled or not*/
+    int isKilled; /*!<check if Ennemy IsKilled or not*/
     int anim_i, anim_j; /*!<Index For the Matrix*/
     int posInit; /*!<Initial x position For the Ennemy*/
     int attack; /*!<Check If the ennemy attacking or not*/
     int AnimE_Attack, AnimE_Run, AnimeE_Idle; /*!<Variables For the Animation Speed*/
 } Ennemy;
 
-void initEnnemy(Ennemy *e, int x, int y, int vitesse, int nbreVie);
+void initEnnemy(Ennemy *e, int x, int y, int x1, int y1, int vitesse, int nbreVie);
 void afficherEnnemy(Ennemy e, SDL_Surface *screen);
 void animerEnnemy(Ennemy *e, Config *Confg);
 void deplacerEnnemy(Ennemy *e, Config *Confg);

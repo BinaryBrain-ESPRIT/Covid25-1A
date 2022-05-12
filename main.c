@@ -8,6 +8,7 @@
 
 int main()
 {
+
     // Declaration & Init
     Config *Confg = (Config *)malloc(sizeof(Config));
 
@@ -43,7 +44,6 @@ int main()
             for (int j = 0; j < i + 1; j++)
             {
                 sprintf(tabM[i][j].NameImg, "assets/MainMenu/Level-%d-Perso-%d.png", i + 1, j + 1);
-                printf("tabM :%s\n", tabM[i][j].NameImg);
                 InitBackg(&tabM[i][j], tabM[i][j].NameImg);
             }
         }
@@ -139,14 +139,21 @@ int main()
                 switch (i)
                 {
                 case 1:
-                    SelectLevel(screen, Confg);
-                    i = 0;
-                    sprintf(MoneyTxt.Texte, "%d $", Confg->Money);
-                    initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
-                    AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
-                    AfficherImg(MoneyImg, screen);
-                    Afficher_txt(MoneyTxt, screen);
-                    SDL_Flip(screen);
+                    Confg->LoadGame = SaveLoad(screen, Confg);
+                    if (Confg->LoadGame)
+                    {
+                        if (Confg->LoadGame == 1)
+                            SelectLevel(screen, Confg);
+                        else if (Confg->LoadGame == 2)
+                            Game(screen, Confg);
+                        i = 0;
+                        sprintf(MoneyTxt.Texte, "%d $", Confg->Money);
+                        initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
+                        AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+                        AfficherImg(MoneyImg, screen);
+                        Afficher_txt(MoneyTxt, screen);
+                        SDL_Flip(screen);
+                    }
 
                     break;
                 case 2:
@@ -186,14 +193,21 @@ int main()
             switch (i)
             {
             case 1:
-                SelectLevel(screen, Confg);
-                i = 0;
-                sprintf(MoneyTxt.Texte, "%d $", Confg->Money);
-                initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
-                AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
-                AfficherImg(MoneyImg, screen);
-                Afficher_txt(MoneyTxt, screen);
-                SDL_Flip(screen);
+                Confg->LoadGame = SaveLoad(screen, Confg);
+                if (Confg->LoadGame)
+                {
+                    if (Confg->LoadGame == 1)
+                        SelectLevel(screen, Confg);
+                    else if (Confg->LoadGame == 2)
+                        Game(screen, Confg);
+                    i = 0;
+                    sprintf(MoneyTxt.Texte, "%d $", Confg->Money);
+                    initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
+                    AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+                    AfficherImg(MoneyImg, screen);
+                    Afficher_txt(MoneyTxt, screen);
+                    SDL_Flip(screen);
+                }
 
                 break;
             case 2:
@@ -239,22 +253,10 @@ int main()
                 Confg->isRunning = 0;
                 break;
             case 7:
-                SwitchPlayer(Confg);
 
-                AffichageMainMenu(screen, tabMT, tabMAT, tabM, 0, Confg->LevelR, Confg->Player);
-                AfficherImg(MoneyImg, screen);
-                Afficher_txt(MoneyTxt, screen);
-                SDL_Flip(screen);
-
-                break;
             case 8:
-                if (Confg->LevelR == 3)
-                    if (Confg->Player == 3)
-                        Confg->Player = 2;
-                    else if (Confg->Player == 2)
-                        Confg->Player = 1;
-                    else
-                        Confg->Player = 3;
+                SwitchPlayer(Confg, i);
+
                 AffichageMainMenu(screen, tabMT, tabMAT, tabM, 0, Confg->LevelR, Confg->Player);
                 AfficherImg(MoneyImg, screen);
                 Afficher_txt(MoneyTxt, screen);
@@ -283,6 +285,4 @@ int main()
     free(Confg);
     TTF_Quit();
     // SDL_Quit();
-
-    printf("\nGame ShutDown !\n");
 }

@@ -5,6 +5,7 @@
         "main_fn.h": "c",
         "background.h": "c",
         "text_image.h": "c",
-        "player.h": "c"
+        "player.h": "c",
+        "numbers": "c"
     }
 }

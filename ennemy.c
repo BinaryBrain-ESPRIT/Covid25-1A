@@ -1,28 +1,28 @@
 /**
- * 
+ *
  * @file ennemy.c
  * @author Mohamed Habib Allah Bibani (mohamedhabiballah.bibani@esprit.tn)
  * @brief Source File For Ennemy
  * @version 1.0
  * @date 2022-04-22
- * 
+ *
  * @copyright Copyright (c) 2022
- * 
+ *
  */
 
 #include "ennemy.h"
 
 /**
  * @brief Initialize Ennemy
- * 
+ *
  * @param e Ennemy
  * @param x PosX
  * @param y PosY
  * @param vitesse Vitesse
  * @param nbreVie Nombre de Vie
- * 
+ *
  */
-void initEnnemy(Ennemy *e, int x, int y, int vitesse, int nbreVie)
+void initEnnemy(Ennemy *e, int x, int y, int x1, int y1, int vitesse, int nbreVie)
 {
 
     int direction;
@@ -47,7 +47,8 @@ void initEnnemy(Ennemy *e, int x, int y, int vitesse, int nbreVie)
     e->AnimE_Run = 0;
     e->AnimeE_Idle = 0;
     e->Flipped = 0;
-    e->posABS = e->pos;
+    e->posABS.x = x1;
+    e->posABS.y = y1;
 
     for (int i = 0; i < 6; i++)
     {
@@ -66,13 +67,13 @@ void initEnnemy(Ennemy *e, int x, int y, int vitesse, int nbreVie)
 }
 
 /**
- * 
+ *
  * @brief Display Ennemy
- * 
+ *
  * @param e Ennemy
  * @param screen ScreenDisplay
- * 
-*/
+ *
+ */
 void afficherEnnemy(Ennemy e, SDL_Surface *screen)
 {
     if (!e.isKilled)
@@ -81,7 +82,7 @@ void afficherEnnemy(Ennemy e, SDL_Surface *screen)
 
 /**
  * @brief Animation For The Ennemy
- * 
+ *
  * @param e Ennemy
  * @param Confg Configuration
  */
@@ -156,7 +157,7 @@ void animerEnnemy(Ennemy *e, Config *Confg)
 
 /**
  * @brief MoveEnnemy
- * 
+ *
  * @param e Ennemy
  * @param Confg Configuration
  */
@@ -181,18 +182,22 @@ void deplacerEnnemy(Ennemy *e, Config *Confg)
 }
 /**
  * @brief MoveAI
- * 
+ *
  * @param e Ennemy
  * @param p Player
- * 
+ *
  */
 void deplacerIA(Ennemy *e, Player p)
 {
-    int ReachPosX = rand()%(500-200)+200;
+    // int ReachPosX = rand()%(500-200)+200;
+    int ReachPosX = 500;
     if (!e->isKilled)
     {
         if (BehindEnnemy(p, *e) != 2)
+        {
             e->direction = BehindEnnemy(p, *e);
+            printf("Detected\n");
+        }
         else
         {
             if (e->pos.x >= e->posInit + ReachPosX)
@@ -205,7 +210,7 @@ void deplacerIA(Ennemy *e, Player p)
 
 /**
  * @brief Ennemy Collsion With Player
- * 
+ *
  * @param e Ennemy
  * @param p Player
  * @return int (1 if YES / 0 if NO)
@@ -231,18 +236,18 @@ int collisionBB(Ennemy e, Player p)
 }
 
 /**
- * @brief Detect Player 
- * 
+ * @brief Detect Player
+ *
  * @param p Player
  * @param e Ennemy
  * @return int (1 Right / -1 Left / 2 NoOne Behind / 0 Close To ennemy To attack)
  */
 int BehindEnnemy(Player p, Ennemy e)
 {
-    int posEX = e.pos.x;
-    int posEY = e.pos.y;
-    int posPX = p.pos.x;
-    int posPY = p.pos.y;
+    int posEX = e.posABS.x;
+    int posEY = e.posABS.y;
+    int posPX = p.posABS.x;
+    int posPY = p.posABS.y;
     int posEX1 = posEX + e.img[e.anim_i][e.anim_j]->w;
     int posEY1 = posEY + e.img[e.anim_i][e.anim_j]->h;
     int posPX1 = posPX + p.img[p.animI][p.animJ]->w;
@@ -269,13 +274,13 @@ int BehindEnnemy(Player p, Ennemy e)
                     return 0;
         }
     }
-    
+
     return 2;
 }
 
 /**
  * @brief Horizontal Collision
- * 
+ *
  * @param e Ennemy
  * @param Masque Mask
  * @return int Posiion Of the Collsion
@@ -309,7 +314,7 @@ int collisionEH(Ennemy e, SDL_Surface *Masque)
 
 /**
  * @brief Vertical Collision
- * 
+ *
  * @param e Ennemy
  * @param Masque Mask Surface
  * @return int Posiion Of the Collsion
@@ -331,7 +336,6 @@ int collisionEV(Ennemy e, SDL_Surface *Masque)
             return 2;
         // Bot
         color = GetPixel1(Masque, i, posY1);
-        //printf("R = %d G = %d B = %d\n", color.r, color.g, color.b);
         if (color.r == 255 && color.g == 255 && color.b == 1)
             return -2;
     }
@@ -339,7 +343,7 @@ int collisionEV(Ennemy e, SDL_Surface *Masque)
 
 /**
  * @brief Free Ennemy
- * 
+ *
  * @param e Ennemy
  */
 void LibererEnnemy(Ennemy e)
@@ -363,7 +367,7 @@ void LibererEnnemy(Ennemy e)
 
 /**
  * @brief Get the Pixel 1 object
- * 
+ *
  * @param pSurface Mask Surface
  * @param x Position X
  * @param y Position Y
