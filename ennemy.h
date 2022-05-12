@@ -25,7 +25,7 @@
 typedef struct Ennemy
 {
     SDL_Rect pos, posABS; /*!<Rectangle For Ennemy Position*/
-    SDL_Surface *img[6][20]; /*!<Surface For Ennmy*/
+    SDL_Surface *img[10][20]; /*!<Surface For Ennmy*/
     int Flipped; /*!<Int to check if his flipped or not*/
     double v; /*!<Ennemy Speed*/
     int direction; /*!<Ennemy Direction*/
@@ -34,7 +34,7 @@ typedef struct Ennemy
     int anim_i, anim_j; /*!<Index For the Matrix*/
     int posInit; /*!<Initial x position For the Ennemy*/
     int attack; /*!<Check If the ennemy attacking or not*/
-    int AnimE_Attack, AnimE_Run, AnimeE_Idle; /*!<Variables For the Animation Speed*/
+    int AnimE_Attack, AnimE_Run, AnimeE_Idle,AnimeE_Die; /*!<Variables For the Animation Speed*/
 } Ennemy;
 
 void initEnnemy(Ennemy *e, int x, int y, int x1, int y1, int vitesse, int nbreVie);

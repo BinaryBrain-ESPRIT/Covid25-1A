@@ -50,7 +50,7 @@ void initEnnemy(Ennemy *e, int x, int y, int x1, int y1, int vitesse, int nbreVi
     e->posABS.x = x1;
     e->posABS.y = y1;
 
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 7; i++)
     {
         if (i == 0 || i == 1)
             n = 15;
@@ -58,9 +58,12 @@ void initEnnemy(Ennemy *e, int x, int y, int x1, int y1, int vitesse, int nbreVi
             n = 10;
         else if (i == 4 || i == 5)
             n = 8;
+        else if (i == 6)
+            n = 10;
         for (int j = 0; j < n; j++)
         {
             sprintf(NomImg, "assets/Animation/Zombie%d/%d/%d.png", 1, i, j + 1);
+            printf("%s\n", NomImg);
             e->img[i][j] = IMG_Load(NomImg);
         }
     }
@@ -153,6 +156,7 @@ void animerEnnemy(Ennemy *e, Config *Confg)
             }
         }
     }
+
 }
 
 /**
@@ -196,7 +200,6 @@ void deplacerIA(Ennemy *e, Player p)
         if (BehindEnnemy(p, *e) != 2)
         {
             e->direction = BehindEnnemy(p, *e);
-            printf("Detected\n");
         }
         else
         {
@@ -358,6 +361,8 @@ void LibererEnnemy(Ennemy e)
             n = 10;
         else if (i == 4 || i == 5)
             n = 8;
+        else if (i == 6)
+            n = 10;
         for (int j = 0; j < n; j++)
         {
             SDL_FreeSurface(e.img[i][j]);

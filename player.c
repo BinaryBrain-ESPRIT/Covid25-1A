@@ -28,27 +28,23 @@ void initPerso(Player *p, int x, int y, int NumPlayer)
     p->attack = 0;
     p->NumPlayer = NumPlayer;
     p->isJumped = 0;
-
     for (int i = 0; i < 10; i++)
     {
         if (i == 0 || i == 1)
-            if (NumPlayer != 3)
-                n = 7;
-            else // player 3 is malek
-                n = 1;
+            n = 8;
         else if (i == 2 || i == 3)
-            if (NumPlayer != 3)
+            if (NumPlayer != 1)
                 n = 6;
             else
                 n = 7;
         else if (i == 4 || i == 5)
             n = 8;
         else if (i == 6 || i == 7)
-            if (NumPlayer != 3)
+            if (NumPlayer != 1)
                 n = 9;
             else
                 n = 6;
-        else if (i == 8 || i == 9)
+        else if ((i == 8 || i == 9))
             n = 6;
 
         for (int j = 0; j < n; j++)
@@ -65,7 +61,7 @@ void initPerso(Player *p, int x, int y, int NumPlayer)
 
 void afficherPerso(Player p, SDL_Surface *screen)
 {
-
+    printf("%d %d\n", p.animI, p.animJ);
     SDL_BlitSurface(p.img[p.animI][p.animJ], NULL, screen, &p.pos);
 }
 
@@ -103,16 +99,17 @@ void animerPerso(Player *p)
         switch (p->direction)
         {
         case 0:
+            p->animJ = 0;
             if (!p->flipped)
                 p->animI = 0;
             else
                 p->animI = 1;
             break;
         case 1:
-            if (p->AnimP_Run > 2)
+            if (p->AnimP_Run > 1)
             {
                 p->animI = 2;
-                if (p->NumPlayer != 3)
+                if (p->NumPlayer != 1)
                     n = 5;
                 else
                     n = 6;
@@ -126,11 +123,11 @@ void animerPerso(Player *p)
             p->AnimP_Run++;
             break;
         case -1:
-            if (p->AnimP_Run > 2)
+            if (p->AnimP_Run > 1)
             {
                 p->animI = 3;
 
-                if (p->NumPlayer != 3)
+                if (p->NumPlayer != 1)
                     n = 5;
                 else
                     n = 6;
@@ -176,28 +173,25 @@ void saut(Player *p, SDL_Surface *Masque)
 void LibererPlayer(Player p)
 {
     int n;
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 10; i++)
     {
-
         if (i == 0 || i == 1)
-            if (p.NumPlayer != 3)
-                n = 7;
-            else
-                n = 1;
+            n = 8;
         else if (i == 2 || i == 3)
-            if (p.NumPlayer != 3)
+            if (p.NumPlayer != 1)
                 n = 6;
             else
                 n = 7;
         else if (i == 4 || i == 5)
             n = 8;
         else if (i == 6 || i == 7)
-            if (p.NumPlayer != 3)
+            if (p.NumPlayer != 1)
                 n = 9;
             else
                 n = 6;
-        else if (i == 8 || i == 9)
+        else if ((i == 8 || i == 9))
             n = 6;
+
         for (int j = 0; j < n; j++)
         {
             SDL_FreeSurface(p.img[i][j]);

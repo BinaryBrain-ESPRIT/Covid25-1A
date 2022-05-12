@@ -689,7 +689,7 @@ int SaveLoad(SDL_Surface *screen, Config *Confg)
                 if (a != 1)
                 {
                     a = 1;
-                    AfficherImg(Backg,screen);
+                    AfficherImg(Backg, screen);
                     AfficherImg(NewS, screen);
                     AfficherImg(Load, screen);
                     AfficherImg(Cancel, screen);
@@ -709,7 +709,7 @@ int SaveLoad(SDL_Surface *screen, Config *Confg)
                     if (a != 2)
                     {
                         a = 2;
-                        AfficherImg(Backg,screen);
+                        AfficherImg(Backg, screen);
                         AfficherImg(LoadS, screen);
                         AfficherImg(New, screen);
                         AfficherImg(Cancel, screen);
@@ -729,7 +729,7 @@ int SaveLoad(SDL_Surface *screen, Config *Confg)
                         if (a != 3)
                         {
                             a = 3;
-                            AfficherImg(Backg,screen);
+                            AfficherImg(Backg, screen);
                             AfficherImg(Load, screen);
                             AfficherImg(New, screen);
                             AfficherImg(CancelS, screen);
@@ -916,7 +916,7 @@ void Game(SDL_Surface *screen, Config *Confg)
                     p.animI = 6;
                 else
                     p.animI = 7;
-                if (p.NumPlayer != 3)
+                if (p.NumPlayer != 1)
                     n = 8;
                 else
                     n = 5;
@@ -1063,27 +1063,6 @@ void Game(SDL_Surface *screen, Config *Confg)
         // Ennemy
         for (int i = 0; i < 5; i++)
         {
-
-            if (event.type == SDL_KEYDOWN)
-                if (event.key.keysym.sym == SDLK_a)
-                {
-                    if (!p.attack)
-                    {
-                        p.animJ = 0;
-                        p.attack = 1;
-                    }
-                    if (BehindEnnemy(p, e[i]) != 2)
-                        AttackedEnnemy = i;
-                }
-
-            if (e[i].nbreVie == 0 && !e[i].isKilled)
-            {
-                p.score += 150;
-                sprintf(MoneyTxt.Texte, "%d $", p.score);
-                initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w / 3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
-                e[i].isKilled = 1;
-            }
-
             if (collisionBB(e[i], p) && p.nbreVie > 0 && BehindEnnemy(p, e[i]) != 2)
             {
                 e[i].direction = 0;
@@ -1102,6 +1081,44 @@ void Game(SDL_Surface *screen, Config *Confg)
                 deplacerIA(&e[i], p);
                 deplacerEnnemy(&e[i], Confg);
                 afficherEnnemy(e[i], screen);
+            }
+
+            if (event.type == SDL_KEYDOWN)
+                if (event.key.keysym.sym == SDLK_a)
+                {
+                    if (!p.attack)
+                    {
+                        p.animJ = 0;
+                        p.attack = 1;
+                    }
+                    if (BehindEnnemy(p, e[i]) != 2)
+                        AttackedEnnemy = i;
+                }
+
+            if (e[i].nbreVie == 0 && !e[i].isKilled)
+            {
+                /*
+                if (e[i].AnimeE_Die > 2)
+                {
+                    p.animI = 6;
+                    if (e[i].anim_j >= 9)
+                    {
+                        e[i].isKilled = 1;
+                        p.score += 150;
+                        sprintf(MoneyTxt.Texte, "%d $", p.score);
+                        initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w / 3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
+                    }
+                    else
+                        e[i].anim_j++;
+
+                    e[i].AnimeE_Die = 0;
+                }
+                e[i].AnimeE_Die++;
+                */
+                e[i].isKilled = 1;
+                p.score += 150;
+                sprintf(MoneyTxt.Texte, "%d $", p.score);
+                initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w / 3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
             }
         }
 
@@ -1154,9 +1171,6 @@ void Game(SDL_Surface *screen, Config *Confg)
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym)
             {
-            case SDLK_o:
-                printf("test\n");
-                break;
             case SDLK_m:
                 if (EnigmeDetected(p, Masque[0]))
                 {
@@ -1409,18 +1423,6 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
     // GameLoop
     while (isRunning)
     {
-        printf("------Player 1------\n");
-        printf("%d\n", p1.posABS.x);
-        printf("------Ennemy 1------\n");
-        for (int i = 0; i < 5; i++)
-        {
-            printf("%d  %d\n", e[i].pos.x, e[i].posABS.x);
-        }
-        printf("------Ennemy 2------\n");
-        for (int i = 0; i < 5; i++)
-        {
-            printf("%d  %d\n", e1[i].pos.x, e1[i].posABS.x);
-        }
         // MAJTime(&GameTimeTxt,GameTimeInit);
         GameTimeS = ((SDL_GetTicks() - GameTimeInit) / 1000) % 60;
         GameTimeM = ((SDL_GetTicks() - GameTimeInit) / 1000) / 60;
@@ -1473,7 +1475,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                     p.animI = 6;
                 else
                     p.animI = 7;
-                if (p.NumPlayer != 3)
+                if (p.NumPlayer != 1)
                     n = 8;
                 else
                     n = 5;
