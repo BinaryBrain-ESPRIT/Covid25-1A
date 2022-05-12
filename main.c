@@ -139,14 +139,21 @@ int main()
                 switch (i)
                 {
                 case 1:
-                    SelectLevel(screen, Confg);
-                    i = 0;
-                    sprintf(MoneyTxt.Texte, "%d $", Confg->Money);
-                    initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
-                    AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
-                    AfficherImg(MoneyImg, screen);
-                    Afficher_txt(MoneyTxt, screen);
-                    SDL_Flip(screen);
+                    Confg->LoadGame = SaveLoad(screen, Confg);
+                    if (Confg->LoadGame)
+                    {
+                        if (Confg->LoadGame == 1)
+                            SelectLevel(screen, Confg);
+                        else if (Confg->LoadGame == 2)
+                            Game(screen, Confg);
+                        i = 0;
+                        sprintf(MoneyTxt.Texte, "%d $", Confg->Money);
+                        initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
+                        AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+                        AfficherImg(MoneyImg, screen);
+                        Afficher_txt(MoneyTxt, screen);
+                        SDL_Flip(screen);
+                    }
 
                     break;
                 case 2:
@@ -186,14 +193,21 @@ int main()
             switch (i)
             {
             case 1:
-                SelectLevel(screen, Confg);
-                i = 0;
-                sprintf(MoneyTxt.Texte, "%d $", Confg->Money);
-                initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
-                AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
-                AfficherImg(MoneyImg, screen);
-                Afficher_txt(MoneyTxt, screen);
-                SDL_Flip(screen);
+                Confg->LoadGame = SaveLoad(screen, Confg);
+                if (Confg->LoadGame)
+                {
+                    if (Confg->LoadGame == 1)
+                        SelectLevel(screen, Confg);
+                    else if (Confg->LoadGame == 2)
+                        Game(screen, Confg);
+                    i = 0;
+                    sprintf(MoneyTxt.Texte, "%d $", Confg->Money);
+                    initTxt(&MoneyTxt, 1740 - (MoneyTxt.surfaceText->w / 3), 60, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
+                    AffichageMainMenu(screen, tabMT, tabMAT, tabM, i, Confg->LevelR, Confg->Player);
+                    AfficherImg(MoneyImg, screen);
+                    Afficher_txt(MoneyTxt, screen);
+                    SDL_Flip(screen);
+                }
 
                 break;
             case 2:
@@ -239,10 +253,10 @@ int main()
                 Confg->isRunning = 0;
                 break;
             case 7:
-        
+
             case 8:
                 SwitchPlayer(Confg, i);
-                
+
                 AffichageMainMenu(screen, tabMT, tabMAT, tabM, 0, Confg->LevelR, Confg->Player);
                 AfficherImg(MoneyImg, screen);
                 Afficher_txt(MoneyTxt, screen);

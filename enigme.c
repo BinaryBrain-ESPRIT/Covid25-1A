@@ -1,6 +1,6 @@
 /**
  * @file enigme.c
- * @author Mohamed Maher Grati (mohammedmaher.grati@esprit.tn)
+ * @author Maher Grati (mohammedmaher.grati@esprit.tn)
  * @brief (enigme text) file
  * @version 0.1
  * @date 2022-04-28

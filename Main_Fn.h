@@ -25,6 +25,7 @@ typedef struct {
     int Money;
     double deltaTime;
     int GameWin;
+    int LoadGame;
 }Config;
 
 
@@ -40,6 +41,9 @@ void InitImg_fr(Image *tabMO,Image * tabMAO);
 void InitImg_en(Image *tabMO,Image * tabMAO);
 void InitTxt_en(Text *tabMT,Text * tabMAT);
 void InitTxt_fr(Text *tabMT,Text * tabMAT);
+
+int arduinoWriteData(int x);
+int arduinoReadData(int *x);
 
 
 

@@ -641,8 +641,159 @@ int SaveGame(Config *Confg, SDL_Surface *screen)
     return 0;
 }
 
+int SaveLoad(SDL_Surface *screen, Config *Confg)
+{
+    SDL_Event event;
+    Image Backg, New, NewS, Load, LoadS, Cancel, CancelS;
+    int isRunning = 1, x, y, posX, posX1, posY, posY1, a = 0;
+
+    InitBackg(&Backg, "assets/SaveLoad/Backg.jpg");
+    initImg(&New, 828, 461, "assets/SaveLoad/New.png");
+    initImg(&NewS, 828, 461, "assets/SaveLoad/NewS.png");
+    initImg(&Load, 828, 628, "assets/SaveLoad/Load.png");
+    initImg(&LoadS, 828, 628, "assets/SaveLoad/LoadS.png");
+    initImg(&Cancel, 881, 841, "assets/SaveLoad/Cancel.png");
+    initImg(&CancelS, 881, 841, "assets/SaveLoad/CancelS.png");
+
+    AfficherImg(Backg, screen);
+    AfficherImg(New, screen);
+    AfficherImg(Load, screen);
+    AfficherImg(Cancel, screen);
+    SDL_Flip(screen);
+
+    while (isRunning)
+    {
+        SDL_PollEvent(&event);
+        switch (event.type)
+        {
+        case SDL_QUIT:
+            isRunning = 0;
+            Confg->isRunning = 0;
+            break;
+        case SDL_KEYDOWN:
+            if (event.key.keysym.sym == SDLK_ESCAPE)
+                isRunning = 0;
+            break;
+        case SDL_MOUSEMOTION:
+            x = event.motion.x;
+            y = event.motion.y;
+
+            posX = New.pos.x;
+            posY = New.pos.y;
+
+            posX1 = posX + New.img->w;
+            posY1 = posY + New.img->h;
+
+            if (x > posX && x < posX1 && y > posY && y < posY1)
+            {
+                if (a != 1)
+                {
+                    a = 1;
+                    AfficherImg(Backg,screen);
+                    AfficherImg(NewS, screen);
+                    AfficherImg(Load, screen);
+                    AfficherImg(Cancel, screen);
+                    SDL_Flip(screen);
+                }
+            }
+            else
+            {
+                posX = Load.pos.x;
+                posY = Load.pos.y;
+
+                posX1 = posX + Load.img->w;
+                posY1 = posY + Load.img->h;
+
+                if (x > posX && x < posX1 && y > posY && y < posY1)
+                {
+                    if (a != 2)
+                    {
+                        a = 2;
+                        AfficherImg(Backg,screen);
+                        AfficherImg(LoadS, screen);
+                        AfficherImg(New, screen);
+                        AfficherImg(Cancel, screen);
+                        SDL_Flip(screen);
+                    }
+                }
+                else
+                {
+                    posX = Cancel.pos.x;
+                    posY = Cancel.pos.y;
+
+                    posX1 = posX + Cancel.img->w;
+                    posY1 = posY + Cancel.img->h;
+
+                    if (x > posX && x < posX1 && y > posY && y < posY1)
+                    {
+                        if (a != 3)
+                        {
+                            a = 3;
+                            AfficherImg(Backg,screen);
+                            AfficherImg(Load, screen);
+                            AfficherImg(New, screen);
+                            AfficherImg(CancelS, screen);
+                            SDL_Flip(screen);
+                        }
+                    }
+                    else
+                    {
+                        if (a != 0)
+                        {
+                            a = 0;
+                            AfficherImg(Backg, screen);
+                            AfficherImg(Load, screen);
+                            AfficherImg(New, screen);
+                            AfficherImg(Cancel, screen);
+                            SDL_Flip(screen);
+                        }
+                    }
+                }
+            }
+
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+            x = event.button.x;
+            y = event.button.y;
+
+            posX = New.pos.x;
+            posY = New.pos.y;
+
+            posX1 = posX + New.img->w;
+            posY1 = posY + New.img->h;
+
+            if (x > posX && x < posX1 && y > posY && y < posY1)
+            {
+                return 1;
+            }
+            else
+            {
+                posX = Load.pos.x;
+                posY = Load.pos.y;
+
+                posX1 = posX + Load.img->w;
+                posY1 = posY + Load.img->h;
+
+                if (x > posX && x < posX1 && y > posY && y < posY1)
+                {
+                    return 2;
+                }
+            }
+
+            break;
+        }
+    }
+
+    Liberer_Img(Backg);
+    Liberer_Img(New);
+    Liberer_Img(NewS);
+    Liberer_Img(Load);
+    Liberer_Img(LoadS);
+    return 0;
+}
 void Game(SDL_Surface *screen, Config *Confg)
 {
+    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
     srand(time(NULL));
     const Uint8 *state = SDL_GetKeyState(NULL);
 
@@ -682,7 +833,8 @@ void Game(SDL_Surface *screen, Config *Confg)
 
     // Init Player
     initPerso(&p, 250, 510, Confg->Player);
-    ChoosePlayerName(&p, Confg, screen);
+    if (Confg->LoadGame != 2)
+        ChoosePlayerName(&p, Confg, screen);
 
     // Init LevelBackg
     InitGameBackg(&Backg, 0, 0, Width, Height);
@@ -709,8 +861,11 @@ void Game(SDL_Surface *screen, Config *Confg)
 
     GameTimeInit = SDL_GetTicks();
     ////
-    LoadGame(Confg, &p.pos, &p.posABS, e, &map.playerTagPos, map.zombieTagPos, map.EnnemyDie, &camPos);
-    Backg.cam.x = camPos.x;
+    if (Confg->LoadGame == 2)
+    {
+        LoadGame(Confg, &p.pos, &p.posABS, e, &map.playerTagPos, map.zombieTagPos, map.EnnemyDie, &camPos);
+        Backg.cam.x = camPos.x;
+    }
 
     // GameLoop
     while (isRunning)
@@ -999,6 +1154,9 @@ void Game(SDL_Surface *screen, Config *Confg)
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym)
             {
+            case SDLK_o:
+                printf("test\n");
+                break;
             case SDLK_m:
                 if (EnigmeDetected(p, Masque[0]))
                 {
@@ -1014,7 +1172,10 @@ void Game(SDL_Surface *screen, Config *Confg)
                 // EnigmeTexte
                 AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque[0]);
                 SDL_WaitEvent(&event);
-
+                break;
+            case SDLK_y:
+                TicTacToe(screen, Confg, p.PlayerName);
+                SDL_Delay(500);
                 break;
             case SDLK_TAB:
                 if (!Opened)
@@ -1078,7 +1239,6 @@ void Game(SDL_Surface *screen, Config *Confg)
             }
             break;
         case SDL_KEYUP:
-
             if (p.direction == 1)
                 p.flipped = 0;
             else if (p.direction == -1)

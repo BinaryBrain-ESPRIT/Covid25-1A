@@ -1,13 +1,3 @@
-/**
- * @file enigme.h
- * @author mohamed maher grati
- * @brief 
- * @version 0.1
- * @date 2022-04-29
- * 
- * @copyright Copyright (c) 2022
- * 
- */
 #ifndef enigme_H
 #define enigme_H
 

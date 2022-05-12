@@ -58,5 +58,5 @@ void SaveScore(char PlayerName[], int Score, char Time[]);
 void LeaderBoard(SDL_Surface *screen, Config *Confg);
 void MAJTime(Text *GameTimeTxt, int GameTimeInit);
 int MiniGameCard(SDL_Surface *screen, Config *Confg);
-
+void TicTacToe(SDL_Surface *screen, Config *Confg, char PlayerN[]);
 #endif
