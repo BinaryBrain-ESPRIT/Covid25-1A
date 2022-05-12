@@ -12,7 +12,7 @@
 #include "enigme_image.h"
 
 /**
- * @brief initialisation riddle
+ * @brief initialization riddle
  * 
  * @param e Enigme
  * @param nomfichier file name
