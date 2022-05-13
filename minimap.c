@@ -447,7 +447,7 @@ void TicTacToe(SDL_Surface *screen, Config *Confg, char PlayerN[])
     SDL_Rect pos[9];
     Text PlayerName;
     SDL_Color White = {255, 255, 255};
-    int i, isMarked[9] = {0}, Winner = 0;
+    int i,x,y, isMarked[9] = {0}, Winner = 0;
 
     SDL_ShowCursor(SDL_ENABLE);
 
@@ -503,8 +503,8 @@ void TicTacToe(SDL_Surface *screen, Config *Confg, char PlayerN[])
             isRunning = 0;
             break;
         case SDL_MOUSEBUTTONDOWN:
-            int x = event.button.x;
-            int y = event.button.y;
+             x = event.button.x;
+             y = event.button.y;
             for (i = 0; i < 9; i++)
                 if (x > pos[i].x && x < pos[i].x + 130 && y > pos[i].y && y < pos[i].y + 140)
                     break;
