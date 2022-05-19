@@ -18,7 +18,7 @@ typedef struct
     int Anim,AnimI;
 } background;
 
-void InitGameBackg(background *Backg, int x, int y, int W, int H);
+void InitGameBackg(background *Backg, int x, int y, int W, int H,int Lvl);
 void AfficherBackg(background Backg, SDL_Surface *screen);
 void animer_background(background *Backg, SDL_Surface *screen);
 int collisionPH(Player p, SDL_Surface *Masque);

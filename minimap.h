@@ -50,7 +50,7 @@ typedef struct card
     int CardNumber;/*!<CardNumber  */
 } card;
 
-void initminimap(minimap *m, char nameimg[], Player p, Ennemy e[]);
+void initminimap(minimap *m, char nameimg[], Player p, Ennemy e[],int Lvl);
 void MAJMinimap(SDL_Rect PosJoueur, Ennemy e[], minimap *m, int redimensionnement);
 void afficherminimap(minimap m, SDL_Surface *screen);
 void Liberer(minimap *m);

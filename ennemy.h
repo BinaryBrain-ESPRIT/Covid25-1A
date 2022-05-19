@@ -48,5 +48,8 @@ int collisionEH(Ennemy e, SDL_Surface *Masque);
 int collisionEV(Ennemy e, SDL_Surface *Masque);
 SDL_Color GetPixel1(SDL_Surface *pSurface, int x, int y);
 int BehindEnnemy(Player p, Ennemy e);
+int isGroundE(Ennemy e, SDL_Surface *Masque);
+void FallEnnemy(Ennemy *e, SDL_Surface *Masque);
+int isTrappedE(Ennemy e, SDL_Surface *Masque);
 
 #endif

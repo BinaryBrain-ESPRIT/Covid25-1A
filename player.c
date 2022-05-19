@@ -61,7 +61,6 @@ void initPerso(Player *p, int x, int y, int NumPlayer)
 
 void afficherPerso(Player p, SDL_Surface *screen)
 {
-    printf("%d %d\n", p.animI, p.animJ);
     SDL_BlitSurface(p.img[p.animI][p.animJ], NULL, screen, &p.pos);
 }
 
@@ -147,7 +146,7 @@ void animerPerso(Player *p)
 void saut(Player *p, SDL_Surface *Masque)
 {
     int Vitesse = 20;
-    int HeightP = p->posInit - 300;
+    int HeightP = p->posInit - 400;
     if (HeightP < 0)
         HeightP = 0;
 
