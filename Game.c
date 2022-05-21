@@ -811,11 +811,13 @@ void Game(SDL_Surface *screen, Config *Confg)
     Ennemy e[5];
 
     minimap map;
-
+    char minimap_Image[20];
     // Init Backround Masque
     background Backg;
-    SDL_Surface *Masque[3];
-    Masque[0] = IMG_Load("assets/Levels/Masque.jpg");
+    SDL_Surface *Masque;
+    char nomMasque[50];
+    sprintf(nomMasque, "assets/Levels/Level%d/Masque.jpg", Confg->Level);
+    Masque = IMG_Load(nomMasque);
 
     Image tabGameUI[5];
     Text MoneyTxt, GameTimeTxt;
@@ -837,7 +839,7 @@ void Game(SDL_Surface *screen, Config *Confg)
         ChoosePlayerName(&p, Confg, screen);
 
     // Init LevelBackg
-    InitGameBackg(&Backg, 0, 0, Width, Height);
+    InitGameBackg(&Backg, 0, 0, Width, Height, Confg->Level);
 
     // Init GameUI
     initImg(&tabGameUI[0], 31, 53, "assets/GameUi/Health3.png");
@@ -855,7 +857,8 @@ void Game(SDL_Surface *screen, Config *Confg)
     initEnnemy(&e[4], 8800, 575, 8800, 575, 5, 2);
 
     // Init MiniMap
-    initminimap(&map, "assets/MiniMap/Level1Mini.jpg", p, e);
+    sprintf(minimap_Image, "assets/MiniMap/Level%d/Level%dMini.jpg", Confg->Level, Confg->Level);
+    initminimap(&map, minimap_Image, p, e, Confg->Level);
 
     SDL_ShowCursor(SDL_DISABLE);
 
@@ -904,7 +907,7 @@ void Game(SDL_Surface *screen, Config *Confg)
         afficherPerso(p, screen);
 
         int n = 0;
-        if (isTrapped(p, Masque[0]) && p.nbreVie != 0)
+        if (isTrapped(p, Masque) && p.nbreVie != 0)
             p.nbreVie = 0;
 
         // PlayerDie
@@ -929,7 +932,7 @@ void Game(SDL_Surface *screen, Config *Confg)
                     int randNum = rand() % 500;
                     if (randNum % 2 == 0)
                     {
-                        if (!AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque[0]))
+                        if (!AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque))
                         {
                             isRunning = 0;
                             Confg->GameWin = 0;
@@ -954,7 +957,7 @@ void Game(SDL_Surface *screen, Config *Confg)
                     }
                     else
                     {
-                        if (!AfficherEnigmeImage(screen, Confg, GameTimeInit, Masque[0], p))
+                        if (!AfficherEnigmeImage(screen, Confg, GameTimeInit, Masque, p))
                         {
                             isRunning = 0;
                             Confg->GameWin = 0;
@@ -1015,7 +1018,7 @@ void Game(SDL_Surface *screen, Config *Confg)
             }
 
             // Scrolling
-            if (collisionPH(p, Masque[0]) != p.direction)
+            if (collisionPH(p, Masque) != p.direction)
             {
                 if (p.pos.x >= screen->w / 2 && p.direction == 1)
                 {
@@ -1059,10 +1062,15 @@ void Game(SDL_Surface *screen, Config *Confg)
                     deplacerPerso(&p, Confg->deltaTime);
             }
         }
-
         // Ennemy
         for (int i = 0; i < 5; i++)
         {
+            if (isTrappedE(e[i], Masque))
+            {
+                e[i].isKilled = 1;
+                e[i].nbreVie = 0;
+            }
+            FallEnnemy(&e[i], Masque);
             if (collisionBB(e[i], p) && p.nbreVie > 0 && BehindEnnemy(p, e[i]) != 2)
             {
                 e[i].direction = 0;
@@ -1080,9 +1088,9 @@ void Game(SDL_Surface *screen, Config *Confg)
                 animerEnnemy(&e[i], Confg);
                 deplacerIA(&e[i], p);
                 deplacerEnnemy(&e[i], Confg);
+
                 afficherEnnemy(e[i], screen);
             }
-
             if (event.type == SDL_KEYDOWN)
                 if (event.key.keysym.sym == SDLK_a)
                 {
@@ -1097,24 +1105,7 @@ void Game(SDL_Surface *screen, Config *Confg)
 
             if (e[i].nbreVie == 0 && !e[i].isKilled)
             {
-                /*
-                if (e[i].AnimeE_Die > 2)
-                {
-                    p.animI = 6;
-                    if (e[i].anim_j >= 9)
-                    {
-                        e[i].isKilled = 1;
-                        p.score += 150;
-                        sprintf(MoneyTxt.Texte, "%d $", p.score);
-                        initTxt(&MoneyTxt, 1775 - (MoneyTxt.surfaceText->w / 3), 91, MoneyColor, 35, "assets/Font/AznKnucklesTrial-z85pa.otf", MoneyTxt.Texte);
-                    }
-                    else
-                        e[i].anim_j++;
 
-                    e[i].AnimeE_Die = 0;
-                }
-                e[i].AnimeE_Die++;
-                */
                 e[i].isKilled = 1;
                 p.score += 150;
                 sprintf(MoneyTxt.Texte, "%d $", p.score);
@@ -1131,14 +1122,14 @@ void Game(SDL_Surface *screen, Config *Confg)
         // PlayerMovement
         if (state[SDLK_UP])
         {
-            if (Interaction(p, Masque[0]) > 2)
+            if (Interaction(p, Masque) > 2)
                 p.direction = 2;
             else
                 p.direction = 0;
         }
         if (state[SDLK_DOWN])
         {
-            if (Interaction(p, Masque[0]) && !isGround(p, Masque[0]))
+            if (Interaction(p, Masque) && !isGround(p, Masque))
                 p.direction = -2;
             else
                 p.direction = 0;
@@ -1153,13 +1144,13 @@ void Game(SDL_Surface *screen, Config *Confg)
         }
         if (state[SDLK_SPACE])
         {
-            if (isGround(p, Masque[0]) && !Interaction(p, Masque[0]))
+            if (isGround(p, Masque) && !Interaction(p, Masque))
             {
                 p.posInit = p.pos.y;
                 p.isJumped = 1;
             }
         }
-        saut(&p, Masque[0]);
+        saut(&p, Masque);
 
         SDL_PollEvent(&event);
         switch (event.type)
@@ -1172,19 +1163,21 @@ void Game(SDL_Surface *screen, Config *Confg)
             switch (event.key.keysym.sym)
             {
             case SDLK_m:
-                if (EnigmeDetected(p, Masque[0]))
+                printf("test1\n");
+                if (EnigmeDetected(p, Masque))
                 {
                     if (!MiniGameCard(screen, Confg))
                         Confg->GameWin = 0;
                     else
                         Confg->GameWin = 1;
+
                     Confg->isRunning = 0;
                     SDL_WaitEvent(&event);
                 }
                 break;
             case SDLK_t:
                 // EnigmeTexte
-                AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque[0]);
+                AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque);
                 SDL_WaitEvent(&event);
                 break;
             case SDLK_y:
@@ -1234,7 +1227,7 @@ void Game(SDL_Surface *screen, Config *Confg)
             break;
             case SDLK_e:
                 // EnigmeImage
-                AfficherEnigmeImage(screen, Confg, GameTimeInit, Masque[0], p);
+                AfficherEnigmeImage(screen, Confg, GameTimeInit, Masque, p);
                 SDL_WaitEvent(&event);
                 break;
 
@@ -1264,6 +1257,8 @@ void Game(SDL_Surface *screen, Config *Confg)
         }
         Confg->deltaTime = (SDL_GetTicks() - last_frame_time);
     }
+
+    printf("test\n");
     int etat, etat1;
     SDL_ShowCursor(SDL_ENABLE);
 
@@ -1281,8 +1276,7 @@ void Game(SDL_Surface *screen, Config *Confg)
 
     Liberer(&map);
 
-    for (int i = 0; i < 3; i++)
-        SDL_FreeSurface(Masque[i]);
+    SDL_FreeSurface(Masque);
 
     for (int i = 0; i < 2; i++)
         Liberer_Img(tabGameUI[i]);
@@ -1324,11 +1318,13 @@ void Game(SDL_Surface *screen, Config *Confg)
         if (Confg->Level < 3)
             Confg->Level++;
         Game(screen, Confg);
+        Confg->GameWin = 0;
         return;
     }
     if (etat1)
     {
         Game(screen, Confg);
+        Confg->GameWin = 0;
         return;
     }
 }
@@ -1353,13 +1349,15 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
     Ennemy e1[5];
 
     minimap map;
-
+    char minimap_Image[20];
     // Init Backround Masque
     background Backg;
     background Backg1;
 
-    SDL_Surface *Masque[3];
-    Masque[0] = IMG_Load("assets/Levels/Masque.jpg");
+    SDL_Surface *Masque;
+    char nomMasque[50];
+    sprintf(nomMasque, "assets/Levels/Level%d/Masque.jpg", Confg->Level);
+    Masque = IMG_Load(nomMasque);
 
     Image tabGameUI[5];
     Text MoneyTxt, GameTimeTxt, MoneyTxt1, GameTimeTxt1;
@@ -1383,8 +1381,8 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
     ChoosePlayerName(&p1, Confg, screen);
 
     // Init LevelBackg
-    InitGameBackg(&Backg, 0, 0, Width / 2, Height);
-    InitGameBackg(&Backg1, Width / 2, 0, Width / 2, Height);
+    InitGameBackg(&Backg, 0, 0, Width / 2, Height, Confg->Level);
+    InitGameBackg(&Backg1, Width / 2, 0, Width / 2, Height, Confg->Level);
     // Init GameUI
     initImg(&tabGameUI[0], 15, 994, "assets/GameUi/Health3.png");
     initImg(&tabGameUI[1], 20, 56, "assets/GameUi/MoneyTime.png");
@@ -1414,7 +1412,8 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
     initEnnemy(&e1[4], 8800 + (Width / 2), 575, 8800, 575, 5, 2);
 
     // Init MiniMap
-    initminimap(&map, "assets/MiniMap/Level1Mini.jpg", p, e);
+    sprintf(minimap_Image, "assets/MiniMap/Level%d/Level%dMini.jpg", Confg->Level, Confg->Level);
+    initminimap(&map, minimap_Image, p, e, Confg->Level);
 
     SDL_ShowCursor(SDL_DISABLE);
 
@@ -1461,9 +1460,9 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
         afficherPerso(p1, screen);
 
         int n = 0;
-        if (isTrapped(p, Masque[0]) && p.nbreVie != 0)
+        if (isTrapped(p, Masque) && p.nbreVie != 0)
             p.nbreVie = 0;
-        if (isTrapped(p1, Masque[0]) && p1.nbreVie != 0)
+        if (isTrapped(p1, Masque) && p1.nbreVie != 0)
             p1.nbreVie = 0;
 
         // PlayerDie
@@ -1488,7 +1487,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                     int randNum = rand() % 500;
                     if (randNum % 2 == 0)
                     {
-                        if (!AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque[0]))
+                        if (!AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque))
                         {
                             isRunning = 0;
                             Confg->GameWin = 0;
@@ -1513,7 +1512,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                     }
                     else
                     {
-                        if (!AfficherEnigmeImage(screen, Confg, GameTimeInit, Masque[0], p))
+                        if (!AfficherEnigmeImage(screen, Confg, GameTimeInit, Masque, p))
                         {
                             isRunning = 0;
                             Confg->GameWin = 0;
@@ -1587,7 +1586,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                     p.AnimP_Attack++;
             }
             // Scrolling
-            if (collisionPH(p, Masque[0]) != p.direction)
+            if (collisionPH(p, Masque) != p.direction)
             {
                 if (p.pos.x >= (screen->w / 2) / 2 && p.direction == 1)
                 {
@@ -1658,7 +1657,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                     int randNum = rand() % 500;
                     if (randNum % 2 == 0)
                     {
-                        if (!AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque[0]))
+                        if (!AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque))
                         {
                             isRunning = 0;
                             Confg->GameWin = 0;
@@ -1683,7 +1682,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                     }
                     else
                     {
-                        if (!AfficherEnigmeImage(screen, Confg, GameTimeInit, Masque[0], p1))
+                        if (!AfficherEnigmeImage(screen, Confg, GameTimeInit, Masque, p1))
                         {
                             isRunning = 0;
                             Confg->GameWin = 0;
@@ -1745,7 +1744,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                     p1.AnimP_Attack++;
             }
             // Scrolling
-            if (collisionPH(p1, Masque[0]) != p1.direction)
+            if (collisionPH(p1, Masque) != p1.direction)
             {
                 if (p1.pos.x >= (screen->w / 2) + (screen->w / 4) && p1.direction == 1)
                 {
@@ -1843,6 +1842,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
             }
             else
             {
+                e[i].direction = 1;
                 e[i].attack = 0;
                 animerEnnemy(&e[i], Confg);
                 deplacerIA(&e[i], p);
@@ -1885,14 +1885,14 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
         // PlayerMovement
         if (state[SDLK_UP])
         {
-            if (Interaction(p1, Masque[0]) > 2)
+            if (Interaction(p1, Masque) > 2)
                 p1.direction = 2;
             else
                 p1.direction = 0;
         }
         if (state[SDLK_z])
         {
-            if (Interaction(p1, Masque[0]) > 2)
+            if (Interaction(p1, Masque) > 2)
                 p.direction = 2;
             else
                 p.direction = 0;
@@ -1900,7 +1900,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
 
         if (state[SDLK_DOWN])
         {
-            if (Interaction(p1, Masque[0]) && !isGround(p1, Masque[0]))
+            if (Interaction(p1, Masque) && !isGround(p1, Masque))
                 p1.direction = -2;
             else
                 p1.direction = 0;
@@ -1908,7 +1908,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
 
         if (state[SDLK_s])
         {
-            if (Interaction(p, Masque[0]) && !isGround(p, Masque[0]))
+            if (Interaction(p, Masque) && !isGround(p, Masque))
                 p.direction = -2;
             else
                 p.direction = 0;
@@ -1936,7 +1936,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
 
         if (state[SDLK_RSHIFT])
         {
-            if (isGround(p1, Masque[0]) && !Interaction(p1, Masque[0]))
+            if (isGround(p1, Masque) && !Interaction(p1, Masque))
             {
                 p1.posInit = p1.pos.y;
                 p1.isJumped = 1;
@@ -1945,14 +1945,14 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
 
         if (state[SDLK_LSHIFT])
         {
-            if (isGround(p, Masque[0]) && !Interaction(p, Masque[0]))
+            if (isGround(p, Masque) && !Interaction(p, Masque))
             {
                 p.posInit = p.pos.y;
                 p.isJumped = 1;
             }
         }
-        saut(&p, Masque[0]);
-        saut(&p1, Masque[0]);
+        saut(&p, Masque);
+        saut(&p1, Masque);
 
         SDL_PollEvent(&event);
         switch (event.type)
@@ -1965,7 +1965,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
             switch (event.key.keysym.sym)
             {
             case SDLK_m:
-                if (EnigmeDetected(p, Masque[0]))
+                if (EnigmeDetected(p, Masque))
                 {
                     if (!MiniGameCard(screen, Confg))
                         Confg->GameWin = 0;
@@ -1974,7 +1974,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                     Confg->isRunning = 0;
                     SDL_WaitEvent(&event);
                 }
-                if (EnigmeDetected(p1, Masque[0]))
+                if (EnigmeDetected(p1, Masque))
                 {
                     if (!MiniGameCard(screen, Confg))
                         Confg->GameWin = 0;
@@ -1986,7 +1986,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
                 break;
             case SDLK_t:
                 // EnigmeTexte
-                AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque[0]);
+                AfficherEnigmeTexte(screen, Confg, GameTimeInit, Masque);
                 SDL_WaitEvent(&event);
 
                 break;
@@ -2042,7 +2042,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
             break;
             case SDLK_e:
                 // EnigmeImage
-                AfficherEnigmeImage(screen, Confg, GameTimeInit, Masque[0], p);
+                AfficherEnigmeImage(screen, Confg, GameTimeInit, Masque, p);
                 SDL_WaitEvent(&event);
                 break;
 
@@ -2105,7 +2105,7 @@ void MultiPlayerGame(SDL_Surface *screen, Config *Confg)
     Liberer(&map);
 
     for (int i = 0; i < 3; i++)
-        SDL_FreeSurface(Masque[i]);
+        SDL_FreeSurface(Masque);
 
     for (int i = 0; i < 2; i++)
         Liberer_Img(tabGameUI[i]);

@@ -20,22 +20,39 @@
  * @param p player
  * @param e ennemy
  */
-void initminimap(minimap *m, char nameimg[], Player p, Ennemy e[])
+void initminimap(minimap *m, char nameimg[], Player p, Ennemy e[], int Lvl)
 {
+    int redim;
+    if (Lvl > 1)
+        redim = Redim1;
+    else
+        redim = Redim;
     m->image = IMG_Load(nameimg);
     m->image1 = IMG_Load("assets/MiniMap/MinimapFrame.png");
     m->pos1.x = 0;
     m->pos1.y = 0;
-    m->pos.x = 382;
-    m->pos.y = 45;
+    
+    if (Lvl > 1)
+    {
+        m->pos.x = 99;
+        m->pos.y = 58;
+        m->image1 = IMG_Load("assets/MiniMap/Level2/MiniMapFrame.png");
+    }
+    else
+    {
+        m->pos.x = 382;
+        m->pos.y = 45;
+        m->image1 = IMG_Load("assets/MiniMap/MinimapFrame.png");
+    }
+
     m->playerTag = IMG_Load("assets/MiniMap/PlayerTag.png");
-    m->playerTagPos.x = ((p.pos.x * Redim) / 100) + m->pos.x;
-    m->playerTagPos.y = ((p.pos.y * Redim) / 100) + m->pos.y;
+    m->playerTagPos.x = ((p.pos.x * redim) / 100) + m->pos.x;
+    m->playerTagPos.y = (((p.pos.y + p.img[p.animI][p.animJ]->h) * redim) / 100) + m->pos.y ;
     for (int i = 0; i < 5; i++)
     {
         m->zombieTag[i] = IMG_Load("assets/MiniMap/ZombieTag.png");
-        m->zombieTagPos[i].x = ((e[i].pos.x * Redim) / 100) + m->pos.x;
-        m->zombieTagPos[i].y = ((e[i].pos.y * Redim) / 100) + m->pos.y;
+        m->zombieTagPos[i].x = ((e[i].pos.x * redim) / 100) + m->pos.x;
+        m->zombieTagPos[i].y = ((e[i].pos.y * redim) / 100) + m->pos.y;
     }
 }
 /**
@@ -514,14 +531,13 @@ void TicTacToe(SDL_Surface *screen, Config *Confg, char PlayerN[])
                 isMarked[i] = 1;
                 AfficherImg(X[i], screen);
                 SDL_Flip(screen);
-
+                SDL_Delay(500);
                 if (!Winner)
                 {
                     for (i = 0; i < 9; i++)
                     {
                         if (isMarked[i] == 2)
                         {
-                            printf("i = %d\n", i);
                             if (!isMarked[i + 1] && i != 2 && i != 5 && i != 8)
                             {
                                 isMarked[i + 1] = 2;
@@ -576,6 +592,7 @@ void TicTacToe(SDL_Surface *screen, Config *Confg, char PlayerN[])
                         SDL_Flip(screen);
                     }
                 }
+
                 for (int j = 0; j < 9; j += 3)
                     if (isMarked[j] && isMarked[j] == isMarked[j + 1] && isMarked[j] == isMarked[j + 2])
                         Winner = isMarked[j];
@@ -584,11 +601,13 @@ void TicTacToe(SDL_Surface *screen, Config *Confg, char PlayerN[])
                     if (isMarked[j] && isMarked[j] == isMarked[j + 3] && isMarked[j] == isMarked[j + 6])
                         Winner = isMarked[j];
 
-                if (isMarked[0] && isMarked[0] == isMarked[4] && isMarked[0] == isMarked[8])
+                if (!Winner && isMarked[0] && isMarked[0] == isMarked[4] && isMarked[0] == isMarked[8])
                     Winner = isMarked[0];
+                else if (!Winner && isMarked[2] && isMarked[2] == isMarked[4] && isMarked[2] == isMarked[6])
+                    Winner = isMarked[2];
+
                 if (Winner)
                 {
-                    printf("Winner :%d\n", Winner);
                     if (Winner == 1)
                         AfficherImg(Win, screen);
                     else
@@ -597,11 +616,6 @@ void TicTacToe(SDL_Surface *screen, Config *Confg, char PlayerN[])
                     SDL_Delay(1500);
                     isRunning = 0;
                 }
-
-                printf("------------\n");
-                for (int j = 0; j < 9; j += 3)
-                    printf("%d %d %d\n", isMarked[j], isMarked[j + 1], isMarked[j + 2]);
-                printf("------------\n");
             }
 
             break;

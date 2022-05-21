@@ -63,7 +63,6 @@ void initEnnemy(Ennemy *e, int x, int y, int x1, int y1, int vitesse, int nbreVi
         for (int j = 0; j < n; j++)
         {
             sprintf(NomImg, "assets/Animation/Zombie%d/%d/%d.png", 1, i, j + 1);
-            printf("%s\n", NomImg);
             e->img[i][j] = IMG_Load(NomImg);
         }
     }
@@ -156,7 +155,6 @@ void animerEnnemy(Ennemy *e, Config *Confg)
             }
         }
     }
-
 }
 
 /**
@@ -256,15 +254,16 @@ int BehindEnnemy(Player p, Ennemy e)
     int posPX1 = posPX + p.img[p.animI][p.animJ]->w;
     int posPY1 = posPY + p.img[p.animI][p.animJ]->h;
 
+    int distance = 500;
     if (!e.isKilled)
     {
-        if (posPX1 > posEX - 500 && posPX1 < e.pos.x)
+        if (posPX1 >= posEX - distance && posPX1 <= posEX)
         {
             for (int i = posPY; i < posPY1; i++)
                 if (i > posEY && i < posEY1)
                     return -1;
         }
-        else if (posPX < posEX1 + 500 && posPX > posEX1)
+        else if (posPX < posEX1 + distance && posPX > posEX1)
         {
             for (int i = posPY; i < posPY1; i++)
                 if (i > posEY && i < posEY1)
@@ -274,7 +273,9 @@ int BehindEnnemy(Player p, Ennemy e)
         {
             for (int i = posPY; i < posPY1; i++)
                 if (i > posEY && i < posEY1)
+                {
                     return 0;
+                }
         }
     }
 
@@ -321,7 +322,9 @@ int collisionEH(Ennemy e, SDL_Surface *Masque)
  * @param e Ennemy
  * @param Masque Mask Surface
  * @return int Posiion Of the Collsion
+ *
  */
+
 int collisionEV(Ennemy e, SDL_Surface *Masque)
 {
     SDL_Color color;
@@ -393,4 +396,51 @@ SDL_Color GetPixel1(SDL_Surface *pSurface, int x, int y)
     SDL_GetRGB(col, pSurface->format, &color.r, &color.g, &color.b);
 
     return color;
+}
+
+void FallEnnemy(Ennemy *e, SDL_Surface *Masque)
+{
+    int Vitesse = 20;
+
+    if (!isGroundE(*e, Masque))
+    {
+        e->pos.y += Vitesse;
+        e->posABS.y += Vitesse;
+    }
+}
+
+int isGroundE(Ennemy e, SDL_Surface *Masque)
+{
+    SDL_Color color;
+    int posX = e.posABS.x;
+    int posY = e.posABS.y;
+    int posX1 = posX + e.img[e.anim_i][e.anim_j]->w;
+    int posY1 = posY + e.img[e.anim_i][e.anim_j]->h;
+
+    for (int i = posX; i <= posX1; i++)
+    {
+        // Bot Yellow
+        color = GetPixel1(Masque, i, posY1);
+        // printf("%d %d %d\n", color.r, color.g, color.b);
+        if (color.r == 255 && color.g == 255 && (color.b == 1 || color.b == 0))
+            return 1;
+    }
+    return 0;
+}
+
+int isTrappedE(Ennemy e, SDL_Surface *Masque)
+{
+    SDL_Color color;
+    int posX = e.posABS.x;
+    int posY = e.posABS.y;
+    int posX1 = posX + e.img[e.anim_i][e.anim_j]->w;
+    int posY1 = posY + e.img[e.anim_i][e.anim_j]->h;
+
+    for (int i = posX; i <= posX1; i++)
+    {
+        color = GetPixel1(Masque, i, posY1);
+        if (color.r == 254 && color.g == 0 && color.b == 0)
+            return 1;
+    }
+    return 0;
 }

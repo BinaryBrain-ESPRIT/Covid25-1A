@@ -1,14 +1,13 @@
 #include "Background.h"
 #include "Main_Fn.h"
 
-void InitGameBackg(background *Backg, int x, int y, int W, int H)
+void InitGameBackg(background *Backg, int x, int y, int W, int H,int Lvl)
 {
 
     for (int i = 0; i < 5; i++)
     {
-        sprintf(Backg->BackgImage[i].NameImg, "assets/Levels/Level1[%d].jpg", i);
-        Backg->BackgImage[i].img = IMG_Load(Backg->BackgImage[i].NameImg);
-        
+        sprintf(Backg->BackgImage[i].NameImg, "assets/Levels/Level%d/Level%d[%d].jpg",Lvl,Lvl, i);
+        Backg->BackgImage[i].img = IMG_Load(Backg->BackgImage[i].NameImg);        
         Backg->BackgImage[i].pos.x = x;
         Backg->BackgImage[i].pos.y = y;
         Backg->BackgImage[i].pos.w = W;
@@ -135,7 +134,7 @@ int isGround(Player p, SDL_Surface *Masque)
     {
         // Bot Yellow
         color = GetPixel(Masque, i, posY1);
-        if (color.r == 255 && color.g == 255 && color.b == 1)
+        if (color.r == 255 && color.g == 255 && (color.b == 1 || color.b == 0))
             return 1;
     }
     return 0;

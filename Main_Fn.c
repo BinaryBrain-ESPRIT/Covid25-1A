@@ -9,10 +9,10 @@ int Setup(Config *Confg)
         f = fopen("Data/Config.txt", "w");
         fprintf(f, "Money : 5000\n");
         fprintf(f, "Player : 2\n");
+        fprintf(f, "Level : 1\n");
         fprintf(f, "LevelReached : 3\n");
         fprintf(f, "Language : 1\n");
         fprintf(f, "FullScreen : -1\n");
-        fprintf(f, "Volume : 100\n");
         fprintf(f, "PosVol : 1042\n");
         fclose(f);
         f = fopen("Data/Config.txt", "r");
@@ -44,20 +44,20 @@ int Setup(Config *Confg)
             Confg->Money = Value;
         else if (strcmp(Nom, "Player") == 0)
             Confg->Player = Value;
+        else if (strcmp(Nom, "Level") == 0)
+            Confg->Level = Value;
         else if (strcmp(Nom, "LevelReached") == 0)
             Confg->LevelR = Value;
         else if (strcmp(Nom, "Language") == 0)
             Confg->Lang = Value;
         else if (strcmp(Nom, "FullScreen") == 0)
             Confg->Fullscr = Value;
-        else if (strcmp(Nom, "Volume") == 0)
-            Confg->Volume = Value;
         else if (strcmp(Nom, "PosVol") == 0)
             Confg->posVol = Value;
     }
 
     Mix_VolumeMusic(Confg->Volume);
-    
+
     fclose(f);
     return 1;
 }
@@ -68,10 +68,10 @@ void SaveSetting(Config *Confg)
 
     fprintf(f, "Money : %d\n", Confg->Money);
     fprintf(f, "Player : %d\n", Confg->Player);
+    fprintf(f, "Level : %d\n", Confg->Level);
     fprintf(f, "LevelReached : %d\n", Confg->LevelR);
     fprintf(f, "Language : %d\n", Confg->Lang);
     fprintf(f, "FullScreen : %d\n", Confg->Fullscr);
-    fprintf(f, "Volume : %d\n", Confg->Volume);
     fprintf(f, "PosVol : %d\n", Confg->posVol);
 
     fclose(f);
@@ -162,32 +162,32 @@ void Liberer_Mus(Mix_Music *music)
 
 int arduinoWriteData(int x)
 {
-    char chemin[]="/dev/ttyACM0";
-    FILE*f;
+    char chemin[] = "/dev/ttyUSB0";
+    FILE *f;
 
-    f=fopen(chemin,"w");
-    if(f == NULL)
-        return(-1);
+    f = fopen(chemin, "w");
+    if (f == NULL)
+        return (-1);
 
-    fprintf(f,"%d",x);
+    fprintf(f, "%d", x);
     fclose(f);
 
-    return(0);
+    return (0);
 }
 
 int arduinoReadData(int *x)
 {
-    char chemin[]="/dev/ttyACM0";
-    FILE*f;
+    char chemin[] = "/dev/ttyUSB0";
+    FILE *f;
     char c;
-    f=fopen(chemin,"r");
+    f = fopen(chemin, "r");
 
-    if(f == NULL)
-        return(-1);
+    if (f == NULL)
+        return (-1);
 
-    fscanf(f,"%d",x);
+    fscanf(f, "%d", x);
 
     fclose(f);
 
-    return(0);
+    return (0);
 }

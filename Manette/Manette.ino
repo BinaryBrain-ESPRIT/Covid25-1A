@@ -10,7 +10,6 @@
 #define CE_PIN 9
 #define CSN_PIN 10
 
-
 #define LedR 16
 #define LedB 17
 
@@ -75,40 +74,190 @@ void loop()
   joystick[7] = analogRead(x_axis);
   joystick[8] = analogRead(y_axis);
 
+  //-----------------------
+
+  // Interact Button With LCD
+  if (!joystick[0] && a != 1)
+  {
+    lcd.init();
+    lcd.setCursor(3, 0);
+    lcd.print("Interact !");
+    a = 1;
+  }
+  else if (!joystick[1] && a != 2)
+  {
+    lcd.init();
+    lcd.setCursor(4, 0);
+    lcd.print("Return ...");
+    a = 2;
+  }
+  else if (!joystick[2] && a != 3)
+  {
+    lcd.init();
+    lcd.setCursor(5, 0);
+    lcd.print("Jump !");
+    a = 3;
+  }
+  else if (!joystick[3] && a != 4)
+  {
+    lcd.init();
+    lcd.setCursor(4, 0);
+    lcd.print("Attack !");
+    a = 4;
+  }
+  else if (!joystick[4] && a != 5)
+  {
+    lcd.init();
+    lcd.setCursor(4, 0);
+    lcd.print("Options !");
+    a = 5;
+  }
+  else if (!joystick[5] && a != 6)
+  {
+    lcd.init();
+    lcd.setCursor(3, 0);
+    lcd.print("FullScreen");
+    a = 6;
+  }
+
+  else if (joystick[7] > 400)
+  {
+    lcd.init();
+    lcd.setCursor(6, 0);
+    lcd.print("Right");
+  }
+  else if (joystick[7] < 200)
+  {
+    lcd.init();
+    lcd.setCursor(6, 0);
+    lcd.print("Left");
+  }
+  else if (joystick[8] > 400)
+  {
+    lcd.init();
+    lcd.setCursor(7, 0);
+    lcd.print("UP");
+  }
+  else if (joystick[8] < 200)
+  {
+    lcd.init();
+    lcd.setCursor(6, 0);
+    lcd.print("DOWN");
+  }
+  Serial.println(joystick[0]);
+  // Action While recieving Information from the serial
+  if (Serial.available())
+  {
+    char byte = Serial.read();
+    lcd.setCursor(1, 0);
+    if (byte == '0')
+    {
+      lcd.init();
+      lcd.print("Starting Game ...");
+      digitalWrite(LedR, HIGH);
+    }
+    else if (byte == '1')
+    {
+      lcd.init();
+      lcd.print("Closing Game ...");
+    }
+    else if (byte == '2')
+    {
+      lcd.init();
+      lcd.print("Collision Right");
+      digitalWrite(LedB, LOW);
+      digitalWrite(LedR, HIGH);
+    }
+    else if (byte == '3')
+    {
+      lcd.init();
+      lcd.print("Collision Left");
+      digitalWrite(LedR, LOW);
+      digitalWrite(LedB, HIGH);
+    }
+    else if (byte == '4')
+    {
+      lcd.init();
+      lcd.print("Collision UP");
+    }
+    else if (byte == '5')
+    {
+      lcd.init();
+      lcd.print("Collision DOWN");
+    }
+    else if (byte == '6')
+    {
+      lcd.init();
+      lcd.print("You Win !");
+      for (int i = 0; i < 10; i++)
+      {
+        digitalWrite(LedB, LOW);
+        delay(100);
+        digitalWrite(LedB, HIGH);
+        delay(100);
+      }
+      digitalWrite(LedB, LOW);
+    }
+    else if (byte == '7')
+    {
+      lcd.init();
+      lcd.print("You Loose !");
+      for (int i = 0; i < 10; i++)
+      {
+        digitalWrite(LedR, LOW);
+        delay(100);
+        digitalWrite(LedR, HIGH);
+        delay(100);
+      }
+      digitalWrite(LedR, LOW);
+    }
+    else if (byte == '8')
+    {
+      lcd.init();
+      lcd.print("Ennemy Right");
+      for (int i = 0; i < 5; i++)
+      {
+        digitalWrite(LedR, LOW);
+        delay(500);
+        digitalWrite(LedR, HIGH);
+        delay(500);
+      }
+      digitalWrite(LedR, LOW);
+    }
+    else if (byte == '9')
+    {
+      lcd.init();
+      lcd.print("Ennemy Left");
+      for (int i = 0; i < 5; i++)
+      {
+        digitalWrite(LedB, LOW);
+        delay(500);
+        digitalWrite(LedB, HIGH);
+        delay(500);
+      }
+      digitalWrite(LedB, LOW);
+    }
+    
+  }
+
+  //-----------------------------
   // Write out values array...
   radio.write(joystick, sizeof(joystick));
   delay(20);
-  if (!joystick[0] && a != 1)
-  {
-    lcd.setCursor(2, 0);
-    lcd.print("Button a");
-    a = 1;
-  }
-  if (!joystick[1] && a != 2)
-  {
-    lcd.setCursor(2, 0);
-    lcd.print("Button b");
-    a = 2;
-  }
-  if (!joystick[2] && a != 3)
-  {
-    lcd.init();
-    a = 2;
-  }
-
 #ifdef DEBUG
   // Log...
-
-  for (int i = 0; i < 9; i++)
-  {
+  // Display Actions Of Shield on the Serial
+  /*
+    for (int i = 0; i < 9; i++)
+    {
     Serial.print(joystick[i]);
     if (i < 8)
       Serial.print(", ");
-  }
-  Serial.print("\n");
+    }
+    Serial.print("\n");
+  */
 
-
- 
+  /*
     char byte = Serial.read();
     if (byte == '2')
     {
@@ -130,36 +279,25 @@ void loop()
       digitalWrite(LedB, LOW);
       lcd.init();
     }
-
-  
+  */
 
 #endif
-  /*
-    if (joystick[7] < 340 || joystick[7] > 360)
-      digitalWrite(LedR, HIGH);
-    else
-      digitalWrite(LedR, LOW);
 
-    if (joystick[8] < 340 || joystick[8] > 360)
-      digitalWrite(LedG, HIGH);
-    else
-      digitalWrite(LedG, LOW);
-  */
   radio.startListening();
-  if (radio.available()) { // Get remote transmission
+  if (radio.available())
+  { // Get remote transmission
     radio.read(&received_value, sizeof(received_value));
     Serial.print("received_value=");
-      Serial.println(received_value);
+    Serial.println(received_value);
     /*
       if (received_value > 10) {
       #ifdef DEBUG
       Serial.print("received_value=");
       Serial.println(received_value);
       #endif
-    
-  }*/
-}
-delay(20);
-radio.stopListening();
 
+      }*/
+  }
+  delay(20);
+  radio.stopListening();
 }
