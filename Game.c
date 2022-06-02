@@ -1163,7 +1163,6 @@ void Game(SDL_Surface *screen, Config *Confg)
             switch (event.key.keysym.sym)
             {
             case SDLK_m:
-                printf("test1\n");
                 if (EnigmeDetected(p, Masque))
                 {
                     if (!MiniGameCard(screen, Confg))
@@ -1258,7 +1257,6 @@ void Game(SDL_Surface *screen, Config *Confg)
         Confg->deltaTime = (SDL_GetTicks() - last_frame_time);
     }
 
-    printf("test\n");
     int etat, etat1;
     SDL_ShowCursor(SDL_ENABLE);
 
