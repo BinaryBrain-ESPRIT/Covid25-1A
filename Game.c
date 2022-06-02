@@ -872,7 +872,7 @@ void Game(SDL_Surface *screen, Config *Confg)
 
     // GameLoop
     while (isRunning)
-    {    
+    {       
         // MAJTime(&GameTimeTxt,GameTimeInit);
         GameTimeS = ((SDL_GetTicks() - GameTimeInit) / 1000) % 60;
         GameTimeM = ((SDL_GetTicks() - GameTimeInit) / 1000) / 60;
