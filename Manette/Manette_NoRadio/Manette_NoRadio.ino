@@ -52,6 +52,8 @@ void loop()
   joystick[8] = analogRead(y_axis);
 
   // Interact Button With LCD
+
+  /*
   if (!joystick[0] && a != 1)
   {
     lcd.init();
@@ -119,7 +121,7 @@ void loop()
     lcd.setCursor(5, 0);
     lcd.print("DOWN");
   }
-
+*/
   // Display Actions Of Shield on the Serial
   for (int i = 0; i < 9; i++)
   {
@@ -133,6 +135,12 @@ void loop()
   if (Serial.available())
   {
     char byte = Serial.read();
+     if (byte == '2')
+      digitalWrite(LedR,HIGH);
+     else if (byte == '0')
+      digitalWrite(LedR,LOW);
+     /*
+    
     lcd.init();
     lcd.setCursor(1, 0);
     if (byte == '2')
@@ -152,7 +160,7 @@ void loop()
     else if (byte == '1')  
       lcd.print("Closing Game ...");
   
-    delay(2000);
+   // delay(2000);
 
     /*
     if (byte == '2')

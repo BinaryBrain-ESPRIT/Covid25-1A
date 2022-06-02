@@ -144,7 +144,6 @@ void loop()
     lcd.setCursor(6, 0);
     lcd.print("DOWN");
   }
-  Serial.println(joystick[0]);
   // Action While recieving Information from the serial
   if (Serial.available())
   {
@@ -247,7 +246,7 @@ void loop()
 #ifdef DEBUG
   // Log...
   // Display Actions Of Shield on the Serial
-  /*
+  
     for (int i = 0; i < 9; i++)
     {
     Serial.print(joystick[i]);
@@ -255,7 +254,7 @@ void loop()
       Serial.print(", ");
     }
     Serial.print("\n");
-  */
+  
 
   /*
     char byte = Serial.read();
